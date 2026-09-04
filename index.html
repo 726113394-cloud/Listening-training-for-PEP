@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>听力练习场</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>听力练习场 · 多人抢答</title>
     <style>
         /* ===== 全局 ===== */
         * {
@@ -20,14 +20,9 @@
             padding: 16px;
             background: linear-gradient(145deg, #f5f9e6 0%, #e2f0d6 100%);
             transition: background 0.4s ease;
-            animation: pageFadeIn 0.6s ease;
-        }
-        @keyframes pageFadeIn {
-            0% { opacity: 0; transform: translateY(12px); }
-            100% { opacity: 1; transform: translateY(0); }
         }
         .app-container {
-            max-width: 800px;
+            max-width: 960px;
             width: 100%;
             background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(12px);
@@ -42,35 +37,35 @@
             background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            padding: 14px 24px;
+            padding: 12px 20px;
             display: flex;
             flex-wrap: wrap;
-            gap: 12px 20px;
+            gap: 8px 16px;
             align-items: center;
             justify-content: space-between;
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         }
         .logo {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: #3a6b2a;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             letter-spacing: -0.3px;
         }
         .logo span {
             background: linear-gradient(135deg, #8bc34a, #558b2f);
             color: #fff;
-            font-size: 0.65rem;
-            padding: 2px 14px;
+            font-size: 0.6rem;
+            padding: 2px 12px;
             border-radius: 30px;
             margin-left: 4px;
         }
         .header-controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px 12px;
+            gap: 6px 12px;
             align-items: center;
         }
         .ctrl-group {
@@ -79,7 +74,7 @@
             gap: 2px;
         }
         .ctrl-group label {
-            font-size: 0.55rem;
+            font-size: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 0.6px;
             color: #5a7a4a;
@@ -88,9 +83,9 @@
         .ctrl-group select {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(180, 200, 140, 0.4);
-            padding: 5px 16px;
+            padding: 4px 14px;
             border-radius: 30px;
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             font-weight: 600;
             color: #2a4a1a;
             cursor: pointer;
@@ -109,9 +104,9 @@
         .btn-unit-select {
             background: rgba(139, 195, 74, 0.2);
             border: 1px solid rgba(139, 195, 74, 0.3);
-            padding: 5px 18px;
+            padding: 4px 16px;
             border-radius: 30px;
-            font-size: 0.78rem;
+            font-size: 0.7rem;
             font-weight: 700;
             color: #2a4a1a;
             cursor: pointer;
@@ -133,36 +128,81 @@
             color: #fff;
             border-radius: 20px;
             padding: 0 8px;
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             line-height: 1.6;
         }
+        .mode-toggle {
+            display: flex;
+            gap: 4px;
+            background: rgba(200, 220, 180, 0.2);
+            border-radius: 40px;
+            padding: 3px;
+            border: 1px solid rgba(180, 200, 140, 0.15);
+        }
+        .mode-toggle button {
+            padding: 4px 16px;
+            border: none;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            background: transparent;
+            color: #5a7a4a;
+        }
+        .mode-toggle button.active {
+            background: rgba(139, 195, 74, 0.25);
+            color: #2a4a1a;
+            box-shadow: 0 2px 8px rgba(139, 195, 74, 0.1);
+        }
+        .mode-toggle button:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.3);
+        }
         .main-content {
-            padding: 18px 24px 24px;
+            position: relative;
+            min-height: 420px;
+            padding: 14px 20px 20px;
+            transition: height 0.35s ease;
         }
-        .single-mode {
-            display: block;
+        .mode-panel {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            opacity: 0;
+            transform: translateY(12px);
+            pointer-events: none;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+            padding: 0 4px;
         }
+        .mode-panel.active {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        /* ===== 单人模式 ===== */
         .info-bar {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 16px;
-            padding: 8px 18px;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 6px 16px;
             background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.3s;
         }
         .info-item {
             display: flex;
             align-items: center;
             gap: 6px;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: #2a4a1a;
         }
         .info-item .num {
@@ -185,14 +225,14 @@
         }
         .info-actions {
             display: flex;
-            gap: 8px;
+            gap: 6px;
         }
         .info-actions .history-btn {
             background: rgba(139, 195, 74, 0.15);
             border: 1px solid rgba(139, 195, 74, 0.2);
             border-radius: 30px;
-            padding: 4px 16px;
-            font-size: 0.7rem;
+            padding: 4px 14px;
+            font-size: 0.65rem;
             font-weight: 700;
             color: #3a6b2a;
             cursor: pointer;
@@ -202,31 +242,30 @@
         .info-actions .history-btn:hover {
             background: rgba(139, 195, 74, 0.25);
             transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 4px 12px rgba(139, 195, 74, 0.15);
         }
         .listening-area {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border-radius: 36px;
-            padding: 20px 24px 22px;
+            padding: 16px 20px 18px;
             border: 1px solid rgba(255, 255, 255, 0.5);
-            margin-bottom: 16px;
+            margin-bottom: 12px;
             text-align: center;
             transition: all 0.3s;
         }
         .status-badge {
             display: inline-block;
-            padding: 5px 24px;
+            padding: 4px 20px;
             border-radius: 40px;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             font-weight: 700;
             background: rgba(200, 220, 160, 0.25);
             color: #3a6b2a;
             border: 1px solid rgba(180, 200, 140, 0.2);
             transition: all 0.4s ease;
-            margin-bottom: 12px;
-            min-height: 34px;
+            margin-bottom: 10px;
+            min-height: 30px;
             line-height: 1.8;
         }
         .status-badge.playing {
@@ -252,42 +291,90 @@
             border-color: #ef9a9a;
             animation: wrongShake 0.5s ease;
         }
+        .status-badge.multi-wait {
+            background: #e3f0d9;
+            color: #3a6b2a;
+            border-color: #a0c870;
+        }
+        .status-badge.multi-correct {
+            background: #c8e6c9;
+            color: #1a6a2a;
+            border-color: #66bb6a;
+            animation: correctPop 0.5s ease;
+        }
+        .status-badge.multi-wrong {
+            background: #ffcdd2;
+            color: #a33a3a;
+            border-color: #ef9a9a;
+            animation: wrongShake 0.5s ease;
+        }
+        .status-badge.multi-locked {
+            background: #fff3e0;
+            color: #8a6a3a;
+            border-color: #ffcc80;
+        }
         @keyframes pulse-badge {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(0.98); }
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.6;
+                transform: scale(0.98);
+            }
         }
         @keyframes correctPop {
-            0% { transform: scale(0.8); opacity: 0.5; }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); opacity: 1; }
+            0% {
+                transform: scale(0.8);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
         }
         @keyframes wrongShake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-4px); }
-            80% { transform: translateX(4px); }
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            20% {
+                transform: translateX(-8px);
+            }
+            40% {
+                transform: translateX(8px);
+            }
+            60% {
+                transform: translateX(-4px);
+            }
+            80% {
+                transform: translateX(4px);
+            }
         }
         .audio-controls {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
             align-items: center;
-            margin: 6px 0 12px;
+            margin: 4px 0 10px;
         }
         .audio-btn {
-            padding: 9px 28px;
+            padding: 7px 24px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border: none;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
             position: relative;
             overflow: hidden;
@@ -319,18 +406,11 @@
             border-color: #8bc34a;
             transform: translateY(-3px) scale(1.02);
         }
-        .audio-btn .icon {
-            font-size: 1.1rem;
-            transition: transform 0.3s ease;
-        }
-        .audio-btn:active .icon {
-            transform: scale(0.8);
-        }
         .options-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 12px;
-            margin: 14px 0 10px;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 10px;
+            margin: 10px 0 8px;
         }
         .option-card {
             background: rgba(255, 255, 255, 0.7);
@@ -338,8 +418,8 @@
             -webkit-backdrop-filter: blur(4px);
             border: 2px solid rgba(180, 200, 140, 0.3);
             border-radius: 40px;
-            padding: 14px 12px;
-            font-size: 1.05rem;
+            padding: 12px 10px;
+            font-size: 1rem;
             font-weight: 700;
             color: #1a3a0a;
             cursor: pointer;
@@ -347,22 +427,22 @@
             text-align: center;
             user-select: none;
             position: relative;
-            min-height: 60px;
+            min-height: 52px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
             will-change: transform, border-color, background;
         }
         .option-card .letter {
             background: rgba(180, 200, 140, 0.2);
-            width: 32px;
-            height: 32px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 800;
             color: #3a6b2a;
             flex-shrink: 0;
@@ -397,40 +477,61 @@
             transform: none !important;
         }
         .option-card .check-mark {
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
         }
         @keyframes correctFlash {
-            0% { transform: scale(0.95); background: rgba(102,187,106,0.3); }
-            50% { transform: scale(1.04); background: rgba(102,187,106,0.25); }
-            100% { transform: scale(1); background: rgba(102,187,106,0.18); }
+            0% {
+                transform: scale(0.95);
+                background: rgba(102, 187, 106, 0.3);
+            }
+            50% {
+                transform: scale(1.04);
+                background: rgba(102, 187, 106, 0.25);
+            }
+            100% {
+                transform: scale(1);
+                background: rgba(102, 187, 106, 0.18);
+            }
         }
         @keyframes wrongFlash {
-            0% { transform: translateX(-4px); background: rgba(239,83,80,0.2); }
-            25% { transform: translateX(4px); }
-            50% { transform: translateX(-2px); }
-            75% { transform: translateX(2px); }
-            100% { transform: translateX(0); background: rgba(239,83,80,0.12); }
+            0% {
+                transform: translateX(-4px);
+                background: rgba(239, 83, 80, 0.2);
+            }
+            25% {
+                transform: translateX(4px);
+            }
+            50% {
+                transform: translateX(-2px);
+            }
+            75% {
+                transform: translateX(2px);
+            }
+            100% {
+                transform: translateX(0);
+                background: rgba(239, 83, 80, 0.12);
+            }
         }
         .action-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 10px;
             justify-content: center;
-            margin-top: 14px;
+            margin-top: 12px;
         }
         .action-btn {
-            padding: 10px 30px;
+            padding: 8px 24px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             border: none;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
             font-family: inherit;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
         .action-btn:active {
             transform: scale(0.94);
@@ -445,7 +546,282 @@
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 6px 20px rgba(180, 200, 140, 0.15);
         }
-        /* ===== 模态框通用 ===== */
+
+        /* ===== 多人模式 ===== */
+        .multi-topbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 6px 16px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .multi-topbar .info-item {
+            font-size: 0.8rem;
+        }
+        .multi-topbar .info-item .num {
+            background: rgba(139, 195, 74, 0.15);
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #3a6b2a;
+        }
+        .multi-topbar .info-item .score-num {
+            background: linear-gradient(135deg, #ffb74d, #ff8a65);
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+        .multi-topbar .config-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: #3a6b2a;
+        }
+        .multi-topbar .config-group input {
+            width: 44px;
+            padding: 3px 6px;
+            border-radius: 20px;
+            border: 1px solid rgba(180, 200, 140, 0.3);
+            text-align: center;
+            font-weight: 700;
+            font-size: 0.75rem;
+            font-family: inherit;
+            background: rgba(255, 255, 255, 0.5);
+            color: #1a3a0a;
+            outline: none;
+        }
+        .multi-topbar .config-group input:focus {
+            border-color: #8bc34a;
+            background: #fff;
+        }
+
+        /* 玩家卡片区域 - 置于底部 */
+        .players-area {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            align-items: stretch;
+            margin-top: 14px;
+            margin-bottom: 4px;
+        }
+        .player-card {
+            flex: 1 1 140px;
+            max-width: 220px;
+            min-width: 120px;
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            border-radius: 28px;
+            padding: 10px 12px 12px;
+            border: 2px solid rgba(180, 200, 140, 0.2);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+        }
+        .player-card .p-name {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #1a3a0a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        .player-card .p-name .p-edit {
+            background: none;
+            border: none;
+            font-size: 0.6rem;
+            cursor: pointer;
+            color: #8aae6a;
+            padding: 0 4px;
+        }
+        .player-card .p-name .p-edit:hover {
+            color: #558b2f;
+        }
+        .player-card .p-score {
+            font-size: 0.7rem;
+            color: #5a7a4a;
+            font-weight: 600;
+            margin: 2px 0 6px;
+        }
+        .player-card .p-score span {
+            background: linear-gradient(135deg, #ffb74d, #ff8a65);
+            color: #fff;
+            padding: 0 10px;
+            border-radius: 20px;
+            font-weight: 700;
+        }
+        .player-card .p-options {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin: 4px 0;
+        }
+        .player-card .p-options button {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid rgba(180, 200, 140, 0.3);
+            background: rgba(255, 255, 255, 0.5);
+            font-weight: 800;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
+            color: #2a4a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .player-card .p-options button:hover:not(:disabled) {
+            background: rgba(139, 195, 74, 0.15);
+            border-color: #8bc34a;
+            transform: scale(1.08);
+        }
+        .player-card .p-options button:disabled {
+            cursor: not-allowed;
+            opacity: 0.4;
+            transform: none !important;
+        }
+        .player-card .p-options button.p-correct {
+            background: #66bb6a;
+            border-color: #66bb6a;
+            color: #fff;
+        }
+        .player-card .p-options button.p-wrong {
+            background: #ef5350;
+            border-color: #ef5350;
+            color: #fff;
+        }
+        .player-card .p-options button.p-selected {
+            background: rgba(139, 195, 74, 0.2);
+            border-color: #8bc34a;
+        }
+        .player-card .p-status {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: #5a7a4a;
+            margin-top: 4px;
+            min-height: 18px;
+        }
+        .player-card .p-status.correct {
+            color: #2a7a2a;
+        }
+        .player-card .p-status.wrong {
+            color: #a33a3a;
+        }
+        .player-card .p-status.locked {
+            color: #8a6a3a;
+        }
+        .player-card .p-remove {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(239, 83, 80, 0.15);
+            color: #a33a3a;
+            font-size: 0.55rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 1;
+        }
+        .player-card .p-remove:hover {
+            background: rgba(239, 83, 80, 0.3);
+            transform: scale(1.1);
+        }
+        .player-card.card-correct {
+            border-color: #66bb6a;
+            background: rgba(102, 187, 106, 0.1);
+            box-shadow: 0 0 20px rgba(102, 187, 106, 0.08);
+        }
+        .player-card.card-wrong {
+            border-color: #ef5350;
+            background: rgba(239, 83, 80, 0.06);
+        }
+        .player-card.card-locked {
+            border-color: #ffcc80;
+            background: rgba(255, 204, 128, 0.06);
+        }
+
+        /* 添加按钮独立行 */
+        .player-add-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 6px;
+        }
+        .player-add-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 28px;
+            border-radius: 40px;
+            border: 2px dashed rgba(180, 200, 140, 0.3);
+            background: rgba(255, 255, 255, 0.15);
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #5a7a4a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            min-width: 140px;
+            height: 48px;
+        }
+        .player-add-btn:hover {
+            background: rgba(139, 195, 74, 0.1);
+            border-color: #8bc34a;
+            transform: scale(1.02);
+            color: #3a6b2a;
+        }
+
+        .multi-options-area {
+            margin: 8px 0 6px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .multi-options-area .opt-labels {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2a4a1a;
+            flex-wrap: wrap;
+        }
+        .multi-options-area .opt-labels span {
+            padding: 2px 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+        }
+        .multi-options-area .opt-labels .opt-letter {
+            font-weight: 800;
+            color: #558b2f;
+        }
+
+        /* ===== 模态框 ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -465,15 +841,21 @@
             display: flex;
         }
         @keyframes modalFade {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
+            0% {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
         .modal-card {
             background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-radius: 48px;
-            padding: 28px 30px;
+            padding: 24px 28px;
             max-width: 640px;
             width: 92%;
             max-height: 85vh;
@@ -484,8 +866,8 @@
         }
         .modal-card h2 {
             color: #2a4a1a;
-            margin-bottom: 12px;
-            font-size: 1.3rem;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -493,22 +875,22 @@
         .modal-card .modal-body {
             flex: 1;
             overflow-y: auto;
-            margin: 8px 0 12px;
+            margin: 6px 0 10px;
             padding-right: 4px;
         }
         .modal-card .modal-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 8px;
             justify-content: flex-end;
             border-top: 1px solid rgba(180, 200, 140, 0.2);
-            padding-top: 14px;
+            padding-top: 12px;
         }
         .modal-card .modal-footer button {
-            padding: 8px 24px;
+            padding: 6px 20px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             border: none;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -539,110 +921,11 @@
             background: rgba(139, 195, 74, 0.25);
             transform: translateY(-2px);
         }
-        /* 单元列表 */
-        .unit-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        .unit-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 12px;
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 30px;
-            border: 1px solid rgba(180, 200, 140, 0.15);
-            transition: background 0.2s;
-        }
-        .unit-item:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-        .unit-item input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: #8bc34a;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .unit-item .unit-name {
-            flex: 1;
-            font-weight: 600;
-            color: #1a3a0a;
-            font-size: 0.95rem;
-        }
-        .unit-item .unit-count {
-            font-size: 0.7rem;
-            color: #5a7a4a;
-            background: rgba(180, 200, 140, 0.15);
-            padding: 0 10px;
-            border-radius: 20px;
-        }
-        .unit-item .unit-actions {
-            display: flex;
-            gap: 6px;
-        }
-        .unit-item .unit-actions button {
-            background: rgba(139, 195, 74, 0.1);
-            border: none;
-            border-radius: 20px;
-            padding: 2px 12px;
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #3a6b2a;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-        .unit-item .unit-actions button:hover {
-            background: rgba(139, 195, 74, 0.25);
-            transform: scale(1.05);
-        }
-        /* 单词选择列表 (在子模态框) */
-        .word-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-            gap: 6px;
-        }
-        .word-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 10px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            border: 1px solid rgba(180, 200, 140, 0.1);
-        }
-        .word-item input[type="checkbox"] {
-            width: 16px;
-            height: 16px;
-            accent-color: #8bc34a;
-            cursor: pointer;
-            flex-shrink: 0;
-        }
-        .word-item .word-text {
-            font-weight: 500;
-            font-size: 0.85rem;
-            color: #1a3a0a;
-        }
-        .word-item .word-mean {
-            font-size: 0.7rem;
-            color: #5a7a4a;
-            margin-left: auto;
-        }
-        .word-item .bold-tag {
-            background: #fee9d4;
-            font-size: 0.55rem;
-            padding: 0 6px;
-            border-radius: 10px;
-            color: #8a6a3a;
-        }
-        /* 子模态框标题带返回 */
         .sub-header {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
         .sub-header .back-btn {
             background: none;
@@ -658,21 +941,114 @@
             color: #3a6b2a;
         }
         .sub-header h3 {
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: #2a4a1a;
+        }
+
+        .unit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .unit-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            border: 1px solid rgba(180, 200, 140, 0.15);
+            transition: background 0.2s;
+        }
+        .unit-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .unit-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #8bc34a;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .unit-item .unit-name {
+            flex: 1;
+            font-weight: 600;
+            color: #1a3a0a;
+            font-size: 0.9rem;
+        }
+        .unit-item .unit-count {
+            font-size: 0.65rem;
+            color: #5a7a4a;
+            background: rgba(180, 200, 140, 0.15);
+            padding: 0 10px;
+            border-radius: 20px;
+        }
+        .unit-item .unit-actions button {
+            background: rgba(139, 195, 74, 0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.6rem;
+            font-weight: 700;
+            color: #3a6b2a;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .unit-item .unit-actions button:hover {
+            background: rgba(139, 195, 74, 0.25);
+            transform: scale(1.05);
+        }
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 4px;
+        }
+        .word-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(180, 200, 140, 0.1);
+        }
+        .word-item input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            accent-color: #8bc34a;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .word-item .word-text {
+            font-weight: 500;
+            font-size: 0.8rem;
+            color: #1a3a0a;
+        }
+        .word-item .word-mean {
+            font-size: 0.65rem;
+            color: #5a7a4a;
+            margin-left: auto;
+        }
+        .word-item .bold-tag {
+            background: #fee9d4;
+            font-size: 0.5rem;
+            padding: 0 6px;
+            border-radius: 10px;
+            color: #8a6a3a;
         }
         .word-list-actions {
             display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
+            gap: 6px;
+            margin-bottom: 8px;
             flex-wrap: wrap;
         }
         .word-list-actions button {
             background: rgba(180, 200, 140, 0.15);
             border: none;
             border-radius: 20px;
-            padding: 4px 16px;
-            font-size: 0.7rem;
+            padding: 3px 14px;
+            font-size: 0.65rem;
             font-weight: 700;
             color: #3a6b2a;
             cursor: pointer;
@@ -683,9 +1059,10 @@
             background: rgba(139, 195, 74, 0.25);
             transform: scale(1.04);
         }
-        /* ===== 历史、排名等 ===== */
-        .rank-modal,
-        .history-modal {
+
+        /* ===== 历史/排名 ===== */
+        .history-modal,
+        .rank-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -700,13 +1077,13 @@
             z-index: 9999;
             animation: modalFade 0.3s ease;
         }
-        .rank-card,
-        .history-card {
+        .history-card,
+        .rank-card {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-radius: 48px;
-            padding: 30px 28px;
+            padding: 28px 24px;
             max-width: 400px;
             width: 90%;
             text-align: center;
@@ -715,22 +1092,22 @@
             max-height: 80vh;
             overflow-y: auto;
         }
-        .rank-card h2,
-        .history-card h2 {
+        .history-card h2,
+        .rank-card h2 {
             color: #2a4a1a;
-            margin-bottom: 14px;
-            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
         }
-        .rank-list,
-        .history-list {
+        .history-list,
+        .rank-list {
             text-align: left;
-            margin: 14px 0;
+            margin: 12px 0;
         }
-        .rank-item,
-        .history-item {
-            padding: 7px 14px;
+        .history-item,
+        .rank-item {
+            padding: 6px 12px;
             border-bottom: 1px solid rgba(180, 200, 140, 0.2);
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 500;
             display: flex;
             justify-content: space-between;
@@ -743,25 +1120,21 @@
             border-radius: 12px;
             transform: translateX(4px);
         }
-        .rank-item .rank-pos {
-            font-weight: 700;
-            color: #8bc34a;
-        }
-        .rank-close,
-        .history-close {
+        .history-close,
+        .rank-close {
             background: linear-gradient(135deg, #8bc34a, #558b2f);
             color: #fff;
             border: none;
-            padding: 10px 32px;
+            padding: 8px 28px;
             border-radius: 40px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.25s ease;
-            font-size: 0.9rem;
-            margin-top: 8px;
+            font-size: 0.85rem;
+            margin-top: 6px;
         }
-        .rank-close:hover,
-        .history-close:hover {
+        .history-close:hover,
+        .rank-close:hover {
             transform: translateY(-3px) scale(1.02);
             box-shadow: 0 8px 24px rgba(139, 195, 74, 0.2);
         }
@@ -769,8 +1142,9 @@
             background: rgba(139, 195, 74, 0.15);
             padding: 0 12px;
             border-radius: 20px;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
         }
+
         .firework-canvas {
             position: fixed;
             top: 0;
@@ -780,12 +1154,14 @@
             pointer-events: none;
             z-index: 9998;
         }
+
         /* ===== 响应式 ===== */
         @media (max-width: 720px) {
             .header {
                 flex-direction: column;
                 align-items: stretch;
-                gap: 8px;
+                gap: 6px;
+                padding: 10px 14px;
             }
             .header-controls {
                 flex-wrap: wrap;
@@ -799,6 +1175,14 @@
                 width: 100%;
                 justify-content: center;
             }
+            .mode-toggle {
+                width: 100%;
+                justify-content: center;
+            }
+            .mode-toggle button {
+                flex: 1;
+                text-align: center;
+            }
             .info-bar {
                 flex-direction: column;
                 align-items: stretch;
@@ -809,39 +1193,69 @@
                 justify-content: center;
             }
             .listening-area {
-                padding: 14px 16px;
+                padding: 12px 14px;
             }
             .options-grid {
                 grid-template-columns: 1fr;
             }
             .main-content {
-                padding: 10px 12px 16px;
+                padding: 8px 10px 14px;
+                min-height: 380px;
             }
             .audio-btn {
-                padding: 7px 18px;
-                font-size: 0.8rem;
+                padding: 6px 16px;
+                font-size: 0.75rem;
             }
             .action-btn {
-                padding: 8px 18px;
-                font-size: 0.8rem;
-            }
-            .option-card .letter {
-                width: 26px;
-                height: 26px;
-                font-size: 0.65rem;
+                padding: 6px 16px;
+                font-size: 0.75rem;
             }
             .option-card {
-                padding: 10px 8px;
-                min-height: 50px;
-                font-size: 0.95rem;
+                padding: 8px 6px;
+                min-height: 44px;
+                font-size: 0.85rem;
             }
             .modal-card {
-                padding: 20px;
-                max-width: 100%;
+                padding: 16px;
                 border-radius: 32px;
             }
             .word-list {
                 grid-template-columns: 1fr 1fr;
+            }
+            .player-card {
+                flex: 1 1 110px;
+                min-width: 90px;
+                padding: 8px 8px 10px;
+            }
+            .player-card .p-options button {
+                width: 28px;
+                height: 28px;
+                font-size: 0.6rem;
+            }
+            .players-area {
+                gap: 6px;
+            }
+            .multi-topbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 4px;
+                text-align: center;
+            }
+            .multi-topbar .info-item {
+                justify-content: center;
+            }
+            .multi-topbar .config-group {
+                justify-content: center;
+            }
+            .multi-options-area .opt-labels {
+                gap: 10px;
+                font-size: 0.8rem;
+            }
+            .player-add-btn {
+                min-width: 120px;
+                height: 42px;
+                font-size: 0.75rem;
+                padding: 6px 20px;
             }
         }
         @media (max-width: 480px) {
@@ -854,196 +1268,277 @@
             .word-list {
                 grid-template-columns: 1fr;
             }
+            .player-card {
+                flex: 1 1 80px;
+                min-width: 70px;
+                padding: 6px 6px 8px;
+            }
+            .player-card .p-options button {
+                width: 24px;
+                height: 24px;
+                font-size: 0.5rem;
+            }
+            .player-add-btn {
+                min-width: 100px;
+                height: 36px;
+                font-size: 0.7rem;
+                padding: 4px 16px;
+            }
         }
         .hidden {
             display: none !important;
         }
         .text-muted {
             color: #5a7a4a;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
-        /* ===== 高级渲染 iOS 26 风格 (动效增强) ===== */
+
+        /* ===== 高级渲染 (iOS 26 风格) ===== */
         [data-glass="enabled"] body {
             background: radial-gradient(circle at 20% 25%, #e8f5e9, #c8e6c9 60%, #a5d6a7 100%);
         }
         [data-glass="enabled"] .app-container {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 30px 80px rgba(40, 80, 20, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.20);
+            backdrop-filter: blur(50px) saturate(200%);
+            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 30px 80px rgba(40, 80, 20, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.8);
             border-radius: 56px;
         }
         [data-glass="enabled"] .header {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 56px 56px 0 0;
         }
         [data-glass="enabled"] .ctrl-group select,
-        [data-glass="enabled"] .btn-unit-select {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            color: #1a3a0a;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
-        }
-        [data-glass="enabled"] .ctrl-group select:hover,
-        [data-glass="enabled"] .btn-unit-select:hover {
-            background: rgba(255, 255, 255, 0.5);
-            border-color: rgba(255, 255, 255, 0.6);
-        }
-        [data-glass="enabled"] .info-bar {
-            background: rgba(255, 255, 255, 0.15);
+        [data-glass="enabled"] .btn-unit-select,
+        [data-glass="enabled"] .mode-toggle {
+            background: rgba(255, 255, 255, 0.12);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 48px;
+            color: #1a3a0a;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
         }
-        [data-glass="enabled"] .listening-area {
-            background: rgba(255, 255, 255, 0.15);
+        [data-glass="enabled"] .ctrl-group select:hover,
+        [data-glass="enabled"] .btn-unit-select:hover {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+        [data-glass="enabled"] .mode-toggle button.active {
+            background: rgba(139, 195, 74, 0.20);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(139, 195, 74, 0.1);
+        }
+        [data-glass="enabled"] .info-bar,
+        [data-glass="enabled"] .multi-topbar {
+            background: rgba(255, 255, 255, 0.10);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 44px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 48px;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
+        [data-glass="enabled"] .listening-area {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 44px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+        }
         [data-glass="enabled"] .status-badge {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
         [data-glass="enabled"] .status-badge.playing {
-            background: rgba(139, 195, 74, 0.25);
-            border-color: rgba(139, 195, 74, 0.4);
+            background: rgba(139, 195, 74, 0.20);
+            border-color: rgba(139, 195, 74, 0.3);
         }
         [data-glass="enabled"] .audio-btn.primary {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.75), rgba(85, 139, 47, 0.75));
-            backdrop-filter: blur(8px);
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.70), rgba(85, 139, 47, 0.70));
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.15);
+        }
+        [data-glass="enabled"] .audio-btn.primary:hover:not(:disabled) {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.85), rgba(85, 139, 47, 0.85));
+            box-shadow: 0 8px 30px rgba(139, 195, 74, 0.25);
         }
         [data-glass="enabled"] .audio-btn.secondary {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        [data-glass="enabled"] .audio-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.3);
+        [data-glass="enabled"] .audio-btn.secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
         }
         [data-glass="enabled"] .option-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 255, 255, 0.10);
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
         }
         [data-glass="enabled"] .option-card:hover:not(.disabled) {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.25);
             border-color: rgba(139, 195, 74, 0.3);
+            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.06);
         }
         [data-glass="enabled"] .option-card .letter {
-            background: rgba(255, 255, 255, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.10);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
         [data-glass="enabled"] .option-card.correct {
-            background: rgba(102, 187, 106, 0.2);
+            background: rgba(102, 187, 106, 0.15);
             border-color: rgba(102, 187, 106, 0.3);
         }
         [data-glass="enabled"] .option-card.wrong {
-            background: rgba(239, 83, 80, 0.15);
+            background: rgba(239, 83, 80, 0.12);
             border-color: rgba(239, 83, 80, 0.25);
         }
         [data-glass="enabled"] .action-btn.reset {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+        }
+        [data-glass="enabled"] .action-btn.reset:hover {
+            background: rgba(255, 255, 255, 0.20);
+            border-color: rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .modal-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 56px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
         }
         [data-glass="enabled"] .modal-card .modal-footer .btn-confirm {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
-            backdrop-filter: blur(8px);
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .modal-card .modal-footer .btn-cancel,
         [data-glass="enabled"] .modal-card .modal-footer .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
         }
-        [data-glass="enabled"] .unit-item {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+        [data-glass="enabled"] .unit-item,
         [data-glass="enabled"] .word-item {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
-        [data-glass="enabled"] .rank-card,
-        [data-glass="enabled"] .history-card {
-            background: rgba(255, 255, 255, 0.30);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+        [data-glass="enabled"] .player-card {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 2px solid rgba(255, 255, 255, 0.10);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .player-card .p-options button {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.10);
+        }
+        [data-glass="enabled"] .player-card .p-options button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .player-card.card-correct {
+            border-color: rgba(102, 187, 106, 0.3);
+            background: rgba(102, 187, 106, 0.08);
+        }
+        [data-glass="enabled"] .player-card.card-wrong {
+            border-color: rgba(239, 83, 80, 0.2);
+            background: rgba(239, 83, 80, 0.05);
+        }
+        [data-glass="enabled"] .player-add-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        [data-glass="enabled"] .player-add-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+        [data-glass="enabled"] .history-card,
+        [data-glass="enabled"] .rank-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 56px;
         }
-        [data-glass="enabled"] .rank-close,
-        [data-glass="enabled"] .history-close {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
-            backdrop-filter: blur(8px);
+        [data-glass="enabled"] .history-close,
+        [data-glass="enabled"] .rank-close {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
+            backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .info-item .num {
-            background: rgba(139, 195, 74, 0.15);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(139, 195, 74, 0.10);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         [data-glass="enabled"] .info-item .score-num {
-            background: linear-gradient(135deg, rgba(255, 183, 77, 0.7), rgba(255, 138, 101, 0.7));
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.60), rgba(255, 138, 101, 0.60));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .logo {
             color: #1a3a0a;
         }
         [data-glass="enabled"] .logo span {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        [data-glass="enabled"] .ctrl-group label {
-            color: #3a6b2a;
+        [data-glass="enabled"] .multi-options-area {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.08);
         }
-        [data-glass="enabled"] .text-muted {
-            color: #4a7a3a;
+        [data-glass="enabled"] .multi-options-area .opt-labels span {
+            background: rgba(255, 255, 255, 0.08);
         }
-        [data-glass="enabled"] .btn-unit-select .badge {
-            background: rgba(139, 195, 74, 0.6);
-            color: #fff;
-        }
-        /* ===== 额外动效: 数字变化跳动 ===== */
-        .num, .score-num {
-            transition: all 0.3s ease;
-        }
-        .num.bump, .score-num.bump {
+
+        /* ===== 微动效增强 ===== */
+        .num.bump,
+        .score-num.bump {
             animation: bumpNumber 0.3s ease;
         }
         @keyframes bumpNumber {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.25); color: #ff8a65; }
-            100% { transform: scale(1); }
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.25);
+                color: #ff8a65;
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        [data-glass="enabled"] .player-card .p-options button:active:not(:disabled) {
+            animation: ripple 0.3s ease;
+        }
+        @keyframes ripple {
+            0% {
+                transform: scale(0.9);
+                box-shadow: 0 0 0 0 rgba(139, 195, 74, 0.3);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 6px rgba(139, 195, 74, 0);
+            }
         }
     </style>
 </head>
@@ -1054,6 +1549,10 @@
         <header class="header">
             <div class="logo">🎧 听力练习场</div>
             <div class="header-controls">
+                <div class="mode-toggle">
+                    <button class="active" data-mode="single">🧑 单人</button>
+                    <button data-mode="multi">👥 多人抢答</button>
+                </div>
                 <div class="ctrl-group">
                     <label>📚 年级</label>
                     <select id="gradeSelect"></select>
@@ -1068,13 +1567,14 @@
                 <button class="btn-unit-select" id="unitSelectBtn">
                     📌 选择单元 <span class="badge" id="unitBadge">0</span>
                 </button>
-                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:4px 14px;font-size:0.7rem;font-weight:600;color:#3a6b2a;cursor:pointer;backdrop-filter:blur(4px);font-family:inherit;transition:all 0.25s ease;">💎 高级渲染</button>
+                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:3px 10px;font-size:1rem;cursor:pointer;transition:all 0.25s ease;font-family:inherit;backdrop-filter:blur(4px);" aria-label="切换高级渲染">💎</button>
             </div>
         </header>
 
         <!-- ===== 主内容 ===== -->
-        <div class="main-content">
-            <div id="singleMode" class="single-mode">
+        <div class="main-content" id="mainContent">
+            <!-- ====== 单人模式 ====== -->
+            <div class="mode-panel active" id="singlePanel">
                 <div class="info-bar">
                     <div class="info-item">📝 第 <span class="num" id="singleProgress">0/0</span> 题</div>
                     <div class="info-item">⭐ 得分 <span class="score-num" id="singleScore">0</span> 分</div>
@@ -1082,7 +1582,6 @@
                         <button class="history-btn" id="historyBtn">📜 练习历史</button>
                     </div>
                 </div>
-
                 <div class="listening-area">
                     <div class="status-badge" id="singleStatus">🎧 准备就绪</div>
                     <div class="audio-controls">
@@ -1099,20 +1598,56 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ====== 多人模式 ====== -->
+            <div class="mode-panel" id="multiPanel">
+                <div class="multi-topbar">
+                    <div class="info-item">📝 第 <span class="num" id="multiProgress">0/0</span> 题</div>
+                    <div class="info-item">🏆 最高分 <span class="score-num" id="multiTopScore">0</span> 分</div>
+                    <div class="config-group">
+                        📊 题数 <input type="number" id="multiTotalInput" value="10" min="3" max="30" />
+                    </div>
+                    <div class="info-actions">
+                        <button class="history-btn" id="multiHistoryBtn">📜 历史</button>
+                    </div>
+                </div>
+
+                <div class="listening-area">
+                    <div class="status-badge" id="multiStatus">🎧 准备就绪 · 添加玩家开始</div>
+                    <div class="audio-controls">
+                        <button class="audio-btn primary" id="multiPlayBtn">▶ 开始练习</button>
+                        <button class="audio-btn secondary" id="multiReplayBtn">🔊 再听一次</button>
+                    </div>
+                    <!-- 选项标签 -->
+                    <div class="multi-options-area">
+                        <div class="opt-labels" id="multiOptionLabels">
+                            <span><span class="opt-letter">A.</span> <span id="optLabelA">---</span></span>
+                            <span><span class="opt-letter">B.</span> <span id="optLabelB">---</span></span>
+                            <span><span class="opt-letter">C.</span> <span id="optLabelC">---</span></span>
+                        </div>
+                    </div>
+                    <div class="action-row">
+                        <button class="action-btn reset" id="multiResetBtn">🔄 重新开始</button>
+                    </div>
+                </div>
+
+                <!-- 玩家卡片区域 (置于底部) -->
+                <div class="players-area" id="playersArea">
+                    <!-- 由 js 动态渲染 -->
+                </div>
+            </div>
         </div>
 
-        <div style="padding:6px 24px 14px; text-align:center; font-size:0.65rem; color:#6a8a5a; border-top:1px solid rgba(180,200,140,0.15);">
+        <div style="padding:4px 20px 12px; text-align:center; font-size:0.6rem; color:#6a8a5a; border-top:1px solid rgba(180,200,140,0.15);">
             🔊 录音文件放于 ./audio/ 目录，命名为 “单词.mp3” · 无录音则使用语音合成
         </div>
     </div>
 
-    <!-- ===== 单元选择模态框 ===== -->
+    <!-- ===== 模态框 ===== -->
     <div class="modal-overlay" id="unitModal">
         <div class="modal-card">
             <h2>📌 选择单元</h2>
-            <div class="modal-body" id="unitModalBody">
-                <!-- 由 js 动态渲染 -->
-            </div>
+            <div class="modal-body" id="unitModalBody"></div>
             <div class="modal-footer">
                 <button class="btn-secondary" id="unitWordSelectBtn">📝 选词</button>
                 <button class="btn-cancel" id="unitModalCancel">取消</button>
@@ -1121,16 +1656,13 @@
         </div>
     </div>
 
-    <!-- ===== 单词选择子模态框 ===== -->
     <div class="modal-overlay" id="wordSelectModal">
         <div class="modal-card">
             <div class="sub-header">
                 <button class="back-btn" id="wordSelectBack">‹</button>
                 <h3 id="wordSelectTitle">选择单词</h3>
             </div>
-            <div class="modal-body" id="wordSelectBody">
-                <!-- 由 js 动态渲染 -->
-            </div>
+            <div class="modal-body" id="wordSelectBody"></div>
             <div class="modal-footer">
                 <button class="btn-cancel" id="wordSelectCancel">取消</button>
                 <button class="btn-confirm" id="wordSelectConfirm">确认</button>
@@ -1142,7 +1674,7 @@
 
     <script>
         // ================================================================
-        //  1. 完整词库 (全年级)
+        //  1. 完整词库 (与单人模式共用)
         // ================================================================
         const wordBank = {
             3: {
@@ -1156,7 +1688,8 @@
                             bold: true }, { word: "listen", meaning: "听", bold: true },
                         { word: "help", meaning: "帮助", bold: true }, { word: "say", meaning: "说",
                             bold: false }, { word: "friend", meaning: "朋友", bold: false },
-                        { word: "good", meaning: "好的", bold: false }],
+                        { word: "good", meaning: "好的", bold: false }
+                    ],
                     "Unit 2": [{ word: "mum", meaning: "妈妈", bold: true }, { word: "dad", meaning: "爸爸",
                             bold: true }, { word: "grandma", meaning: "奶奶", bold: true },
                         { word: "grandpa", meaning: "爷爷", bold: true }, { word: "grandfather",
@@ -1169,7 +1702,8 @@
                         { word: "brother", meaning: "兄弟", bold: true }, { word: "baby", meaning: "婴儿",
                             bold: true }, { word: "uncle", meaning: "叔叔", bold: true },
                         { word: "aunt", meaning: "阿姨", bold: true }, { word: "small", meaning: "小的",
-                            bold: true }],
+                            bold: true }
+                    ],
                     "Unit 3": [{ word: "like", meaning: "喜欢", bold: true }, { word: "dog", meaning: "狗",
                             bold: true }, { word: "pet", meaning: "宠物", bold: false },
                         { word: "cat", meaning: "猫", bold: true }, { word: "fish", meaning: "鱼",
@@ -1184,7 +1718,8 @@
                         { word: "elephant", meaning: "大象", bold: true }, { word: "lion", meaning: "狮子",
                             bold: true }, { word: "animal", meaning: "动物", bold: false },
                         { word: "giraffe", meaning: "长颈鹿", bold: true }, { word: "tall", meaning: "高的",
-                            bold: true }, { word: "fast", meaning: "快速的", bold: true }],
+                            bold: true }, { word: "fast", meaning: "快速的", bold: true }
+                    ],
                     "Unit 4": [{ word: "apple", meaning: "苹果", bold: true }, { word: "banana", meaning: "香蕉",
                             bold: true }, { word: "farm", meaning: "农场", bold: false },
                         { word: "air", meaning: "空气", bold: true }, { word: "orange", meaning: "橙子；橙色",
@@ -1196,7 +1731,8 @@
                         { word: "plant", meaning: "植物", bold: false }, { word: "new", meaning: "新的",
                             bold: false }, { word: "tree", meaning: "树", bold: true },
                         { word: "sun", meaning: "太阳", bold: true }, { word: "give", meaning: "给予",
-                            bold: false }, { word: "them", meaning: "他们", bold: false }],
+                            bold: false }, { word: "them", meaning: "他们", bold: false }
+                    ],
                     "Unit 5": [{ word: "colour", meaning: "颜色", bold: false }, { word: "orange", meaning: "橙色",
                             bold: true }, { word: "green", meaning: "绿色", bold: true },
                         { word: "red", meaning: "红色", bold: true }, { word: "make", meaning: "制作",
@@ -1207,7 +1743,8 @@
                             bold: false }, { word: "some", meaning: "一些", bold: false },
                         { word: "pink", meaning: "粉色", bold: true }, { word: "draw", meaning: "画画",
                             bold: false }, { word: "white", meaning: "白色", bold: true },
-                        { word: "black", meaning: "黑色", bold: true }],
+                        { word: "black", meaning: "黑色", bold: true }
+                    ],
                     "Unit 6": [{ word: "one", meaning: "一", bold: true }, { word: "two", meaning: "二",
                             bold: true }, { word: "three", meaning: "三", bold: true },
                         { word: "four", meaning: "四", bold: true }, { word: "five", meaning: "五",
@@ -1218,7 +1755,8 @@
                             bold: false }, { word: "year", meaning: "年", bold: false },
                         { word: "o'clock", meaning: "点钟", bold: false }, { word: "cut", meaning: "切",
                             bold: false }, { word: "eat", meaning: "吃", bold: false },
-                        { word: "cake", meaning: "蛋糕", bold: false }]
+                        { word: "cake", meaning: "蛋糕", bold: false }
+                    ]
                 },
                 lower: {
                     "Unit 1": [{ word: "where", meaning: "哪里", bold: false }, { word: "from", meaning: "从...",
@@ -1236,7 +1774,8 @@
                         { word: "she", meaning: "她", bold: false }, { word: "very", meaning: "非常",
                             bold: false }, { word: "UK", meaning: "英国", bold: true },
                         { word: "China", meaning: "中国", bold: true }, { word: "Canada", meaning: "加拿大",
-                            bold: true }, { word: "USA", meaning: "美国", bold: true }],
+                            bold: true }, { word: "USA", meaning: "美国", bold: true }
+                    ],
                     "Unit 2": [{ word: "has", meaning: "有", bold: false }, { word: "long", meaning: "长的",
                             bold: true }, { word: "body", meaning: "身体", bold: false },
                         { word: "short", meaning: "短的", bold: true }, { word: "leg", meaning: "腿",
@@ -1252,7 +1791,8 @@
                         { word: "face", meaning: "脸", bold: false }, { word: "all", meaning: "全部",
                             bold: false }, { word: "song", meaning: "歌曲", bold: false },
                         { word: "or", meaning: "或者", bold: false }, { word: "much", meaning: "许多",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 3": [{ word: "eraser", meaning: "橡皮", bold: false }, { word: "find", meaning: "找到",
                             bold: false }, { word: "ruler", meaning: "尺子", bold: true },
                         { word: "pen", meaning: "钢笔", bold: true }, { word: "pencil", meaning: "铅笔",
@@ -1266,7 +1806,8 @@
                         { word: "tongue", meaning: "舌头", bold: false }, { word: "class", meaning: "班级",
                             bold: false }, { word: "in", meaning: "在...里", bold: false },
                         { word: "computer", meaning: "电脑", bold: false }, { word: "learn", meaning: "学习",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 4": [{ word: "breakfast", meaning: "早餐", bold: false }, { word: "time", meaning: "时间",
                             bold: false }, { word: "bread", meaning: "面包", bold: true },
                         { word: "egg", meaning: "鸡蛋", bold: true }, { word: "milk", meaning: "牛奶",
@@ -1278,7 +1819,8 @@
                             bold: false }, { word: "soup", meaning: "汤", bold: true },
                         { word: "fruit", meaning: "水果", bold: true }, { word: "colourful",
                             meaning: "色彩缤纷", bold: false }, { word: "candy", meaning: "糖果",
-                            bold: false }, { word: "yummy", meaning: "美味的", bold: false }],
+                            bold: false }, { word: "yummy", meaning: "美味的", bold: false }
+                    ],
                     "Unit 5": [{ word: "boat", meaning: "小船", bold: true }, { word: "cool", meaning: "酷的",
                             bold: false }, { word: "keep", meaning: "保持", bold: false },
                         { word: "at", meaning: "在", bold: false }, { word: "home", meaning: "家",
@@ -1290,7 +1832,8 @@
                         { word: "cap", meaning: "帽子", bold: true }, { word: "map", meaning: "地图",
                             bold: true }, { word: "under", meaning: "在下面", bold: true },
                         { word: "still", meaning: "仍然", bold: false }, { word: "put", meaning: "放置",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 6": [{ word: "fifteen", meaning: "十五", bold: false }, { word: "twelve", meaning: "十二",
                             bold: true }, { word: "fourteen", meaning: "十四", bold: true },
                         { word: "thirteen", meaning: "十三", bold: true }, { word: "eleven", meaning: "十一",
@@ -1299,7 +1842,8 @@
                             bold: true }, { word: "eighteen", meaning: "十八", bold: false },
                         { word: "nineteen", meaning: "十九", bold: false }, { word: "piggy bank",
                             meaning: "储蓄罐", bold: false }, { word: "pay", meaning: "支付", bold: false },
-                        { word: "back", meaning: "背部；返回", bold: false }]
+                        { word: "back", meaning: "背部；返回", bold: false }
+                    ]
                 }
             },
             4: {
@@ -1317,7 +1861,8 @@
                             meaning: "打扫", bold: true }, { word: "floor", meaning: "地板", bold: true },
                         { word: "together", meaning: "一起", bold: false }, { word: "people",
                             meaning: "人们", bold: false }, { word: "child", meaning: "孩子",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 2": [{ word: "his", meaning: "他的", bold: false }, { word: "strong", meaning: "强壮的",
                             bold: true }, { word: "hair", meaning: "头发", bold: true },
                         { word: "also", meaning: "也", bold: false }, { word: "kind", meaning: "和蔼的",
@@ -1327,7 +1872,8 @@
                             bold: true }, { word: "game", meaning: "游戏", bold: true },
                         { word: "football", meaning: "足球", bold: true }, { word: "basketball",
                             meaning: "篮球", bold: false }, { word: "always", meaning: "总是",
-                            bold: false }, { word: "best", meaning: "最好的", bold: false }],
+                            bold: false }, { word: "best", meaning: "最好的", bold: false }
+                    ],
                     "Unit 3": [{ word: "afternoon", meaning: "下午", bold: false }, { word: "there",
                             meaning: "那里", bold: false }, { word: "playground", meaning: "操场",
                             bold: true }, { word: "park", meaning: "公园", bold: true },
@@ -1340,7 +1886,8 @@
                             meaning: "最喜欢的", bold: false }, { word: "place", meaning: "地方",
                             bold: false }, { word: "photo", meaning: "照片", bold: false },
                         { word: "story", meaning: "故事", bold: false }, { word: "buy", meaning: "买",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 4": [{ word: "firefighter", meaning: "消防员", bold: false }, { word: "why",
                             meaning: "为什么", bold: false }, { word: "driver", meaning: "司机",
                             bold: true }, { word: "cleaner", meaning: "清洁工", bold: true },
@@ -1351,7 +1898,8 @@
                             meaning: "整理床铺", bold: false }, { word: "old", meaning: "老的",
                             bold: true }, { word: "ell", meaning: "？", bold: false },
                         { word: "everyone", meaning: "每个人", bold: false }, { word: "Ms", meaning: "女士",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 5": [{ word: "speak", meaning: "说", bold: false }, { word: "weather", meaning: "天气",
                             bold: false }, { word: "sunny", meaning: "晴朗的", bold: true },
                         { word: "hot", meaning: "热的", bold: true }, { word: "cold", meaning: "冷的",
@@ -1364,7 +1912,8 @@
                             bold: false }, { word: "snowman", meaning: "雪人", bold: false },
                         { word: "fun", meaning: "乐趣", bold: false }, { word: "their", meaning: "他们的",
                             bold: false }, { word: "swim", meaning: "游泳", bold: false },
-                        { word: "Sydney", meaning: "悉尼", bold: false }],
+                        { word: "Sydney", meaning: "悉尼", bold: false }
+                    ],
                     "Unit 6": [{ word: "whose", meaning: "谁的", bold: false }, { word: "sweater", meaning: "毛衣",
                             bold: true }, { word: "sock", meaning: "袜子", bold: true },
                         { word: "shirt", meaning: "衬衫", bold: true }, { word: "mine", meaning: "我的",
@@ -1380,7 +1929,8 @@
                             bold: false }, { word: "leaf", meaning: "叶子", bold: false },
                         { word: "leaves", meaning: "叶子（复数）", bold: false }, { word: "glove",
                             meaning: "手套", bold: false }, { word: "then", meaning: "然后",
-                            bold: false }]
+                            bold: false }
+                    ]
                 },
                 lower: {
                     "Unit 1": [{ word: "sorry", meaning: "抱歉", bold: false }, { word: "hurry", meaning: "赶快",
@@ -1398,7 +1948,8 @@
                         { word: "understand", meaning: "理解", bold: false }, { word: "wall", meaning: "墙",
                             bold: false }, { word: "newspaper", meaning: "报纸", bold: false },
                         { word: "hand out", meaning: "分发", bold: false }, { word: "workbook",
-                            meaning: "练习册", bold: false }],
+                            meaning: "练习册", bold: false }
+                    ],
                     "Unit 2": [{ word: "watch", meaning: "手表", bold: false }, { word: "TV", meaning: "电视",
                             bold: false }, { word: "homework", meaning: "作业", bold: true },
                         { word: "first", meaning: "第一", bold: false }, { word: "wet", meaning: "湿的",
@@ -1414,7 +1965,8 @@
                         { word: "think", meaning: "思考", bold: false }, { word: "work", meaning: "工作",
                             bold: false }, { word: "hard", meaning: "努力地", bold: false },
                         { word: "follow", meaning: "跟随", bold: false }, { word: "feel", meaning: "感觉",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 3": [{ word: "over", meaning: "结束", bold: false }, { word: "kid", meaning: "小孩",
                             bold: false }, { word: "dinner", meaning: "晚餐", bold: true },
                         { word: "art", meaning: "美术", bold: true }, { word: "lunch", meaning: "午餐",
@@ -1424,7 +1976,8 @@
                             bold: true }, { word: "go to bed", meaning: "上床睡觉", bold: true },
                         { word: "want", meaning: "想要", bold: false }, { word: "clock", meaning: "时钟",
                             bold: false }, { word: "just", meaning: "只是", bold: false },
-                        { word: "minute", meaning: "分钟", bold: false }],
+                        { word: "minute", meaning: "分钟", bold: false }
+                    ],
                     "Unit 4": [{ word: "trousers", meaning: "裤子", bold: true }, { word: "pair", meaning: "一对",
                             bold: false }, { word: "clothes", meaning: "衣服", bold: false },
                         { word: "those", meaning: "那些", bold: false }, { word: "shorts", meaning: "短裤",
@@ -1439,7 +1992,8 @@
                             meaning: "免费的", bold: false }, { word: "large", meaning: "大的",
                             bold: false }, { word: "size", meaning: "尺寸", bold: false },
                         { word: "list", meaning: "清单", bold: false }, { word: "try on", meaning: "试穿",
-                            bold: false }, { word: "any", meaning: "任何", bold: false }],
+                            bold: false }, { word: "any", meaning: "任何", bold: false }
+                    ],
                     "Unit 5": [{ word: "cow", meaning: "奶牛", bold: true }, { word: "horse", meaning: "马",
                             bold: true }, { word: "sheep", meaning: "绵羊", bold: true },
                         { word: "pig", meaning: "猪", bold: true }, { word: "chicken", meaning: "鸡",
@@ -1448,7 +2002,8 @@
                             bold: false }, { word: "carrot", meaning: "胡萝卜", bold: true },
                         { word: "potato", meaning: "土豆", bold: true }, { word: "green bean",
                             meaning: "豆角", bold: false }, { word: "can", meaning: "罐子",
-                            bold: false }, { word: "a box of", meaning: "一盒", bold: false }],
+                            bold: false }, { word: "a box of", meaning: "一盒", bold: false }
+                    ],
                     "Unit 6": [{ word: "feed", meaning: "喂", bold: true }, { word: "pass", meaning: "传递",
                             bold: false }, { word: "pick", meaning: "摘", bold: true },
                         { word: "milk", meaning: "挤奶", bold: true }, { word: "knife", meaning: "刀",
@@ -1460,7 +2015,8 @@
                             bold: false }, { word: "set the table", meaning: "摆餐具", bold: false },
                         { word: "supermarket", meaning: "超市", bold: false }, { word: "herself",
                             meaning: "她自己", bold: false }, { word: "week", meaning: "星期",
-                            bold: false }, { word: "salad", meaning: "沙拉", bold: false }]
+                            bold: false }, { word: "salad", meaning: "沙拉", bold: false }
+                    ]
                 }
             },
             5: {
@@ -1476,7 +2032,8 @@
                         { word: "front", meaning: "前面", bold: false }, { word: "easy", meaning: "容易的",
                             bold: false }, { word: "star", meaning: "星星", bold: false },
                         { word: "wonderful", meaning: "精彩的", bold: false }, { word: "Australia",
-                            meaning: "澳大利亚", bold: false }],
+                            meaning: "澳大利亚", bold: false }
+                    ],
                     "Unit 2": [{ word: "sad", meaning: "悲伤的", bold: true }, { word: "matter", meaning: "事情",
                             bold: false }, { word: "project", meaning: "项目", bold: false },
                         { word: "centre", meaning: "中心", bold: false }, { word: "agree", meaning: "同意",
@@ -1488,7 +2045,8 @@
                             bold: true }, { word: "parent", meaning: "父/母", bold: true },
                         { word: "ask", meaning: "问", bold: true }, { word: "laugh", meaning: "笑",
                             bold: true }, { word: "move", meaning: "移动", bold: true },
-                        { word: "yours", meaning: "你的（名词性物主代词）", bold: true }],
+                        { word: "yours", meaning: "你的（名词性物主代词）", bold: true }
+                    ],
                     "Unit 3": [{ word: "Wednesday", meaning: "星期三", bold: true }, { word: "subject",
                             meaning: "科目", bold: false }, { word: "Tuesday", meaning: "星期二",
                             bold: true }, { word: "Friday", meaning: "星期五", bold: true },
@@ -1502,7 +2060,8 @@
                             bold: true }, { word: "answer", meaning: "回答", bold: true },
                         { word: "ping-pong", meaning: "乒乓球", bold: true }, { word: "night",
                             meaning: "夜晚", bold: true }, { word: "visit", meaning: "参观",
-                            bold: true }, { word: "grandparent", meaning: "祖父母", bold: true }],
+                            bold: true }, { word: "grandparent", meaning: "祖父母", bold: true }
+                    ],
                     "Unit 4": [{ word: "stay", meaning: "停留", bold: false }, { word: "should", meaning: "应该",
                             bold: true }, { word: "flu", meaning: "流感", bold: true },
                         { word: "else", meaning: "其他", bold: true }, { word: "exercise", meaning: "锻炼",
@@ -1517,7 +2076,8 @@
                         { word: "brush", meaning: "刷", bold: true }, { word: "tooth", meaning: "牙齿（单数）",
                             bold: true }, { word: "teeth", meaning: "牙齿（复数）", bold: true },
                         { word: "twice", meaning: "两次", bold: true }, { word: "hour", meaning: "小时",
-                            bold: true }, { word: "free", meaning: "免费的/自由的", bold: true }],
+                            bold: true }, { word: "free", meaning: "免费的/自由的", bold: true }
+                    ],
                     "Unit 5": [{ word: "hungry", meaning: "饥饿的", bold: false }, { word: "beef", meaning: "牛肉",
                             bold: true }, { word: "ice cream", meaning: "冰淇淋", bold: true },
                         { word: "dumpling", meaning: "饺子", bold: true }, { word: "tea", meaning: "茶",
@@ -1530,7 +2090,8 @@
                             bold: true }, { word: "lake", meaning: "湖", bold: true },
                         { word: "world", meaning: "世界", bold: true }, { word: "round", meaning: "圆的",
                             bold: true }, { word: "different", meaning: "不同的", bold: true },
-                        { word: "way", meaning: "方式", bold: true }],
+                        { word: "way", meaning: "方式", bold: true }
+                    ],
                     "Unit 6": [{ word: "river", meaning: "河流", bold: true }, { word: "nature", meaning: "自然",
                             bold: false }, { word: "waterfall", meaning: "瀑布", bold: true },
                         { word: "forest", meaning: "森林", bold: true }, { word: "famous", meaning: "著名的",
@@ -1546,7 +2107,8 @@
                             bold: true }, { word: "fire", meaning: "火", bold: true },
                         { word: "know", meaning: "知道", bold: true }, { word: "before", meaning: "在...之前",
                             bold: true }, { word: "go hiking", meaning: "去远足", bold: true },
-                        { word: "bring", meaning: "带来", bold: true }]
+                        { word: "bring", meaning: "带来", bold: true }
+                    ]
                 },
                 lower: {
                     "Unit 1": [{ word: "eat breakfast", meaning: "吃早餐", bold: true },
@@ -1565,7 +2127,8 @@
                             bold: false }, { word: "why", meaning: "为什么", bold: false },
                         { word: "work", meaning: "工作", bold: false }, { word: "always",
                             meaning: "总是", bold: false }, { word: "go swimming", meaning: "去游泳",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 2": [{ word: "spring", meaning: "春天", bold: true }, { word: "summer", meaning: "夏天",
                             bold: true }, { word: "autumn", meaning: "秋天", bold: true },
                         { word: "winter", meaning: "冬天", bold: true }, { word: "season", meaning: "季节",
@@ -1579,7 +2142,8 @@
                             bold: false }, { word: "snow", meaning: "雪", bold: false },
                         { word: "good job", meaning: "做得好", bold: false }, { word: "because",
                             meaning: "因为", bold: false }, { word: "vacation", meaning: "假期",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 3": [{ word: "January", meaning: "一月", bold: true }, { word: "February",
                             meaning: "二月", bold: true }, { word: "March", meaning: "三月",
                             bold: true }, { word: "April", meaning: "四月", bold: true },
@@ -1599,7 +2163,8 @@
                         { word: "national", meaning: "国家的", bold: false },
                         { word: "National Day", meaning: "国庆节", bold: false },
                         { word: "Thanksgiving Day", meaning: "感恩节", bold: false },
-                        { word: "Christmas", meaning: "圣诞节", bold: false }],
+                        { word: "Christmas", meaning: "圣诞节", bold: false }
+                    ],
                     "Unit 4": [{ word: "first", meaning: "第一", bold: true }, { word: "second", meaning: "第二",
                             bold: true }, { word: "third", meaning: "第三", bold: true },
                         { word: "fourth", meaning: "第四", bold: true }, { word: "fifth", meaning: "第五",
@@ -1607,7 +2172,8 @@
                         { word: "twentieth", meaning: "第二十", bold: true },
                         { word: "twenty-first", meaning: "第二十一", bold: true },
                         { word: "twenty-third", meaning: "第二十三", bold: true },
-                        { word: "thirtieth", meaning: "第三十", bold: true }],
+                        { word: "thirtieth", meaning: "第三十", bold: true }
+                    ],
                     "Unit 5": [{ word: "mine", meaning: "我的", bold: true }, { word: "yours", meaning: "你的",
                             bold: true }, { word: "his", meaning: "他的", bold: true },
                         { word: "hers", meaning: "她的", bold: true }, { word: "theirs", meaning: "他们的",
@@ -1616,7 +2182,8 @@
                             meaning: "吃", bold: true }, { word: "playing", meaning: "玩",
                             bold: true }, { word: "jumping", meaning: "跳", bold: true },
                         { word: "drinking", meaning: "喝", bold: true }, { word: "sleeping",
-                            meaning: "睡觉", bold: true }],
+                            meaning: "睡觉", bold: true }
+                    ],
                     "Unit 6": [{ word: "doing morning exercises", meaning: "做早操", bold: true },
                         { word: "having lunch", meaning: "吃午餐", bold: true },
                         { word: "reading a book", meaning: "读书", bold: true },
@@ -1628,7 +2195,8 @@
                         { word: "turn", meaning: "轮流", bold: true }, { word: "take turns",
                             meaning: "轮流", bold: true }, { word: "bamboo", meaning: "竹子",
                             bold: false }, { word: "say", meaning: "说", bold: false },
-                        { word: "teach", meaning: "教", bold: false }]
+                        { word: "teach", meaning: "教", bold: false }
+                    ]
                 }
             },
             6: {
@@ -1654,7 +2222,8 @@
                         { word: "Eiffel Tower", meaning: "埃菲尔铁塔", bold: false },
                         { word: "Terracotta Warriors", meaning: "兵马俑", bold: false },
                         { word: "Jinggangshan Revolution Museum", meaning: "井冈山革命博物馆",
-                            bold: false }, { word: "the Red Army", meaning: "红军", bold: false }],
+                            bold: false }, { word: "the Red Army", meaning: "红军", bold: false }
+                    ],
                     "Unit 2": [{ word: "paste", meaning: "粘贴", bold: false }, { word: "dress", meaning: "连衣裙",
                             bold: false }, { word: "gala", meaning: "盛会", bold: false },
                         { word: "count down", meaning: "倒计时", bold: false },
@@ -1675,7 +2244,8 @@
                             bold: false }, { word: "won", meaning: "赢（过去式）", bold: false },
                         { word: "winner", meaning: "获胜者", bold: false }, { word: "ever",
                             meaning: "曾经", bold: false }, { word: "exciting", meaning: "令人兴奋的",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 3": [{ word: "cold", meaning: "感冒", bold: false }, { word: "ill", meaning: "生病的",
                             bold: false }, { word: "head", meaning: "头", bold: false },
                         { word: "runny nose", meaning: "流鼻涕", bold: false }, { word: "soon",
@@ -1690,7 +2260,8 @@
                         { word: "glass", meaning: "玻璃", bold: false }, { word: "may",
                             meaning: "可以", bold: false }, { word: "add", meaning: "添加",
                             bold: false }, { word: "video", meaning: "视频", bold: false },
-                        { word: "better", meaning: "更好的", bold: false }],
+                        { word: "better", meaning: "更好的", bold: false }
+                    ],
                     "Unit 4": [{ word: "money", meaning: "钱", bold: false }, { word: "money pocket",
                             meaning: "钱袋", bold: false }, { word: "schoolbag", meaning: "书包",
                             bold: false }, { word: "goods", meaning: "商品", bold: false },
@@ -1703,7 +2274,8 @@
                         { word: "ticket", meaning: "票", bold: false }, { word: "manage",
                             meaning: "管理", bold: false }, { word: "sell", meaning: "卖",
                             bold: false }, { word: "jar", meaning: "罐子", bold: false },
-                        { word: "for example", meaning: "例如", bold: false }],
+                        { word: "for example", meaning: "例如", bold: false }
+                    ],
                     "Unit 5": [{ word: "planet", meaning: "行星", bold: false }, { word: "earth", meaning: "地球",
                             bold: false }, { word: "sky", meaning: "天空", bold: false },
                         { word: "daytime", meaning: "白天", bold: false }, { word: "cloud",
@@ -1727,7 +2299,8 @@
                         { word: "question", meaning: "问题", bold: false },
                         { word: "sunset", meaning: "日落", bold: false }, { word: "time",
                             meaning: "时间", bold: false }, { word: "Mars", meaning: "火星",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 6": [{ word: "power", meaning: "电力", bold: false }, { word: "electricity",
                             meaning: "电", bold: false }, { word: "solar", meaning: "太阳的",
                             bold: false }, { word: "type", meaning: "类型", bold: false },
@@ -1748,7 +2321,8 @@
                         { word: "bottle", meaning: "瓶子", bold: false }, { word: "top",
                             meaning: "顶部", bold: false }, { word: "useful", meaning: "有用的",
                             bold: false }, { word: "dirty", meaning: "肮脏的", bold: false },
-                        { word: "side", meaning: "侧面", bold: false }]
+                        { word: "side", meaning: "侧面", bold: false }
+                    ]
                 },
                 lower: {
                     "Unit 1": [{ word: "younger", meaning: "更年轻的", bold: true }, { word: "older",
@@ -1766,7 +2340,8 @@
                         { word: "countryside", meaning: "乡村", bold: false },
                         { word: "lower", meaning: "更低的", bold: false }, { word: "shadow",
                             meaning: "影子", bold: false }, { word: "become", meaning: "变成",
-                            bold: false }],
+                            bold: false }
+                    ],
                     "Unit 2": [{ word: "cleaned", meaning: "打扫了", bold: true }, { word: "stayed",
                             meaning: "待了", bold: true }, { word: "washed", meaning: "洗了",
                             bold: true }, { word: "watched", meaning: "看了", bold: true },
@@ -1784,7 +2359,8 @@
                         { word: "broken", meaning: "破碎的", bold: false }, { word: "lamp",
                             meaning: "台灯", bold: false }, { word: "loud", meaning: "大声的",
                             bold: false }, { word: "enjoy", meaning: "享受", bold: false },
-                        { word: "stay", meaning: "停留", bold: false }],
+                        { word: "stay", meaning: "停留", bold: false }
+                    ],
                     "Unit 3": [{ word: "went", meaning: "去了", bold: true }, { word: "camp", meaning: "露营",
                             bold: true }, { word: "went camping", meaning: "去露营", bold: true },
                         { word: "fish", meaning: "鱼；钓鱼", bold: true },
@@ -1800,7 +2376,8 @@
                             meaning: "吐鲁番", bold: false }, { word: "could", meaning: "可以",
                             bold: false }, { word: "till", meaning: "直到", bold: false },
                         { word: "beach", meaning: "海滩", bold: false }, { word: "laughed",
-                            meaning: "笑了", bold: false }],
+                            meaning: "笑了", bold: false }
+                    ],
                     "Unit 4": [{ word: "dining hall", meaning: "餐厅", bold: true }, { word: "grass",
                             meaning: "草", bold: true }, { word: "gym", meaning: "体育馆",
                             bold: true }, { word: "ago", meaning: "以前", bold: true },
@@ -1818,7 +2395,8 @@
                         { word: "felt", meaning: "感觉", bold: false }, { word: "cheetah",
                             meaning: "猎豹", bold: false }, { word: "trip", meaning: "绊倒",
                             bold: false }, { word: "woke", meaning: "醒来", bold: false },
-                        { word: "dream", meaning: "梦", bold: false }]
+                        { word: "dream", meaning: "梦", bold: false }
+                    ]
                 }
             }
         };
@@ -1889,10 +2467,12 @@
             reset() { this.playTone(440, 0.08);
                 setTimeout(() => this.playTone(554, 0.08), 70); },
             playStart() { this.playTone(880, 0.06);
-                setTimeout(() => this.playTone(1108, 0.06), 70); }
+                setTimeout(() => this.playTone(1108, 0.06), 70); },
+            multiCorrect() {
+                [523, 659, 784].forEach((f, i) => setTimeout(() => this.playTone(f, 0.12), i * 80));
+            }
         };
 
-        // 礼花
         const fwCanvas = document.getElementById('fireworkCanvas');
         const fwCtx = fwCanvas.getContext('2d');
         let fwParticles = [];
@@ -2091,13 +2671,10 @@
             grade: '4',
             book: 'upper',
             glass: false,
-            // 选中的单元和单词配置
-            selectedUnits: [], // 单元名称列表
-            // 每个单元选中的单词列表，如果未选则视为全部
-            selectedWordsPerUnit: {}, // { unitName: [word1, word2, ...] } 如果不存在则视为全部
-            // 单人练习状态
+            selectedUnits: [],
+            selectedWordsPerUnit: {},
             single: {
-                words: [], // 当前练习的单词列表 (合并后)
+                words: [],
                 index: 0,
                 score: 0,
                 total: 0,
@@ -2110,10 +2687,28 @@
                 audioLock: false,
                 history: [],
                 autoNextTimer: null,
+            },
+            multi: {
+                players: [],
+                words: [],
+                index: 0,
+                totalQuestions: 10,
+                maxScore: 20,
+                correctWord: '',
+                options: [],
+                answered: false,
+                correctPlayerId: null,
+                playerStatus: {},
+                allWrong: false,
+                isPlaying: false,
+                audioLock: false,
+                played: false,
+                history: [],
+                autoNextTimer: null,
+                playerIdCounter: 0,
             }
         };
 
-        // 默认选中第一个单元（用于初始化）
         function initDefaultSelection() {
             const units = getUnits(STATE.grade, STATE.book);
             if (units.length > 0) {
@@ -2142,12 +2737,24 @@
         const singleResetBtn = $('singleResetBtn');
         const historyBtn = $('historyBtn');
 
+        const multiProgress = $('multiProgress');
+        const multiTopScore = $('multiTopScore');
+        const multiStatus = $('multiStatus');
+        const multiPlayBtn = $('multiPlayBtn');
+        const multiReplayBtn = $('multiReplayBtn');
+        const multiResetBtn = $('multiResetBtn');
+        const multiHistoryBtn = $('multiHistoryBtn');
+        const playersArea = $('playersArea');
+        const multiTotalInput = $('multiTotalInput');
+        const optLabelA = $('optLabelA');
+        const optLabelB = $('optLabelB');
+        const optLabelC = $('optLabelC');
+
         const unitModal = $('unitModal');
         const unitModalBody = $('unitModalBody');
         const unitModalConfirm = $('unitModalConfirm');
         const unitModalCancel = $('unitModalCancel');
         const unitWordSelectBtn = $('unitWordSelectBtn');
-
         const wordSelectModal = $('wordSelectModal');
         const wordSelectBody = $('wordSelectBody');
         const wordSelectTitle = $('wordSelectTitle');
@@ -2155,11 +2762,15 @@
         const wordSelectConfirm = $('wordSelectConfirm');
         const wordSelectCancel = $('wordSelectCancel');
 
+        const modeBtns = document.querySelectorAll('.mode-toggle button');
+        const singlePanel = $('singlePanel');
+        const multiPanel = $('multiPanel');
+        const mainContent = $('mainContent');
+
         // ================================================================
-        //  7. 核心逻辑：加载单词、渲染题目等 (单人)
+        //  7. 单人模式 (保持不变)
         // ================================================================
         const Single = {
-            // 根据当前选中的单元和单词配置，生成练习单词列表
             buildWordList() {
                 let allWords = [];
                 const units = STATE.selectedUnits;
@@ -2174,7 +2785,6 @@
                     }
                     allWords = allWords.concat(wordsToAdd);
                 }
-                // 去重（按单词去重，保留第一个出现的）
                 const seen = new Set();
                 const unique = [];
                 for (const w of allWords) {
@@ -2205,7 +2815,6 @@
                 }
                 this.updateUI();
                 this.renderQuestion();
-                // 更新单元徽章
                 this.updateUnitBadge();
             },
 
@@ -2491,7 +3100,487 @@
         };
 
         // ================================================================
-        //  8. 单元选择模态框
+        //  8. 多人模式
+        // ================================================================
+        const Multi = {
+            init() {
+                const p1 = this.addPlayer('玩家1');
+                const p2 = this.addPlayer('玩家2');
+                this.loadWords();
+                this.renderPlayers();
+                this.renderQuestion();
+                this.updateUI();
+            },
+
+            addPlayer(name) {
+                const id = 'p' + (++STATE.multi.playerIdCounter);
+                const player = { id, name, score: 0, wrongCount: 0 };
+                STATE.multi.players.push(player);
+                STATE.multi.playerStatus[id] = 'pending';
+                this.renderPlayers();
+                this.updateUI();
+                return player;
+            },
+
+            removePlayer(id) {
+                if (STATE.multi.players.length <= 2) {
+                    alert('至少保留2名玩家');
+                    return false;
+                }
+                STATE.multi.players = STATE.multi.players.filter(p => p.id !== id);
+                delete STATE.multi.playerStatus[id];
+                this.renderPlayers();
+                this.updateUI();
+                return true;
+            },
+
+            renamePlayer(id, newName) {
+                const p = STATE.multi.players.find(p => p.id === id);
+                if (p && newName.trim()) {
+                    p.name = newName.trim();
+                    this.renderPlayers();
+                }
+            },
+
+            buildWordList() {
+                let allWords = [];
+                const units = STATE.selectedUnits;
+                const grade = STATE.grade;
+                const book = STATE.book;
+                for (const unit of units) {
+                    const unitWords = getWords(grade, book, unit);
+                    const selected = STATE.selectedWordsPerUnit[unit];
+                    let wordsToAdd = unitWords;
+                    if (selected && selected.length > 0) {
+                        wordsToAdd = unitWords.filter(w => selected.includes(w.word));
+                    }
+                    allWords = allWords.concat(wordsToAdd);
+                }
+                const seen = new Set();
+                const unique = [];
+                for (const w of allWords) {
+                    if (!seen.has(w.word)) {
+                        seen.add(w.word);
+                        unique.push(w);
+                    }
+                }
+                return unique;
+            },
+
+            loadWords() {
+                const all = this.buildWordList();
+                const valid = all.filter(w => w.word && w.word.trim().length > 0);
+                STATE.multi.words = shuffle([...valid]);
+                STATE.multi.index = 0;
+                STATE.multi.players.forEach(p => { p.score = 0;
+                    p.wrongCount = 0; });
+                STATE.multi.history = [];
+                STATE.multi.answered = false;
+                STATE.multi.correctPlayerId = null;
+                STATE.multi.allWrong = false;
+                STATE.multi.isPlaying = false;
+                STATE.multi.audioLock = false;
+                STATE.multi.played = false;
+                if (STATE.multi.autoNextTimer) {
+                    clearTimeout(STATE.multi.autoNextTimer);
+                    STATE.multi.autoNextTimer = null;
+                }
+                STATE.multi.players.forEach(p => {
+                    STATE.multi.playerStatus[p.id] = 'pending';
+                });
+                this.renderPlayers();
+                this.renderQuestion();
+                this.updateUI();
+                this.updateUnitBadge();
+            },
+
+            renderQuestion() {
+                const words = STATE.multi.words;
+                const idx = STATE.multi.index;
+                const total = parseInt(multiTotalInput.value) || 10;
+
+                if (idx >= total || idx >= words.length || words.length === 0) {
+                    multiStatus.textContent = '🎉 全部完成！点击「重新开始」再来一轮';
+                    multiStatus.className = 'status-badge done';
+                    multiPlayBtn.disabled = true;
+                    multiReplayBtn.disabled = true;
+                    multiProgress.textContent = `${Math.min(idx, words.length)}/${total}`;
+                    if (idx >= total || idx >= words.length) {
+                        sfx.cheer();
+                        showFirework(document.querySelector('.listening-area'));
+                    }
+                    return;
+                }
+
+                const word = words[idx];
+                const pool = words;
+                const opts = pickOptions(word.word, pool, 3);
+                STATE.multi.options = opts;
+                STATE.multi.correctWord = word.word;
+                STATE.multi.answered = false;
+                STATE.multi.correctPlayerId = null;
+                STATE.multi.allWrong = false;
+                STATE.multi.played = false;
+                STATE.multi.isPlaying = false;
+                STATE.multi.audioLock = false;
+
+                STATE.multi.players.forEach(p => {
+                    STATE.multi.playerStatus[p.id] = 'pending';
+                });
+
+                optLabelA.textContent = opts[0] || '---';
+                optLabelB.textContent = opts[1] || '---';
+                optLabelC.textContent = opts[2] || '---';
+
+                multiStatus.textContent = '🎧 点击「开始练习」听录音，然后抢答！';
+                multiStatus.className = 'status-badge multi-wait';
+                multiPlayBtn.disabled = false;
+                multiReplayBtn.disabled = true;
+                multiProgress.textContent = `${idx+1}/${total}`;
+                this.updateUI();
+                this.renderPlayers();
+            },
+
+            renderPlayers() {
+                const players = STATE.multi.players;
+                if (players.length === 0) {
+                    playersArea.innerHTML =
+                        `<div style="text-align:center;padding:20px;color:#5a7a4a;width:100%;">请添加玩家</div>`;
+                    return;
+                }
+
+                let html = '';
+                const letters = ['A', 'B', 'C'];
+                const statusMap = {
+                    'pending': '⏳ 等待作答',
+                    'correct': '✅ 正确！',
+                    'wrong': '❌ 错误'
+                };
+
+                for (const p of players) {
+                    const status = STATE.multi.playerStatus[p.id] || 'pending';
+                    const isCorrect = status === 'correct';
+                    const isWrong = status === 'wrong';
+                    const isPending = status === 'pending';
+                    const disabled = !isPending || STATE.multi.answered || STATE.multi.allWrong;
+
+                    let cardClass = 'player-card';
+                    if (isCorrect) cardClass += ' card-correct';
+                    if (isWrong) cardClass += ' card-wrong';
+                    if (STATE.multi.answered && !isCorrect && !isWrong) cardClass += ' card-locked';
+
+                    let statusText = statusMap[status] || '⏳ 等待作答';
+                    let statusClass = '';
+                    if (isCorrect) statusClass = 'correct';
+                    if (isWrong) statusClass = 'wrong';
+                    if (STATE.multi.answered && !isCorrect && !isWrong) statusClass = 'locked';
+
+                    html += `
+                        <div class="${cardClass}" data-id="${p.id}">
+                            <div class="p-name">
+                                ${p.name}
+                                <button class="p-edit" data-id="${p.id}">✎</button>
+                            </div>
+                            <div class="p-score">⭐ <span>${p.score}</span></div>
+                            <div class="p-options">
+                                ${letters.map((letter, idx) => {
+                                    const optWord = STATE.multi.options[idx] || '';
+                                    let btnClass = '';
+                                    if (isCorrect && optWord === STATE.multi.correctWord) btnClass = 'p-correct';
+                                    if (isWrong && optWord === STATE.multi.correctWord) btnClass = 'p-correct';
+                                    if (isWrong && status === 'wrong') btnClass = 'p-wrong';
+                                    if (isCorrect) btnClass = 'p-correct';
+                                    return `<button class="${btnClass}" data-player="${p.id}" data-optidx="${idx}" ${disabled ? 'disabled' : ''}>${letter}</button>`;
+                                }).join('')}
+                            </div>
+                            <div class="p-status ${statusClass}">${statusText}</div>
+                            ${STATE.multi.players.length > 2 ? `<button class="p-remove" data-id="${p.id}">✕</button>` : ''}
+                        </div>
+                    `;
+                }
+
+                // 添加玩家按钮 — 独立一行，放在最底部
+                if (STATE.multi.players.length < 5) {
+                    html += `
+                        <div class="player-add-wrapper">
+                            <button class="player-add-btn" id="multiAddPlayerBtn">➕ 添加玩家</button>
+                        </div>
+                    `;
+                }
+
+                playersArea.innerHTML = html;
+
+                // 事件绑定
+                playersArea.querySelectorAll('.p-options button:not(:disabled)').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const playerId = btn.dataset.player;
+                        const optIdx = parseInt(btn.dataset.optidx);
+                        this.playerSelect(playerId, optIdx);
+                    });
+                });
+
+                playersArea.querySelectorAll('.p-edit').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        const p = STATE.multi.players.find(p => p.id === id);
+                        if (p) {
+                            const newName = prompt('修改玩家名称：', p.name);
+                            if (newName && newName.trim()) {
+                                this.renamePlayer(id, newName.trim());
+                            }
+                        }
+                    });
+                });
+
+                playersArea.querySelectorAll('.p-remove').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        this.removePlayer(id);
+                    });
+                });
+
+                const addBtn = document.getElementById('multiAddPlayerBtn');
+                if (addBtn) {
+                    addBtn.addEventListener('click', () => {
+                        const name = prompt('输入玩家名称：', `玩家${STATE.multi.players.length + 1}`);
+                        if (name && name.trim()) {
+                            this.addPlayer(name.trim());
+                        } else if (name !== null) {
+                            this.addPlayer(`玩家${STATE.multi.players.length + 1}`);
+                        }
+                    });
+                }
+            },
+
+            playerSelect(playerId, optIdx) {
+                if (STATE.multi.answered || STATE.multi.allWrong) return;
+                const status = STATE.multi.playerStatus[playerId];
+                if (status !== 'pending') return;
+
+                const selectedWord = STATE.multi.options[optIdx];
+                const correct = STATE.multi.correctWord;
+                const isCorrect = selectedWord === correct;
+
+                if (isCorrect) {
+                    STATE.multi.playerStatus[playerId] = 'correct';
+                    STATE.multi.answered = true;
+                    STATE.multi.correctPlayerId = playerId;
+                    const p = STATE.multi.players.find(p => p.id === playerId);
+                    if (p) p.score += 2;
+                    sfx.multiCorrect();
+                    multiStatus.textContent = `🎉 ${p ? p.name : '玩家'} 抢答成功！ +2分`;
+                    multiStatus.className = 'status-badge multi-correct';
+                    // 在答对的玩家卡片位置放礼花
+                    const cardEl = playersArea.querySelector(`.player-card[data-id="${playerId}"]`);
+                    if (cardEl) {
+                        setTimeout(() => showFirework(cardEl), 200);
+                    } else {
+                        showFirework(document.querySelector('.listening-area'));
+                    }
+                    const wordObj = STATE.multi.words[STATE.multi.index];
+                    STATE.multi.history.push({
+                        word: wordObj.word,
+                        meaning: wordObj.meaning,
+                        correctPlayer: p ? p.name : '未知',
+                        wrongPlayers: STATE.multi.players.filter(pl => STATE.multi.playerStatus[pl.id] === 'wrong')
+                            .map(pl => pl.name),
+                        options: [...STATE.multi.options],
+                        timestamp: Date.now()
+                    });
+                    if (STATE.multi.autoNextTimer) clearTimeout(STATE.multi.autoNextTimer);
+                    STATE.multi.autoNextTimer = setTimeout(() => {
+                        this.next();
+                    }, 1500);
+                } else {
+                    STATE.multi.playerStatus[playerId] = 'wrong';
+                    const p = STATE.multi.players.find(p => p.id === playerId);
+                    if (p) p.wrongCount++;
+                    sfx.wrong();
+                    multiStatus.textContent = `❌ ${p ? p.name : '玩家'} 答错了！`;
+                    multiStatus.className = 'status-badge multi-wrong';
+
+                    const allWrong = STATE.multi.players.every(p => STATE.multi.playerStatus[p.id] === 'wrong');
+                    if (allWrong) {
+                        STATE.multi.allWrong = true;
+                        multiStatus.textContent = `😅 所有人都答错了，正确答案是 “${correct}”`;
+                        multiStatus.className = 'status-badge multi-wrong';
+                        const wordObj = STATE.multi.words[STATE.multi.index];
+                        STATE.multi.history.push({
+                            word: wordObj.word,
+                            meaning: wordObj.meaning,
+                            correctPlayer: null,
+                            wrongPlayers: STATE.multi.players.map(p => p.name),
+                            options: [...STATE.multi.options],
+                            timestamp: Date.now()
+                        });
+                        if (STATE.multi.autoNextTimer) clearTimeout(STATE.multi.autoNextTimer);
+                        STATE.multi.autoNextTimer = setTimeout(() => {
+                            this.next();
+                        }, 2000);
+                    } else {
+                        multiStatus.textContent = `⏳ 还有玩家未作答，继续抢答...`;
+                        multiStatus.className = 'status-badge multi-wait';
+                    }
+                }
+
+                this.renderPlayers();
+                this.updateUI();
+            },
+
+            playAudio() {
+                if (STATE.multi.audioLock) return;
+                const words = STATE.multi.words;
+                const idx = STATE.multi.index;
+                const total = parseInt(multiTotalInput.value) || 10;
+                if (idx >= total || idx >= words.length) return;
+                if (STATE.multi.isPlaying) return;
+                const word = words[idx].word;
+
+                STATE.multi.audioLock = true;
+                STATE.multi.isPlaying = true;
+                multiPlayBtn.disabled = true;
+                multiReplayBtn.disabled = true;
+                multiStatus.textContent = '🔊 播放中 ...';
+                multiStatus.className = 'status-badge playing';
+
+                AudioEngine.play(word,
+                    () => {},
+                    () => {
+                        STATE.multi.isPlaying = false;
+                        STATE.multi.audioLock = false;
+                        multiPlayBtn.disabled = false;
+                        multiReplayBtn.disabled = false;
+                        if (!STATE.multi.answered && !STATE.multi.allWrong) {
+                            multiStatus.textContent = '🔊 播放完毕，开始抢答！点击玩家卡片上的 A/B/C';
+                            multiStatus.className = 'status-badge multi-wait';
+                            STATE.multi.played = true;
+                        }
+                    }
+                );
+            },
+
+            replayAudio() {
+                if (STATE.multi.audioLock) return;
+                if (STATE.multi.answered || STATE.multi.allWrong) return;
+                const words = STATE.multi.words;
+                const idx = STATE.multi.index;
+                const total = parseInt(multiTotalInput.value) || 10;
+                if (idx >= total || idx >= words.length) return;
+                const word = words[idx].word;
+
+                STATE.multi.audioLock = true;
+                STATE.multi.isPlaying = true;
+                multiPlayBtn.disabled = true;
+                multiReplayBtn.disabled = true;
+                multiStatus.textContent = '🔊 再听一次 ...';
+                multiStatus.className = 'status-badge playing';
+
+                AudioEngine.play(word,
+                    () => {},
+                    () => {
+                        STATE.multi.isPlaying = false;
+                        STATE.multi.audioLock = false;
+                        multiPlayBtn.disabled = false;
+                        multiReplayBtn.disabled = false;
+                        if (!STATE.multi.answered && !STATE.multi.allWrong) {
+                            multiStatus.textContent = '🔊 播放完毕，继续抢答！';
+                            multiStatus.className = 'status-badge multi-wait';
+                        }
+                    }
+                );
+            },
+
+            next() {
+                const total = parseInt(multiTotalInput.value) || 10;
+                STATE.multi.index++;
+                if (STATE.multi.index >= total || STATE.multi.index >= STATE.multi.words.length) {
+                    this.renderQuestion();
+                    multiStatus.textContent = '🎉 全部完成！';
+                    multiStatus.className = 'status-badge done';
+                    multiPlayBtn.disabled = true;
+                    multiReplayBtn.disabled = true;
+                    sfx.cheer();
+                    showFirework(document.querySelector('.listening-area'));
+                    return;
+                }
+                sfx.next();
+                this.renderQuestion();
+                setTimeout(() => {
+                    if (!STATE.multi.answered && !STATE.multi.allWrong && !STATE.multi.isPlaying) {
+                        this.playAudio();
+                    }
+                }, 500);
+            },
+
+            reset() {
+                AudioEngine.stop();
+                STATE.multi.isPlaying = false;
+                STATE.multi.audioLock = false;
+                if (STATE.multi.autoNextTimer) {
+                    clearTimeout(STATE.multi.autoNextTimer);
+                    STATE.multi.autoNextTimer = null;
+                }
+                STATE.multi.players.forEach(p => { p.score = 0;
+                    p.wrongCount = 0; });
+                this.loadWords();
+                sfx.reset();
+                multiStatus.textContent = '🔄 已重置';
+                multiStatus.className = 'status-badge';
+                multiPlayBtn.disabled = false;
+                multiReplayBtn.disabled = true;
+                this.renderPlayers();
+                this.updateUI();
+            },
+
+            updateUI() {
+                const total = parseInt(multiTotalInput.value) || 10;
+                const done = Math.min(STATE.multi.index + (STATE.multi.answered || STATE.multi.allWrong ? 1 : 0), total);
+                multiProgress.textContent = `${Math.min(done, total)}/${total}`;
+                const topScore = STATE.multi.players.reduce((max, p) => Math.max(max, p.score), 0);
+                multiTopScore.textContent = topScore;
+                this.updateUnitBadge();
+            },
+
+            updateUnitBadge() {
+                const count = STATE.selectedUnits.length;
+                unitBadge.textContent = count;
+            },
+
+            showHistory() {
+                const history = STATE.multi.history;
+                if (history.length === 0) {
+                    alert('暂无练习记录');
+                    return;
+                }
+                let html = `<div class="history-card">
+                            <h2>📜 多人抢答历史 (${history.length} 题)</h2>
+                            <div class="history-list">`;
+                for (const item of history) {
+                    const winner = item.correctPlayer ? `🏆 ${item.correctPlayer}` : '😅 无人答对';
+                    const wrongs = item.wrongPlayers.length > 0 ? `❌ ${item.wrongPlayers.join(', ')}` : '';
+                    html += `<div class="history-item">
+                                <span>${item.word} <span class="word-badge">${item.meaning}</span></span>
+                                <span style="font-size:0.7rem;">${winner} ${wrongs}</span>
+                             </div>`;
+                }
+                html += `</div><button class="history-close">关闭</button></div>`;
+
+                const modal = document.createElement('div');
+                modal.className = 'history-modal';
+                modal.innerHTML = html;
+                document.body.appendChild(modal);
+
+                modal.querySelector('.history-close').addEventListener('click', () => {
+                    modal.remove();
+                });
+            }
+        };
+
+        // ================================================================
+        //  9. 单元选择模态框
         // ================================================================
         function renderUnitModal() {
             const units = getUnits(STATE.grade, STATE.book);
@@ -2516,7 +3605,6 @@
             html += `</div>`;
             unitModalBody.innerHTML = html;
 
-            // 绑定事件：复选框
             unitModalBody.querySelectorAll('.unit-checkbox').forEach(cb => {
                 cb.addEventListener('change', function() {
                     const unit = this.value;
@@ -2531,7 +3619,6 @@
                 });
             });
 
-            // 绑定事件：单词按钮
             unitModalBody.querySelectorAll('.unit-word-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -2540,7 +3627,6 @@
                 });
             });
 
-            // 更新计数显示
             function updateUnitModalCounts() {
                 const items = unitModalBody.querySelectorAll('.unit-item');
                 for (const item of items) {
@@ -2558,7 +3644,6 @@
         function openWordSelectModal(unit) {
             const words = getWords(STATE.grade, STATE.book, unit);
             const selected = STATE.selectedWordsPerUnit[unit] || [];
-            // 如果 selected 为空，默认全选
             const selectedSet = new Set(selected.length > 0 ? selected : words.map(w => w.word));
 
             wordSelectTitle.textContent = `选择单词 - ${unit}`;
@@ -2585,7 +3670,6 @@
             html += `</div>`;
             wordSelectBody.innerHTML = html;
 
-            // 绑定全选等按钮
             wordSelectBody.querySelector('.select-all').addEventListener('click', () => {
                 wordSelectBody.querySelectorAll('.word-checkbox').forEach(cb => cb.checked = true);
             });
@@ -2601,31 +3685,24 @@
                 });
             });
 
-            // 存储当前操作的单元
             wordSelectModal.dataset.unit = unit;
-
-            // 显示子模态框
             wordSelectModal.classList.add('show');
             unitModal.classList.remove('show');
         }
 
         // ================================================================
-        //  9. 模态框事件绑定
+        //  10. 模态框事件绑定
         // ================================================================
-        // 打开单元选择
         unitSelectBtn.addEventListener('click', () => {
             renderUnitModal();
             unitModal.classList.add('show');
         });
 
-        // 关闭单元选择
         unitModalCancel.addEventListener('click', () => {
             unitModal.classList.remove('show');
         });
 
-        // 确认单元选择
         unitModalConfirm.addEventListener('click', () => {
-            // 确保选中的单元有效
             const units = getUnits(STATE.grade, STATE.book);
             STATE.selectedUnits = STATE.selectedUnits.filter(u => units.includes(u));
             if (STATE.selectedUnits.length === 0) {
@@ -2633,21 +3710,21 @@
                 return;
             }
             unitModal.classList.remove('show');
-            // 重新加载单词
             Single.loadWords();
+            Multi.loadWords();
+            Multi.renderPlayers();
+            Multi.renderQuestion();
+            Multi.updateUI();
         });
 
-        // 点击“选词”按钮（从单元选择中）
         unitWordSelectBtn.addEventListener('click', () => {
-            // 如果没有选中单元，则默认选中第一个
             if (STATE.selectedUnits.length === 0) {
                 const units = getUnits(STATE.grade, STATE.book);
                 if (units.length > 0) {
                     STATE.selectedUnits = [units[0]];
-                    renderUnitModal(); // 刷新显示
+                    renderUnitModal();
                 }
             }
-            // 如果有多个单元，选词是针对当前激活的单元？我们选择第一个选中单元
             if (STATE.selectedUnits.length > 0) {
                 const unit = STATE.selectedUnits[0];
                 openWordSelectModal(unit);
@@ -2656,7 +3733,6 @@
             }
         });
 
-        // 子模态框 - 返回
         wordSelectBack.addEventListener('click', () => {
             wordSelectModal.classList.remove('show');
             unitModal.classList.add('show');
@@ -2676,19 +3752,17 @@
                 if (cb.checked) selected.push(cb.value);
             });
             if (selected.length === 0) {
-                // 如果全不选，则视为选择全部（或清空配置）
-                STATE.selectedWordsPerUnit[unit] = []; // 空数组表示全选
+                STATE.selectedWordsPerUnit[unit] = [];
             } else {
                 STATE.selectedWordsPerUnit[unit] = selected;
             }
             wordSelectModal.classList.remove('show');
             unitModal.classList.add('show');
-            // 刷新单元模态框显示
             renderUnitModal();
         });
 
         // ================================================================
-        //  10. 年级/册别联动
+        //  11. 年级/册别联动
         // ================================================================
         function populateGrades() {
             const grades = Object.keys(wordBank);
@@ -2698,15 +3772,18 @@
         }
 
         function updateUnits() {
-            // 清空之前的单元选择
             STATE.selectedUnits = [];
             STATE.selectedWordsPerUnit = {};
             const units = getUnits(STATE.grade, STATE.book);
             if (units.length > 0) {
                 STATE.selectedUnits = [units[0]];
             }
-            renderUnitModal(); // 预渲染
+            renderUnitModal();
             Single.loadWords();
+            Multi.loadWords();
+            Multi.renderPlayers();
+            Multi.renderQuestion();
+            Multi.updateUI();
         }
 
         function onUnitChange() {
@@ -2717,20 +3794,20 @@
         }
 
         // ================================================================
-        //  11. 高级渲染
+        //  12. 高级渲染
         // ================================================================
         function toggleGlass() {
             STATE.glass = !STATE.glass;
             if (STATE.glass) {
                 document.documentElement.setAttribute('data-glass', 'enabled');
-                glassToggleBtn.textContent = '💎 高级渲染 (开)';
                 glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
                 glassToggleBtn.style.borderColor = '#8bc34a';
+                glassToggleBtn.style.boxShadow = '0 0 12px rgba(139,195,74,0.2)';
             } else {
                 document.documentElement.removeAttribute('data-glass');
-                glassToggleBtn.textContent = '💎 高级渲染';
                 glassToggleBtn.style.background = 'rgba(255,255,255,0.3)';
                 glassToggleBtn.style.borderColor = 'rgba(180,200,140,0.2)';
+                glassToggleBtn.style.boxShadow = 'none';
             }
             localStorage.setItem('glassEnabled', STATE.glass ? 'true' : 'false');
         }
@@ -2739,25 +3816,51 @@
         if (savedGlass === 'true') {
             STATE.glass = true;
             document.documentElement.setAttribute('data-glass', 'enabled');
-            glassToggleBtn.textContent = '💎 高级渲染 (开)';
             glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
             glassToggleBtn.style.borderColor = '#8bc34a';
+            glassToggleBtn.style.boxShadow = '0 0 12px rgba(139,195,74,0.2)';
         }
 
         // ================================================================
-        //  12. 事件绑定
+        //  13. 模式切换 (带平滑动画)
         // ================================================================
-        gradeSelect.addEventListener('change', () => {
-            STATE.grade = gradeSelect.value;
-            updateUnits();
-            onUnitChange();
-        });
-        bookSelect.addEventListener('change', () => {
-            STATE.book = bookSelect.value;
-            updateUnits();
-            onUnitChange();
+        function switchMode(mode) {
+            const oldPanel = document.querySelector('.mode-panel.active');
+            const newPanel = mode === 'single' ? singlePanel : multiPanel;
+            if (oldPanel === newPanel) return;
+
+            // 获取新面板高度并设置父容器
+            newPanel.style.display = 'block';
+            void newPanel.offsetHeight; // 强制重排
+            const height = newPanel.scrollHeight;
+            mainContent.style.height = height + 'px';
+
+            // 切换active类
+            oldPanel.classList.remove('active');
+            newPanel.classList.add('active');
+
+            // 更新按钮状态
+            modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
+
+            // 如果是多人模式，重新渲染以确保内容最新
+            if (mode === 'multi') {
+                Multi.renderPlayers();
+                Multi.renderQuestion();
+                Multi.updateUI();
+            }
+        }
+
+        modeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchMode(btn.dataset.mode);
+            });
         });
 
+        // ================================================================
+        //  14. 事件绑定
+        // ================================================================
+        gradeSelect.addEventListener('change', onUnitChange);
+        bookSelect.addEventListener('change', onUnitChange);
         glassToggleBtn.addEventListener('click', toggleGlass);
 
         singlePlayBtn.addEventListener('click', () => Single.playAudio());
@@ -2765,16 +3868,49 @@
         singleResetBtn.addEventListener('click', () => Single.reset());
         historyBtn.addEventListener('click', () => Single.showHistory());
 
+        multiPlayBtn.addEventListener('click', () => Multi.playAudio());
+        multiReplayBtn.addEventListener('click', () => Multi.replayAudio());
+        multiResetBtn.addEventListener('click', () => Multi.reset());
+        multiHistoryBtn.addEventListener('click', () => Multi.showHistory());
+
+        multiTotalInput.addEventListener('change', function() {
+            let val = parseInt(this.value) || 10;
+            if (val < 3) val = 3;
+            if (val > 30) val = 30;
+            this.value = val;
+            Multi.updateUI();
+            const words = STATE.multi.words;
+            if (STATE.multi.index >= val || STATE.multi.index >= words.length) {
+                Multi.loadWords();
+                Multi.renderPlayers();
+                Multi.renderQuestion();
+                Multi.updateUI();
+            } else {
+                Multi.renderQuestion();
+                Multi.updateUI();
+            }
+        });
+
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' || e.code === 'Space') {
-                if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
-                    e.preventDefault();
-                    Single.playAudio();
+                const activeMode = document.querySelector('.mode-toggle button.active');
+                if (!activeMode) return;
+                const mode = activeMode.dataset.mode;
+                if (mode === 'single') {
+                    if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
+                        e.preventDefault();
+                        Single.playAudio();
+                    }
+                } else if (mode === 'multi') {
+                    if (!STATE.multi.isPlaying && !STATE.multi.answered && !STATE.multi.allWrong && !STATE.multi
+                        .audioLock) {
+                        e.preventDefault();
+                        Multi.playAudio();
+                    }
                 }
             }
         });
 
-        // 点击模态框外部关闭
         unitModal.addEventListener('click', (e) => {
             if (e.target === unitModal) unitModal.classList.remove('show');
         });
@@ -2783,7 +3919,7 @@
         });
 
         // ================================================================
-        //  13. 启动
+        //  15. 启动
         // ================================================================
         populateGrades();
         STATE.grade = '4';
@@ -2791,20 +3927,28 @@
         gradeSelect.value = '4';
         bookSelect.value = 'upper';
         updateUnits();
-        // 初始加载
-        Single.loadWords();
+        Multi.init();
 
+        // 初始高度自适应
         setTimeout(() => {
-            singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
-            singleStatus.className = 'status-badge';
-        }, 300);
+            const activePanel = document.querySelector('.mode-panel.active');
+            if (activePanel) {
+                mainContent.style.height = activePanel.scrollHeight + 'px';
+            }
+        }, 100);
+
+        // 窗口resize时重新计算高度
+        window.addEventListener('resize', () => {
+            const activePanel = document.querySelector('.mode-panel.active');
+            if (activePanel) {
+                mainContent.style.height = activePanel.scrollHeight + 'px';
+            }
+        });
 
         console.log('🎧 听力练习场已启动！');
-        console.log('📁 录音文件放于 ./audio/ 目录，命名为 "单词.mp3"');
-        console.log('💡 无录音文件时自动使用语音合成 (TTS)');
-        console.log('⌨️ 空格键快速播放');
-        console.log('✨ 高级渲染已启用 iOS 26 风格，动效全面优化');
-        console.log('📌 单元选择支持多选，点击 📝 可精细选择单词');
+        console.log('👥 多人模式：玩家卡片在下方，抢答按钮为 A/B/C');
+        console.log('🎆 答对时礼花会在对应玩家卡片位置绽放');
+        console.log('✨ 高级渲染已启用 iOS 26 风格毛玻璃与高光');
     </script>
 </body>
 </html>
