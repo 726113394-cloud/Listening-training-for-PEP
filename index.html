@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>👂 听力练习 · 四年级上册</title>
+    <title>听力练习场</title>
     <style>
         /* ===== 全局 ===== */
         * {
@@ -20,10 +20,14 @@
             padding: 16px;
             background: linear-gradient(145deg, #f5f9e6 0%, #e2f0d6 100%);
             transition: background 0.4s ease;
+            animation: pageFadeIn 0.6s ease;
         }
-        /* ===== 容器 ===== */
+        @keyframes pageFadeIn {
+            0% { opacity: 0; transform: translateY(12px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
         .app-container {
-            max-width: 1200px;
+            max-width: 800px;
             width: 100%;
             background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(12px);
@@ -34,7 +38,6 @@
             overflow: hidden;
             transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
-        /* ===== 顶部 ===== */
         .header {
             background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(16px);
@@ -48,7 +51,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
         }
         .logo {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: #3a6b2a;
             display: flex;
@@ -82,8 +85,7 @@
             color: #5a7a4a;
             font-weight: 700;
         }
-        .ctrl-group select,
-        .ctrl-group .mode-btn {
+        .ctrl-group select {
             background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(180, 200, 140, 0.4);
             padding: 5px 16px;
@@ -98,44 +100,48 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
         }
-        .ctrl-group select:hover,
-        .ctrl-group .mode-btn:hover {
+        .ctrl-group select:hover {
             background: rgba(255, 255, 255, 0.9);
             border-color: #a0c870;
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(80, 140, 40, 0.08);
         }
-        .mode-toggle-group {
+        .btn-unit-select {
+            background: rgba(139, 195, 74, 0.2);
+            border: 1px solid rgba(139, 195, 74, 0.3);
+            padding: 5px 18px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #2a4a1a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
             display: flex;
-            gap: 4px;
-            background: rgba(200, 220, 160, 0.2);
-            padding: 3px 8px;
-            border-radius: 40px;
             align-items: center;
+            gap: 6px;
         }
-        .mode-toggle-group .mode-btn {
-            padding: 4px 16px;
-            font-size: 0.72rem;
-            background: transparent;
-            border-color: transparent;
+        .btn-unit-select:hover {
+            background: rgba(139, 195, 74, 0.35);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(139, 195, 74, 0.15);
         }
-        .mode-toggle-group .mode-btn.active {
-            background: linear-gradient(135deg, #8bc34a, #558b2f);
+        .btn-unit-select .badge {
+            background: #8bc34a;
             color: #fff;
-            border-color: transparent;
-            box-shadow: 0 4px 16px rgba(139, 195, 74, 0.25);
+            border-radius: 20px;
+            padding: 0 8px;
+            font-size: 0.65rem;
+            line-height: 1.6;
         }
-        /* ===== 主内容 ===== */
         .main-content {
             padding: 18px 24px 24px;
         }
         .single-mode {
             display: block;
         }
-        .pk-mode {
-            display: none;
-        }
-        /* ===== 信息栏 ===== */
         .info-bar {
             display: flex;
             flex-wrap: wrap;
@@ -149,6 +155,7 @@
             -webkit-backdrop-filter: blur(4px);
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.3s;
         }
         .info-item {
             display: flex;
@@ -164,6 +171,8 @@
             border-radius: 30px;
             font-weight: 700;
             color: #3a6b2a;
+            transition: all 0.3s;
+            display: inline-block;
         }
         .info-item .score-num {
             background: linear-gradient(135deg, #ffb74d, #ff8a65);
@@ -171,8 +180,30 @@
             padding: 2px 16px;
             border-radius: 30px;
             font-weight: 700;
+            transition: all 0.3s;
+            display: inline-block;
         }
-        /* ===== 听力区 ===== */
+        .info-actions {
+            display: flex;
+            gap: 8px;
+        }
+        .info-actions .history-btn {
+            background: rgba(139, 195, 74, 0.15);
+            border: 1px solid rgba(139, 195, 74, 0.2);
+            border-radius: 30px;
+            padding: 4px 16px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #3a6b2a;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .info-actions .history-btn:hover {
+            background: rgba(139, 195, 74, 0.25);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(139, 195, 74, 0.15);
+        }
         .listening-area {
             background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(8px);
@@ -193,8 +224,10 @@
             background: rgba(200, 220, 160, 0.25);
             color: #3a6b2a;
             border: 1px solid rgba(180, 200, 140, 0.2);
-            transition: all 0.3s;
+            transition: all 0.4s ease;
             margin-bottom: 12px;
+            min-height: 34px;
+            line-height: 1.8;
         }
         .status-badge.playing {
             background: #d4e8c0;
@@ -211,20 +244,29 @@
             background: #c8e6c9;
             color: #1a6a2a;
             border-color: #66bb6a;
+            animation: correctPop 0.5s ease;
         }
         .status-badge.wrong {
             background: #ffcdd2;
             color: #a33a3a;
             border-color: #ef9a9a;
+            animation: wrongShake 0.5s ease;
         }
         @keyframes pulse-badge {
-            0%,
-            100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(0.98); }
+        }
+        @keyframes correctPop {
+            0% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes wrongShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
         }
         .audio-controls {
             display: flex;
@@ -241,12 +283,14 @@
             font-size: 0.9rem;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
             font-family: inherit;
             display: inline-flex;
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+            position: relative;
+            overflow: hidden;
         }
         .audio-btn:active {
             transform: scale(0.94);
@@ -256,8 +300,8 @@
             color: #fff;
             box-shadow: 0 4px 20px rgba(139, 195, 74, 0.25);
         }
-        .audio-btn.primary:hover {
-            transform: translateY(-2px);
+        .audio-btn.primary:hover:not(:disabled) {
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 8px 28px rgba(139, 195, 74, 0.3);
         }
         .audio-btn.primary:disabled {
@@ -270,15 +314,18 @@
             color: #3a6b2a;
             border: 1px solid rgba(180, 200, 140, 0.3);
         }
-        .audio-btn.secondary:hover {
+        .audio-btn.secondary:hover:not(:disabled) {
             background: #fff;
             border-color: #8bc34a;
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
         }
         .audio-btn .icon {
             font-size: 1.1rem;
+            transition: transform 0.3s ease;
         }
-        /* ===== 选项 ===== */
+        .audio-btn:active .icon {
+            transform: scale(0.8);
+        }
         .options-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -296,7 +343,7 @@
             font-weight: 700;
             color: #1a3a0a;
             cursor: pointer;
-            transition: all 0.18s ease;
+            transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
             text-align: center;
             user-select: none;
             position: relative;
@@ -305,6 +352,7 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            will-change: transform, border-color, background;
         }
         .option-card .letter {
             background: rgba(180, 200, 140, 0.2);
@@ -318,9 +366,10 @@
             font-weight: 800;
             color: #3a6b2a;
             flex-shrink: 0;
+            transition: all 0.3s ease;
         }
         .option-card:hover:not(.disabled) {
-            transform: translateY(-3px);
+            transform: translateY(-4px) scale(1.02);
             border-color: #8bc34a;
             background: rgba(255, 255, 255, 0.9);
             box-shadow: 0 8px 24px rgba(139, 195, 74, 0.10);
@@ -328,25 +377,41 @@
         .option-card.selected {
             border-color: #8bc34a;
             background: rgba(139, 195, 74, 0.10);
+            transform: scale(0.98);
         }
         .option-card.correct {
             border-color: #66bb6a;
             background: rgba(102, 187, 106, 0.18);
             color: #1a6a2a;
+            animation: correctFlash 0.6s ease;
         }
         .option-card.wrong {
             border-color: #ef5350;
             background: rgba(239, 83, 80, 0.12);
             color: #a33a3a;
+            animation: wrongFlash 0.6s ease;
         }
         .option-card.disabled {
             cursor: not-allowed;
             opacity: 0.6;
+            transform: none !important;
         }
         .option-card .check-mark {
             font-size: 1.3rem;
+            transition: all 0.3s ease;
         }
-        /* ===== 底部按钮 ===== */
+        @keyframes correctFlash {
+            0% { transform: scale(0.95); background: rgba(102,187,106,0.3); }
+            50% { transform: scale(1.04); background: rgba(102,187,106,0.25); }
+            100% { transform: scale(1); background: rgba(102,187,106,0.18); }
+        }
+        @keyframes wrongFlash {
+            0% { transform: translateX(-4px); background: rgba(239,83,80,0.2); }
+            25% { transform: translateX(4px); }
+            50% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+            100% { transform: translateX(0); background: rgba(239,83,80,0.12); }
+        }
         .action-row {
             display: flex;
             flex-wrap: wrap;
@@ -361,7 +426,7 @@
             font-size: 0.85rem;
             border: none;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.25s cubic-bezier(0.34, 1.2, 0.64, 1);
             font-family: inherit;
             display: inline-flex;
             align-items: center;
@@ -370,20 +435,6 @@
         .action-btn:active {
             transform: scale(0.94);
         }
-        .action-btn.next {
-            background: linear-gradient(135deg, #8bc34a, #558b2f);
-            color: #fff;
-            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.2);
-        }
-        .action-btn.next:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 28px rgba(139, 195, 74, 0.25);
-        }
-        .action-btn.next:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
-        }
         .action-btn.reset {
             background: rgba(180, 200, 140, 0.25);
             color: #3a6b2a;
@@ -391,210 +442,250 @@
         }
         .action-btn.reset:hover {
             background: rgba(180, 200, 140, 0.4);
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(180, 200, 140, 0.15);
         }
-        /* ===== PK 模式 ===== */
-        .pk-layout {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 16px;
-        }
-        .pk-players-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 14px;
-        }
-        .pk-player-card {
-            background: rgba(255, 255, 255, 0.55);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 32px;
-            padding: 14px 14px 16px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            transition: all 0.25s;
-            position: relative;
-        }
-        .pk-player-card .pname {
-            font-weight: 700;
-            font-size: 0.85rem;
-            color: #2a4a1a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 8px;
-        }
-        .pk-player-card .pname .pscore {
-            background: linear-gradient(135deg, #ffb74d, #ff8a65);
-            color: #fff;
-            padding: 0 14px;
-            border-radius: 30px;
-            font-size: 0.8rem;
-        }
-        .pk-player-card .pk-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 6px;
-            margin: 6px 0 4px;
-        }
-        .pk-player-card .pk-opt {
-            background: rgba(255, 255, 255, 0.5);
-            border: 1.5px solid rgba(180, 200, 140, 0.3);
-            border-radius: 30px;
-            padding: 8px 4px;
-            font-size: 0.72rem;
-            font-weight: 600;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.15s;
-            color: #1a3a0a;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
+        /* ===== 模态框通用 ===== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(40, 60, 20, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: none;
             justify-content: center;
-            word-break: break-word;
+            align-items: center;
+            z-index: 9999;
+            animation: modalFade 0.3s ease;
         }
-        .pk-player-card .pk-opt:hover:not(.disabled) {
+        .modal-overlay.show {
+            display: flex;
+        }
+        @keyframes modalFade {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        .modal-card {
             background: rgba(255, 255, 255, 0.85);
-            border-color: #8bc34a;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 48px;
+            padding: 28px 30px;
+            max-width: 640px;
+            width: 92%;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
         }
-        .pk-player-card .pk-opt.selected {
-            border-color: #8bc34a;
-            background: rgba(139, 195, 74, 0.12);
-        }
-        .pk-player-card .pk-opt.correct {
-            border-color: #66bb6a;
-            background: rgba(102, 187, 106, 0.18);
-            color: #1a6a2a;
-        }
-        .pk-player-card .pk-opt.wrong {
-            border-color: #ef5350;
-            background: rgba(239, 83, 80, 0.12);
-            color: #a33a3a;
-        }
-        .pk-player-card .pk-opt.disabled {
-            cursor: not-allowed;
-            opacity: 0.5;
-        }
-        .pk-player-card .pk-status {
-            font-size: 0.65rem;
-            color: #5a7a4a;
-            margin-top: 4px;
-            text-align: center;
-        }
-        .pk-player-card .remove-pk {
-            position: absolute;
-            top: 6px;
-            right: 10px;
-            background: rgba(239, 83, 80, 0.10);
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            font-size: 14px;
-            cursor: pointer;
-            color: #a03a3a;
-            transition: 0.2s;
+        .modal-card h2 {
+            color: #2a4a1a;
+            margin-bottom: 12px;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 10px;
         }
-        .pk-player-card .remove-pk:hover {
-            background: rgba(239, 83, 80, 0.2);
-            transform: scale(1.08);
+        .modal-card .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            margin: 8px 0 12px;
+            padding-right: 4px;
         }
-        .pk-player-card.flash-correct {
-            background: rgba(102, 187, 106, 0.15) !important;
-            border-color: #66bb6a;
-        }
-        .pk-player-card.flash-wrong {
-            background: rgba(239, 83, 80, 0.10) !important;
-            border-color: #ef5350;
-        }
-        .pk-player-card .pk-progress {
-            font-size: 0.6rem;
-            color: #5a7a4a;
-            text-align: center;
-            margin-top: 2px;
-        }
-        /* PK 控制栏 */
-        .pk-control-bar {
+        .modal-card .modal-footer {
             display: flex;
             flex-wrap: wrap;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            padding: 12px 0 4px;
-            border-top: 1px solid rgba(180, 200, 140, 0.15);
-            margin-top: 8px;
+            gap: 10px;
+            justify-content: flex-end;
+            border-top: 1px solid rgba(180, 200, 140, 0.2);
+            padding-top: 14px;
         }
-        .pk-control-bar label {
-            font-weight: 600;
-            color: #3a6b2a;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .pk-control-bar input[type="number"] {
-            width: 56px;
-            padding: 5px 8px;
-            border-radius: 30px;
-            border: 1px solid rgba(180, 200, 140, 0.3);
-            font-weight: 600;
-            text-align: center;
-            background: rgba(255, 255, 255, 0.5);
-            font-size: 0.85rem;
-            outline: none;
-            font-family: inherit;
-        }
-        .pk-control-bar input[type="number"]:focus {
-            border-color: #8bc34a;
-            box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.10);
-        }
-        .pk-control-bar .pk-btn {
-            padding: 7px 22px;
+        .modal-card .modal-footer button {
+            padding: 8px 24px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.78rem;
+            font-size: 0.85rem;
             border: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: inherit;
+        }
+        .modal-card .modal-footer .btn-confirm {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+        }
+        .modal-card .modal-footer .btn-confirm:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 20px rgba(139, 195, 74, 0.25);
+        }
+        .modal-card .modal-footer .btn-cancel {
+            background: rgba(180, 200, 140, 0.2);
+            color: #3a6b2a;
+        }
+        .modal-card .modal-footer .btn-cancel:hover {
+            background: rgba(180, 200, 140, 0.35);
+            transform: translateY(-2px);
+        }
+        .modal-card .modal-footer .btn-secondary {
+            background: rgba(139, 195, 74, 0.15);
+            color: #2a4a1a;
+            border: 1px solid rgba(139, 195, 74, 0.2);
+        }
+        .modal-card .modal-footer .btn-secondary:hover {
+            background: rgba(139, 195, 74, 0.25);
+            transform: translateY(-2px);
+        }
+        /* 单元列表 */
+        .unit-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .unit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 30px;
+            border: 1px solid rgba(180, 200, 140, 0.15);
+            transition: background 0.2s;
+        }
+        .unit-item:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+        .unit-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #8bc34a;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .unit-item .unit-name {
+            flex: 1;
+            font-weight: 600;
+            color: #1a3a0a;
+            font-size: 0.95rem;
+        }
+        .unit-item .unit-count {
+            font-size: 0.7rem;
+            color: #5a7a4a;
+            background: rgba(180, 200, 140, 0.15);
+            padding: 0 10px;
+            border-radius: 20px;
+        }
+        .unit-item .unit-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .unit-item .unit-actions button {
+            background: rgba(139, 195, 74, 0.1);
+            border: none;
+            border-radius: 20px;
+            padding: 2px 12px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #3a6b2a;
             cursor: pointer;
             transition: all 0.2s;
             font-family: inherit;
         }
-        .pk-control-bar .pk-btn.start {
-            background: linear-gradient(135deg, #8bc34a, #558b2f);
-            color: #fff;
-            box-shadow: 0 4px 16px rgba(139, 195, 74, 0.2);
+        .unit-item .unit-actions button:hover {
+            background: rgba(139, 195, 74, 0.25);
+            transform: scale(1.05);
         }
-        .pk-control-bar .pk-btn.start:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.25);
+        /* 单词选择列表 (在子模态框) */
+        .word-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 6px;
         }
-        .pk-control-bar .pk-btn.start:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-            transform: none;
+        .word-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            border: 1px solid rgba(180, 200, 140, 0.1);
         }
-        .pk-control-bar .pk-btn.reset-pk {
-            background: rgba(180, 200, 140, 0.2);
+        .word-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #8bc34a;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .word-item .word-text {
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #1a3a0a;
+        }
+        .word-item .word-mean {
+            font-size: 0.7rem;
+            color: #5a7a4a;
+            margin-left: auto;
+        }
+        .word-item .bold-tag {
+            background: #fee9d4;
+            font-size: 0.55rem;
+            padding: 0 6px;
+            border-radius: 10px;
+            color: #8a6a3a;
+        }
+        /* 子模态框标题带返回 */
+        .sub-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .sub-header .back-btn {
+            background: none;
+            border: none;
+            font-size: 1.4rem;
+            cursor: pointer;
+            color: #5a7a4a;
+            transition: 0.2s;
+            padding: 0 4px;
+        }
+        .sub-header .back-btn:hover {
+            transform: scale(1.1);
             color: #3a6b2a;
-            border: 1px solid rgba(180, 200, 140, 0.15);
         }
-        .pk-control-bar .pk-btn.reset-pk:hover {
-            background: rgba(180, 200, 140, 0.35);
-            transform: translateY(-2px);
+        .sub-header h3 {
+            font-size: 1.1rem;
+            color: #2a4a1a;
         }
-        .pk-control-bar .pk-btn.add-player {
-            background: rgba(255, 215, 150, 0.25);
-            color: #8a7a3a;
-            border: 1px solid rgba(255, 215, 150, 0.2);
+        .word-list-actions {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
-        .pk-control-bar .pk-btn.add-player:hover {
-            background: rgba(255, 215, 150, 0.4);
-            transform: translateY(-2px);
+        .word-list-actions button {
+            background: rgba(180, 200, 140, 0.15);
+            border: none;
+            border-radius: 20px;
+            padding: 4px 16px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #3a6b2a;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-        /* ===== 排行榜 ===== */
-        .rank-modal {
+        .word-list-actions button:hover {
+            background: rgba(139, 195, 74, 0.25);
+            transform: scale(1.04);
+        }
+        /* ===== 历史、排名等 ===== */
+        .rank-modal,
+        .history-modal {
             position: fixed;
             top: 0;
             left: 0;
@@ -607,8 +698,10 @@
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            animation: modalFade 0.3s ease;
         }
-        .rank-card {
+        .rank-card,
+        .history-card {
             background: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
@@ -619,17 +712,22 @@
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.5);
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+            max-height: 80vh;
+            overflow-y: auto;
         }
-        .rank-card h2 {
+        .rank-card h2,
+        .history-card h2 {
             color: #2a4a1a;
             margin-bottom: 14px;
             font-size: 1.4rem;
         }
-        .rank-list {
+        .rank-list,
+        .history-list {
             text-align: left;
             margin: 14px 0;
         }
-        .rank-item {
+        .rank-item,
+        .history-item {
             padding: 7px 14px;
             border-bottom: 1px solid rgba(180, 200, 140, 0.2);
             font-size: 0.95rem;
@@ -637,12 +735,20 @@
             display: flex;
             justify-content: space-between;
             color: #2a4a1a;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .history-item:hover {
+            background: rgba(139, 195, 74, 0.08);
+            border-radius: 12px;
+            transform: translateX(4px);
         }
         .rank-item .rank-pos {
             font-weight: 700;
             color: #8bc34a;
         }
-        .rank-close {
+        .rank-close,
+        .history-close {
             background: linear-gradient(135deg, #8bc34a, #558b2f);
             color: #fff;
             border: none;
@@ -650,15 +756,21 @@
             border-radius: 40px;
             font-weight: 700;
             cursor: pointer;
-            transition: 0.2s;
+            transition: all 0.25s ease;
             font-size: 0.9rem;
             margin-top: 8px;
         }
-        .rank-close:hover {
-            transform: translateY(-2px);
+        .rank-close:hover,
+        .history-close:hover {
+            transform: translateY(-3px) scale(1.02);
             box-shadow: 0 8px 24px rgba(139, 195, 74, 0.2);
         }
-        /* ===== 礼花 ===== */
+        .history-item .word-badge {
+            background: rgba(139, 195, 74, 0.15);
+            padding: 0 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+        }
         .firework-canvas {
             position: fixed;
             top: 0;
@@ -683,10 +795,7 @@
                 width: 100%;
             }
             .header-controls select,
-            .header-controls .mode-btn {
-                width: 100%;
-            }
-            .mode-toggle-group {
+            .header-controls .btn-unit-select {
                 width: 100%;
                 justify-content: center;
             }
@@ -704,12 +813,6 @@
             }
             .options-grid {
                 grid-template-columns: 1fr;
-            }
-            .pk-players-grid {
-                grid-template-columns: 1fr;
-            }
-            .pk-player-card .pk-options {
-                grid-template-columns: 1fr 1fr 1fr;
             }
             .main-content {
                 padding: 10px 12px 16px;
@@ -732,6 +835,14 @@
                 min-height: 50px;
                 font-size: 0.95rem;
             }
+            .modal-card {
+                padding: 20px;
+                max-width: 100%;
+                border-radius: 32px;
+            }
+            .word-list {
+                grid-template-columns: 1fr 1fr;
+            }
         }
         @media (max-width: 480px) {
             .app-container {
@@ -740,17 +851,10 @@
             .logo {
                 font-size: 1rem;
             }
-            .pk-player-card .pk-options {
-                grid-template-columns: 1fr 1fr 1fr;
-                gap: 4px;
-            }
-            .pk-player-card .pk-opt {
-                font-size: 0.6rem;
-                padding: 6px 2px;
-                min-height: 34px;
+            .word-list {
+                grid-template-columns: 1fr;
             }
         }
-        /* ===== 工具 ===== */
         .hidden {
             display: none !important;
         }
@@ -758,17 +862,7 @@
             color: #5a7a4a;
             font-size: 0.8rem;
         }
-        .mt-8 {
-            margin-top: 8px;
-        }
-        .flex-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* ==============================================================
-                   iOS 26 高级渲染 (通过 data-glass 开启)
-                   ============================================================== */
+        /* ===== 高级渲染 iOS 26 风格 (动效增强) ===== */
         [data-glass="enabled"] body {
             background: radial-gradient(circle at 20% 25%, #e8f5e9, #c8e6c9 60%, #a5d6a7 100%);
         }
@@ -788,7 +882,7 @@
             border-radius: 56px 56px 0 0;
         }
         [data-glass="enabled"] .ctrl-group select,
-        [data-glass="enabled"] .ctrl-group .mode-btn {
+        [data-glass="enabled"] .btn-unit-select {
             background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
@@ -797,15 +891,9 @@
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
         }
         [data-glass="enabled"] .ctrl-group select:hover,
-        [data-glass="enabled"] .ctrl-group .mode-btn:hover {
+        [data-glass="enabled"] .btn-unit-select:hover {
             background: rgba(255, 255, 255, 0.5);
             border-color: rgba(255, 255, 255, 0.6);
-        }
-        [data-glass="enabled"] .mode-toggle-group .mode-btn.active {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
-            backdrop-filter: blur(8px);
-            border-color: rgba(255, 255, 255, 0.2);
-            color: #fff;
         }
         [data-glass="enabled"] .info-bar {
             background: rgba(255, 255, 255, 0.15);
@@ -868,56 +956,49 @@
             background: rgba(239, 83, 80, 0.15);
             border-color: rgba(239, 83, 80, 0.25);
         }
-        [data-glass="enabled"] .action-btn.next {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
         [data-glass="enabled"] .action-btn.reset {
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        [data-glass="enabled"] .pk-player-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 40px;
-        }
-        [data-glass="enabled"] .pk-player-card .pk-opt {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1.5px solid rgba(255, 255, 255, 0.1);
-        }
-        [data-glass="enabled"] .pk-player-card .pk-opt:hover:not(.disabled) {
+        [data-glass="enabled"] .modal-card {
             background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(139, 195, 74, 0.2);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 56px;
         }
-        [data-glass="enabled"] .pk-control-bar .pk-btn.start {
+        [data-glass="enabled"] .modal-card .modal-footer .btn-confirm {
             background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
-        [data-glass="enabled"] .pk-control-bar .pk-btn.reset-pk {
-            background: rgba(255, 255, 255, 0.10);
+        [data-glass="enabled"] .modal-card .modal-footer .btn-cancel,
+        [data-glass="enabled"] .modal-card .modal-footer .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
-        [data-glass="enabled"] .pk-control-bar .pk-btn.add-player {
-            background: rgba(255, 215, 150, 0.15);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 215, 150, 0.15);
+        [data-glass="enabled"] .unit-item {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
-        [data-glass="enabled"] .rank-card {
+        [data-glass="enabled"] .word-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        [data-glass="enabled"] .rank-card,
+        [data-glass="enabled"] .history-card {
             background: rgba(255, 255, 255, 0.30);
             backdrop-filter: blur(40px);
             -webkit-backdrop-filter: blur(40px);
             border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: 56px;
         }
-        [data-glass="enabled"] .rank-close {
+        [data-glass="enabled"] .rank-close,
+        [data-glass="enabled"] .history-close {
             background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
             backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -932,15 +1013,6 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        [data-glass="enabled"] .pk-control-bar input[type="number"] {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        [data-glass="enabled"] .pk-control-bar label {
-            color: #1a3a0a;
         }
         [data-glass="enabled"] .logo {
             color: #1a3a0a;
@@ -957,14 +1029,21 @@
         [data-glass="enabled"] .text-muted {
             color: #4a7a3a;
         }
-        [data-glass="enabled"] .pk-player-card .pname {
-            color: #1a3a0a;
+        [data-glass="enabled"] .btn-unit-select .badge {
+            background: rgba(139, 195, 74, 0.6);
+            color: #fff;
         }
-        [data-glass="enabled"] .pk-player-card .pk-status {
-            color: #4a7a3a;
+        /* ===== 额外动效: 数字变化跳动 ===== */
+        .num, .score-num {
+            transition: all 0.3s ease;
         }
-        [data-glass="enabled"] .pk-player-card .pk-progress {
-            color: #4a7a3a;
+        .num.bump, .score-num.bump {
+            animation: bumpNumber 0.3s ease;
+        }
+        @keyframes bumpNumber {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.25); color: #ff8a65; }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -973,10 +1052,7 @@
     <div class="app-container" id="app">
         <!-- ===== 顶部 ===== -->
         <header class="header">
-            <div class="logo">
-                🎧 听力练习
-                <span>四上</span>
-            </div>
+            <div class="logo">🎧 听力练习场</div>
             <div class="header-controls">
                 <div class="ctrl-group">
                     <label>📚 年级</label>
@@ -989,27 +1065,22 @@
                         <option value="lower">下册</option>
                     </select>
                 </div>
-                <div class="ctrl-group">
-                    <label>📌 单元</label>
-                    <select id="unitSelect"></select>
-                </div>
-                <div class="mode-toggle-group">
-                    <button id="modeSingleBtn" class="mode-btn active">🧑 单人</button>
-                    <button id="modePkBtn" class="mode-btn">👥 PK</button>
-                </div>
-                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:4px 14px;font-size:0.7rem;font-weight:600;color:#3a6b2a;cursor:pointer;backdrop-filter:blur(4px);font-family:inherit;">💎 高级渲染</button>
+                <button class="btn-unit-select" id="unitSelectBtn">
+                    📌 选择单元 <span class="badge" id="unitBadge">0</span>
+                </button>
+                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:4px 14px;font-size:0.7rem;font-weight:600;color:#3a6b2a;cursor:pointer;backdrop-filter:blur(4px);font-family:inherit;transition:all 0.25s ease;">💎 高级渲染</button>
             </div>
         </header>
 
         <!-- ===== 主内容 ===== -->
         <div class="main-content">
-
-            <!-- ===== 单人模式 ===== -->
             <div id="singleMode" class="single-mode">
                 <div class="info-bar">
                     <div class="info-item">📝 第 <span class="num" id="singleProgress">0/0</span> 题</div>
                     <div class="info-item">⭐ 得分 <span class="score-num" id="singleScore">0</span> 分</div>
-                    <div class="info-item text-muted">✅ 每题 2 分</div>
+                    <div class="info-actions">
+                        <button class="history-btn" id="historyBtn">📜 练习历史</button>
+                    </div>
                 </div>
 
                 <div class="listening-area">
@@ -1019,45 +1090,15 @@
                         <button class="audio-btn secondary" id="singleReplayBtn">🔊 再听一次</button>
                     </div>
                     <div class="options-grid" id="singleOptions">
-                        <div class="option-card disabled" data-idx="0"><span class="letter">A</span>---</div>
-                        <div class="option-card disabled" data-idx="1"><span class="letter">B</span>---</div>
-                        <div class="option-card disabled" data-idx="2"><span class="letter">C</span>---</div>
+                        <div class="option-card" data-idx="0"><span class="letter">A</span><span class="opt-text">---</span><span class="check-mark"></span></div>
+                        <div class="option-card" data-idx="1"><span class="letter">B</span><span class="opt-text">---</span><span class="check-mark"></span></div>
+                        <div class="option-card" data-idx="2"><span class="letter">C</span><span class="opt-text">---</span><span class="check-mark"></span></div>
                     </div>
                     <div class="action-row">
-                        <button class="action-btn next" id="singleNextBtn" disabled>➡ 下一题</button>
                         <button class="action-btn reset" id="singleResetBtn">🔄 重新开始</button>
                     </div>
                 </div>
             </div>
-
-            <!-- ===== PK 模式 ===== -->
-            <div id="pkMode" class="pk-mode">
-                <div class="info-bar">
-                    <div class="info-item">📝 第 <span class="num" id="pkProgress">0/0</span> 题</div>
-                    <div class="info-item">🎯 目标 <span class="num" id="pkTargetDisplay">20</span> 分</div>
-                    <div class="info-item text-muted">✅ 每题 2 分 · 独立抢答</div>
-                </div>
-
-                <div class="listening-area">
-                    <div class="status-badge" id="pkStatus">🎧 等待开始</div>
-                    <div class="audio-controls">
-                        <button class="audio-btn primary" id="pkPlayBtn">▶ 开始对局</button>
-                        <button class="audio-btn secondary" id="pkReplayBtn">🔊 再听一次</button>
-                    </div>
-                    <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">⚡ 各玩家独立抢答，答对即得分，自动进入下一题</div>
-                </div>
-
-                <div class="pk-layout">
-                    <div class="pk-players-grid" id="pkPlayersGrid"></div>
-                    <div class="pk-control-bar">
-                        <label>📊 题数 <input type="number" id="pkTotalInput" value="10" min="1" max="50"></label>
-                        <button class="pk-btn add-player" id="pkAddPlayerBtn">➕ 添加玩家</button>
-                        <button class="pk-btn start" id="pkStartBtn">▶ 开始对局</button>
-                        <button class="pk-btn reset-pk" id="pkResetBtn">🔄 重置</button>
-                    </div>
-                </div>
-            </div>
-
         </div>
 
         <div style="padding:6px 24px 14px; text-align:center; font-size:0.65rem; color:#6a8a5a; border-top:1px solid rgba(180,200,140,0.15);">
@@ -1065,14 +1106,43 @@
         </div>
     </div>
 
+    <!-- ===== 单元选择模态框 ===== -->
+    <div class="modal-overlay" id="unitModal">
+        <div class="modal-card">
+            <h2>📌 选择单元</h2>
+            <div class="modal-body" id="unitModalBody">
+                <!-- 由 js 动态渲染 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="unitWordSelectBtn">📝 选词</button>
+                <button class="btn-cancel" id="unitModalCancel">取消</button>
+                <button class="btn-confirm" id="unitModalConfirm">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 单词选择子模态框 ===== -->
+    <div class="modal-overlay" id="wordSelectModal">
+        <div class="modal-card">
+            <div class="sub-header">
+                <button class="back-btn" id="wordSelectBack">‹</button>
+                <h3 id="wordSelectTitle">选择单词</h3>
+            </div>
+            <div class="modal-body" id="wordSelectBody">
+                <!-- 由 js 动态渲染 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" id="wordSelectCancel">取消</button>
+                <button class="btn-confirm" id="wordSelectConfirm">确认</button>
+            </div>
+        </div>
+    </div>
+
     <canvas id="fireworkCanvas" class="firework-canvas"></canvas>
 
-    <!-- ============================================================ -->
-    <!-- JavaScript -->
-    <!-- ============================================================ -->
     <script>
         // ================================================================
-        //  1. 词库 (全年级)
+        //  1. 完整词库 (全年级)
         // ================================================================
         const wordBank = {
             3: {
@@ -1754,7 +1824,7 @@
         };
 
         // ================================================================
-        //  2. 工具
+        //  2. 工具函数
         // ================================================================
         function shuffle(arr) {
             for (let i = arr.length - 1; i > 0; i--) {
@@ -1888,16 +1958,14 @@
         }
 
         // ================================================================
-        //  4. 音频引擎 (支持 MP3 + TTS 降级)
+        //  4. 音频引擎
         // ================================================================
         const AudioEngine = {
             audio: null,
             isPlaying: false,
             word: '',
             useTTS: false,
-            ttsCache: new Map(),
 
-            // 检测音频文件是否存在
             checkAudioFile(word) {
                 return new Promise((resolve) => {
                     const url = getAudioUrl(word);
@@ -1922,13 +1990,11 @@
                 });
             },
 
-            // 播放 (返回 Promise)
             play(word, onStart, onEnd) {
                 return new Promise(async (resolve) => {
                     this.stop();
                     this.word = word;
 
-                    // 检查是否有可用 MP3
                     const hasFile = await this.checkAudioFile(word);
                     if (hasFile) {
                         this.useTTS = false;
@@ -1942,7 +2008,6 @@
                             resolve();
                         };
                         this.audio.onerror = () => {
-                            // MP3 加载失败，降级到 TTS
                             this.isPlaying = false;
                             this.playTTS(word, onStart, onEnd).then(resolve);
                         };
@@ -1952,13 +2017,11 @@
                         });
                         this.isPlaying = true;
                     } else {
-                        // 使用 TTS
                         this.playTTS(word, onStart, onEnd).then(resolve);
                     }
                 });
             },
 
-            // TTS 降级
             playTTS(word, onStart, onEnd) {
                 return new Promise((resolve) => {
                     this.useTTS = true;
@@ -1967,7 +2030,6 @@
                         resolve();
                         return;
                     }
-                    // 取消任何正在进行的语音
                     window.speechSynthesis.cancel();
 
                     const utterance = new SpeechSynthesisUtterance(word);
@@ -1976,7 +2038,6 @@
                     utterance.pitch = 1.0;
                     utterance.volume = 1.0;
 
-                    // 尝试选择英语语音
                     const voices = window.speechSynthesis.getVoices();
                     const enVoice = voices.find(v => v.lang.startsWith('en'));
                     if (enVoice) utterance.voice = enVoice;
@@ -2016,7 +2077,6 @@
             }
         };
 
-        // 预加载语音列表
         if (window.speechSynthesis) {
             window.speechSynthesis.getVoices();
             window.speechSynthesis.onvoiceschanged = () => {
@@ -2030,12 +2090,14 @@
         const STATE = {
             grade: '4',
             book: 'upper',
-            unit: 'Unit 1',
-            mode: 'single', // 'single' | 'pk'
             glass: false,
-            // 单人
+            // 选中的单元和单词配置
+            selectedUnits: [], // 单元名称列表
+            // 每个单元选中的单词列表，如果未选则视为全部
+            selectedWordsPerUnit: {}, // { unitName: [word1, word2, ...] } 如果不存在则视为全部
+            // 单人练习状态
             single: {
-                words: [],
+                words: [], // 当前练习的单词列表 (合并后)
                 index: 0,
                 score: 0,
                 total: 0,
@@ -2045,25 +2107,21 @@
                 options: [],
                 isPlaying: false,
                 played: false,
-                audioLock: false, // 防止重复触发
-            },
-            // PK
-            pk: {
-                players: [], // { id, score, answered, selectedIdx, correctWord, options, done }
-                totalQuestions: 10,
-                currentQuestion: 0,
-                maxScore: 0,
-                isActive: false,
-                isPlaying: false,
-                played: false,
-                wordList: [],
-                correctWord: '',
-                options: [],
-                playerIdCounter: 1,
                 audioLock: false,
-                roundFinished: false, // 当前回合是否已结束
+                history: [],
+                autoNextTimer: null,
             }
         };
+
+        // 默认选中第一个单元（用于初始化）
+        function initDefaultSelection() {
+            const units = getUnits(STATE.grade, STATE.book);
+            if (units.length > 0) {
+                STATE.selectedUnits = [units[0]];
+                STATE.selectedWordsPerUnit = {};
+            }
+        }
+        initDefaultSelection();
 
         // ================================================================
         //  6. DOM 引用
@@ -2071,11 +2129,8 @@
         const $ = id => document.getElementById(id);
         const gradeSelect = $('gradeSelect');
         const bookSelect = $('bookSelect');
-        const unitSelect = $('unitSelect');
-        const modeSingleBtn = $('modeSingleBtn');
-        const modePkBtn = $('modePkBtn');
-        const singleMode = $('singleMode');
-        const pkMode = $('pkMode');
+        const unitSelectBtn = $('unitSelectBtn');
+        const unitBadge = $('unitBadge');
         const glassToggleBtn = $('glassToggleBtn');
 
         const singleProgress = $('singleProgress');
@@ -2084,26 +2139,55 @@
         const singlePlayBtn = $('singlePlayBtn');
         const singleReplayBtn = $('singleReplayBtn');
         const singleOptions = $('singleOptions');
-        const singleNextBtn = $('singleNextBtn');
         const singleResetBtn = $('singleResetBtn');
+        const historyBtn = $('historyBtn');
 
-        const pkProgress = $('pkProgress');
-        const pkTargetDisplay = $('pkTargetDisplay');
-        const pkStatus = $('pkStatus');
-        const pkPlayBtn = $('pkPlayBtn');
-        const pkReplayBtn = $('pkReplayBtn');
-        const pkPlayersGrid = $('pkPlayersGrid');
-        const pkTotalInput = $('pkTotalInput');
-        const pkAddPlayerBtn = $('pkAddPlayerBtn');
-        const pkStartBtn = $('pkStartBtn');
-        const pkResetBtn = $('pkResetBtn');
+        const unitModal = $('unitModal');
+        const unitModalBody = $('unitModalBody');
+        const unitModalConfirm = $('unitModalConfirm');
+        const unitModalCancel = $('unitModalCancel');
+        const unitWordSelectBtn = $('unitWordSelectBtn');
+
+        const wordSelectModal = $('wordSelectModal');
+        const wordSelectBody = $('wordSelectBody');
+        const wordSelectTitle = $('wordSelectTitle');
+        const wordSelectBack = $('wordSelectBack');
+        const wordSelectConfirm = $('wordSelectConfirm');
+        const wordSelectCancel = $('wordSelectCancel');
 
         // ================================================================
-        //  7. 单人模式
+        //  7. 核心逻辑：加载单词、渲染题目等 (单人)
         // ================================================================
         const Single = {
+            // 根据当前选中的单元和单词配置，生成练习单词列表
+            buildWordList() {
+                let allWords = [];
+                const units = STATE.selectedUnits;
+                const grade = STATE.grade;
+                const book = STATE.book;
+                for (const unit of units) {
+                    const unitWords = getWords(grade, book, unit);
+                    const selected = STATE.selectedWordsPerUnit[unit];
+                    let wordsToAdd = unitWords;
+                    if (selected && selected.length > 0) {
+                        wordsToAdd = unitWords.filter(w => selected.includes(w.word));
+                    }
+                    allWords = allWords.concat(wordsToAdd);
+                }
+                // 去重（按单词去重，保留第一个出现的）
+                const seen = new Set();
+                const unique = [];
+                for (const w of allWords) {
+                    if (!seen.has(w.word)) {
+                        seen.add(w.word);
+                        unique.push(w);
+                    }
+                }
+                return unique;
+            },
+
             loadWords() {
-                const all = getWords(STATE.grade, STATE.book, STATE.unit);
+                const all = this.buildWordList();
                 const valid = all.filter(w => w.word && w.word.trim().length > 0);
                 STATE.single.words = shuffle([...valid]);
                 STATE.single.index = 0;
@@ -2114,8 +2198,15 @@
                 STATE.single.played = false;
                 STATE.single.isPlaying = false;
                 STATE.single.audioLock = false;
+                STATE.single.history = [];
+                if (STATE.single.autoNextTimer) {
+                    clearTimeout(STATE.single.autoNextTimer);
+                    STATE.single.autoNextTimer = null;
+                }
                 this.updateUI();
                 this.renderQuestion();
+                // 更新单元徽章
+                this.updateUnitBadge();
             },
 
             renderQuestion() {
@@ -2128,7 +2219,6 @@
                     singleStatus.className = 'status-badge done';
                     singlePlayBtn.disabled = true;
                     singleReplayBtn.disabled = true;
-                    singleNextBtn.disabled = true;
                     singleProgress.textContent = `${words.length}/${words.length}`;
                     return;
                 }
@@ -2157,8 +2247,7 @@
 
                 singleOptions.querySelectorAll('.option-card').forEach(el => {
                     el.addEventListener('click', () => {
-                        if (STATE.single.answered || STATE.single.isPlaying || STATE.single
-                            .audioLock) return;
+                        if (STATE.single.answered) return;
                         const idx = parseInt(el.dataset.idx);
                         this.selectOption(idx);
                     });
@@ -2168,7 +2257,6 @@
                 singleStatus.className = 'status-badge';
                 singlePlayBtn.disabled = false;
                 singleReplayBtn.disabled = true;
-                singleNextBtn.disabled = true;
                 singleProgress.textContent = `${idx+1}/${words.length}`;
                 this.updateUI();
 
@@ -2179,21 +2267,42 @@
             },
 
             selectOption(idx) {
-                if (STATE.single.answered || STATE.single.audioLock) return;
+                if (STATE.single.answered) return;
                 const cards = singleOptions.querySelectorAll('.option-card');
                 const selectedWord = cards[idx].dataset.word;
                 const correct = STATE.single.correctWord;
                 const isCorrect = selectedWord === correct;
 
+                const wordObj = STATE.single.words[STATE.single.index];
+                STATE.single.history.push({
+                    word: wordObj.word,
+                    meaning: wordObj.meaning,
+                    correct: isCorrect,
+                    timestamp: Date.now()
+                });
+
                 STATE.single.answered = true;
                 STATE.single.selectedIdx = idx;
 
-                // 立即截停录音
                 AudioEngine.stop();
                 STATE.single.isPlaying = false;
                 STATE.single.audioLock = false;
                 singlePlayBtn.disabled = false;
                 singleReplayBtn.disabled = true;
+
+                if (isCorrect) {
+                    STATE.single.score += 2;
+                    sfx.correct();
+                    singleStatus.textContent = '✅ 答对了！ +2分';
+                    singleStatus.className = 'status-badge correct';
+                    this.bumpScore();
+                } else {
+                    STATE.single.score = Math.max(0, STATE.single.score - 1);
+                    sfx.wrong();
+                    singleStatus.textContent = `❌ 正确答案是 “${correct}” -1分`;
+                    singleStatus.className = 'status-badge wrong';
+                    this.bumpScore();
+                }
 
                 cards.forEach((el, i) => {
                     el.classList.add('disabled');
@@ -2208,20 +2317,13 @@
                     if (i === idx) el.classList.add('selected');
                 });
 
-                if (isCorrect) {
-                    STATE.single.score += 2;
-                    sfx.correct();
-                    singleStatus.textContent = '✅ 答对了！ +2分';
-                    singleStatus.className = 'status-badge correct';
-                } else {
-                    sfx.wrong();
-                    singleStatus.textContent = `❌ 正确答案是 “${correct}”`;
-                    singleStatus.className = 'status-badge wrong';
-                }
-
                 this.updateUI();
-                singleNextBtn.disabled = false;
-                singleReplayBtn.disabled = true;
+
+                const delay = isCorrect ? 1000 : 2000;
+                if (STATE.single.autoNextTimer) clearTimeout(STATE.single.autoNextTimer);
+                STATE.single.autoNextTimer = setTimeout(() => {
+                    this.next();
+                }, delay);
             },
 
             playAudio() {
@@ -2239,13 +2341,9 @@
                 singleStatus.textContent = '🔊 播放中 ...';
                 singleStatus.className = 'status-badge playing';
 
-                // 播放一次
                 AudioEngine.play(word,
+                    () => {},
                     () => {
-                        // 开始播放
-                    },
-                    () => {
-                        // 播放结束
                         STATE.single.isPlaying = false;
                         STATE.single.audioLock = false;
                         singlePlayBtn.disabled = false;
@@ -2254,9 +2352,6 @@
                             singleStatus.textContent = '🔊 播放完毕，请选择答案';
                             singleStatus.className = 'status-badge done';
                             STATE.single.played = true;
-                        } else {
-                            singleStatus.textContent = '✅ 已作答';
-                            singleStatus.className = 'status-badge correct';
                         }
                     }
                 );
@@ -2301,28 +2396,33 @@
                     singleStatus.className = 'status-badge done';
                     singlePlayBtn.disabled = true;
                     singleReplayBtn.disabled = true;
-                    singleNextBtn.disabled = true;
                     sfx.cheer();
+                    showFirework(document.querySelector('.listening-area'));
                     return;
                 }
                 sfx.next();
                 this.renderQuestion();
-                singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
-                singleStatus.className = 'status-badge';
-                singleReplayBtn.disabled = true;
+                setTimeout(() => {
+                    if (!STATE.single.answered && !STATE.single.isPlaying) {
+                        this.playAudio();
+                    }
+                }, 400);
             },
 
             reset() {
                 AudioEngine.stop();
                 STATE.single.isPlaying = false;
                 STATE.single.audioLock = false;
+                if (STATE.single.autoNextTimer) {
+                    clearTimeout(STATE.single.autoNextTimer);
+                    STATE.single.autoNextTimer = null;
+                }
                 this.loadWords();
                 sfx.reset();
                 singleStatus.textContent = '🔄 已重置';
                 singleStatus.className = 'status-badge';
                 singlePlayBtn.disabled = false;
                 singleReplayBtn.disabled = true;
-                singleNextBtn.disabled = true;
             },
 
             updateUI() {
@@ -2330,532 +2430,266 @@
                 const done = STATE.single.index + (STATE.single.answered ? 1 : 0);
                 singleProgress.textContent = `${Math.min(done, total)}/${total}`;
                 singleScore.textContent = STATE.single.score;
-            }
-        };
-
-        // ================================================================
-        //  8. PK 模式
-        // ================================================================
-        const PK = {
-            init() {
-                const total = parseInt(pkTotalInput.value) || 10;
-                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
-                STATE.pk.currentQuestion = 0;
-                STATE.pk.isActive = false;
-                STATE.pk.isPlaying = false;
-                STATE.pk.played = false;
-                STATE.pk.audioLock = false;
-                STATE.pk.roundFinished = false;
-                STATE.pk.wordList = [];
-                STATE.pk.options = [];
-                STATE.pk.correctWord = '';
-                for (const p of STATE.pk.players) {
-                    p.score = 0;
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                    p.done = false;
-                }
-                this.updateUI();
-                this.renderPlayers();
-                pkStatus.textContent = '🎧 等待开始';
-                pkStatus.className = 'status-badge';
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
-                pkStartBtn.disabled = false;
             },
 
-            loadWords() {
-                const all = getWords(STATE.grade, STATE.book, STATE.unit);
-                const valid = all.filter(w => w.word && w.word.trim().length > 0);
-                STATE.pk.wordList = shuffle([...valid]);
-                const total = STATE.pk.totalQuestions;
-                if (STATE.pk.wordList.length > total) {
-                    STATE.pk.wordList = STATE.pk.wordList.slice(0, total);
-                }
-                STATE.pk.currentQuestion = 0;
-                for (const p of STATE.pk.players) {
-                    p.score = 0;
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                    p.done = false;
-                }
-                this.updateUI();
-                this.renderPlayers();
+            bumpScore() {
+                const el = singleScore;
+                el.classList.remove('bump');
+                void el.offsetWidth;
+                el.classList.add('bump');
             },
 
-            renderPlayers() {
-                const players = STATE.pk.players;
-                if (players.length === 0) {
-                    pkPlayersGrid.innerHTML =
-                        `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#5a7a4a;">👥 点击「添加玩家」开始</div>`;
+            updateUnitBadge() {
+                const count = STATE.selectedUnits.length;
+                unitBadge.textContent = count;
+            },
+
+            showHistory() {
+                const history = STATE.single.history;
+                if (history.length === 0) {
+                    alert('暂无练习记录');
                     return;
                 }
-                let html = '';
-                for (const p of players) {
-                    const progress = p.done ? '✅ 完成' : `${Math.min(p.score / 2, STATE.pk.totalQuestions)}/${STATE.pk.totalQuestions}`;
-                    html += `
-                        <div class="pk-player-card" data-pid="${p.id}">
-                            <button class="remove-pk" data-pid="${p.id}">✕</button>
-                            <div class="pname">
-                                <span>🧑‍🎓 玩家 ${p.id}</span>
-                                <span class="pscore">${p.score} 分</span>
-                            </div>
-                            <div class="pk-options" data-pid="${p.id}">
-                                <div class="pk-opt disabled" data-idx="0">-</div>
-                                <div class="pk-opt disabled" data-idx="1">-</div>
-                                <div class="pk-opt disabled" data-idx="2">-</div>
-                            </div>
-                            <div class="pk-status">${p.answered ? '✅ 已答' : '⏳ 等待'}</div>
-                            <div class="pk-progress">${progress}</div>
-                        </div>
-                    `;
-                }
-                pkPlayersGrid.innerHTML = html;
-
-                pkPlayersGrid.querySelectorAll('.remove-pk').forEach(btn => {
-                    btn.addEventListener('click', () => {
-                        const id = parseInt(btn.dataset.pid);
-                        this.removePlayer(id);
-                    });
+                let html = `<div class="history-card">
+                            <h2>📜 练习历史 (${history.length} 个)</h2>
+                            <div class="history-list">`;
+                history.forEach((item, idx) => {
+                    const icon = item.correct ? '✅' : '❌';
+                    html += `<div class="history-item" data-index="${idx}">
+                                <span>${icon} ${item.word}</span>
+                                <span class="word-badge">${item.meaning}</span>
+                             </div>`;
                 });
-            },
-
-            renderQuestionForPlayers() {
-                const players = STATE.pk.players;
-                const opts = STATE.pk.options;
-                const letters = ['A', 'B', 'C'];
-                const isActive = STATE.pk.isActive && !STATE.pk.roundFinished;
-
-                for (const p of players) {
-                    const container = pkPlayersGrid.querySelector(`.pk-options[data-pid="${p.id}"]`);
-                    if (!container) continue;
-                    let html = '';
-                    for (let i = 0; i < opts.length; i++) {
-                        const word = opts[i] || '---';
-                        const cls = 'pk-opt' + (isActive && !p.answered && !p.done ? '' : ' disabled');
-                        const mark = (p.answered && p.selectedIdx === i) ? (p.selectedIdx === i && opts[i] === STATE.pk
-                            .correctWord ? ' ✅' : (p.selectedIdx === i ? ' ❌' : '')) : '';
-                        html += `<div class="${cls}" data-idx="${i}" data-word="${word}">${letters[i]}. ${word}${mark}</div>`;
-                    }
-                    container.innerHTML = html;
-
-                    if (isActive && !p.answered && !p.done) {
-                        container.querySelectorAll('.pk-opt').forEach(el => {
-                            el.addEventListener('click', () => {
-                                if (!STATE.pk.isActive || STATE.pk.roundFinished) return;
-                                if (p.answered || p.done) return;
-                                const idx = parseInt(el.dataset.idx);
-                                this.playerSelect(p.id, idx);
-                            });
-                        });
-                    }
-
-                    // 状态
-                    const statusEl = container.closest('.pk-player-card').querySelector('.pk-status');
-                    if (statusEl) {
-                        if (p.done) statusEl.textContent = '🏁 已完成';
-                        else if (p.answered) statusEl.textContent = '✅ 已答';
-                        else statusEl.textContent = isActive ? '⏳ 思考中' : '⏳ 等待';
-                    }
-                    const scoreEl = container.closest('.pk-player-card').querySelector('.pscore');
-                    if (scoreEl) scoreEl.textContent = p.score + ' 分';
-
-                    // 进度
-                    const progEl = container.closest('.pk-player-card').querySelector('.pk-progress');
-                    if (progEl) {
-                        const done = Math.min(p.score / 2, STATE.pk.totalQuestions);
-                        progEl.textContent = p.done ? '✅ 完成' : `${done}/${STATE.pk.totalQuestions}`;
-                    }
-                }
-            },
-
-            playerSelect(playerId, optIdx) {
-                if (STATE.pk.roundFinished) return;
-                const p = STATE.pk.players.find(p => p.id === playerId);
-                if (!p || p.answered || p.done || !STATE.pk.isActive) return;
-                const correct = STATE.pk.correctWord;
-                const selectedWord = STATE.pk.options[optIdx] || '';
-                const isCorrect = selectedWord === correct;
-
-                p.answered = true;
-                p.selectedIdx = optIdx;
-
-                if (isCorrect) {
-                    p.score += 2;
-                    sfx.correct();
-                    const card = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"]`);
-                    if (card) {
-                        card.classList.add('flash-correct');
-                        setTimeout(() => card.classList.remove('flash-correct'), 500);
-                        showFirework(card);
-                    }
-                } else {
-                    sfx.wrong();
-                    const card = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"]`);
-                    if (card) {
-                        card.classList.add('flash-wrong');
-                        setTimeout(() => card.classList.remove('flash-wrong'), 500);
-                    }
-                }
-
-                // 更新UI
-                const container = pkPlayersGrid.querySelector(`.pk-options[data-pid="${p.id}"]`);
-                if (container) {
-                    container.querySelectorAll('.pk-opt').forEach((el, i) => {
-                        el.classList.add('disabled');
-                        const w = el.dataset.word;
-                        let suffix = '';
-                        if (w === correct) suffix = ' ✅';
-                        else if (i === optIdx && !isCorrect) suffix = ' ❌';
-                        if (i === optIdx) {
-                            el.classList.add('selected');
-                            if (isCorrect) el.classList.add('correct');
-                            else el.classList.add('wrong');
-                        }
-                        if (w === correct && i !== optIdx) {
-                            el.classList.add('correct');
-                        }
-                        el.textContent = el.textContent.replace(/[✅❌]/g, '') + suffix;
-                    });
-                    const statusEl = container.closest('.pk-player-card').querySelector('.pk-status');
-                    if (statusEl) statusEl.textContent = isCorrect ? '✅ +2分' : '❌ 答错';
-                }
-                const scoreEl = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"] .pscore`);
-                if (scoreEl) scoreEl.textContent = p.score + ' 分';
-
-                // 检查是否所有玩家都已答完或完成
-                const allDone = STATE.pk.players.every(p => p.answered || p.done);
-                if (allDone) {
-                    this.roundFinished = true;
-                    // 检查是否有玩家达到目标
-                    const target = STATE.pk.totalQuestions * 2;
-                    const winner = STATE.pk.players.find(p => p.score >= target);
-                    if (winner) {
-                        this.endPK(winner);
-                        return;
-                    }
-                    // 检查是否所有玩家都已完成所有题目
-                    const allCompleted = STATE.pk.players.every(p => p.score / 2 >= STATE.pk.totalQuestions);
-                    if (allCompleted) {
-                        const sorted = [...STATE.pk.players].sort((a, b) => b.score - a.score);
-                        this.endPK(sorted[0], sorted);
-                        return;
-                    }
-                    // 进入下一题
-                    setTimeout(() => {
-                        if (STATE.pk.isActive) {
-                            this.nextQuestion();
-                        }
-                    }, 1000);
-                }
-            },
-
-            nextQuestion() {
-                const words = STATE.pk.wordList;
-                const idx = STATE.pk.currentQuestion + 1;
-                if (idx >= words.length) {
-                    // 所有题目用完，按分数排名
-                    const sorted = [...STATE.pk.players].sort((a, b) => b.score - a.score);
-                    this.endPK(sorted[0], sorted);
-                    return;
-                }
-                STATE.pk.currentQuestion = idx;
-                STATE.pk.roundFinished = false;
-                for (const p of STATE.pk.players) {
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                }
-                this.loadQuestion(idx);
-            },
-
-            loadQuestion(idx) {
-                const words = STATE.pk.wordList;
-                if (idx >= words.length) return;
-                const word = words[idx];
-                const pool = words;
-                const opts = pickOptions(word.word, pool, 3);
-                STATE.pk.options = opts;
-                STATE.pk.correctWord = word.word;
-                STATE.pk.roundFinished = false;
-
-                for (const p of STATE.pk.players) {
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                }
-
-                this.updateUI();
-                this.renderQuestionForPlayers();
-                pkStatus.textContent = `🎧 第 ${idx+1}/${words.length} 题，听录音选词`;
-                pkStatus.className = 'status-badge';
-                pkPlayBtn.disabled = false;
-                pkReplayBtn.disabled = true;
-                pkStartBtn.disabled = true;
-                STATE.pk.played = false;
-                STATE.pk.isPlaying = false;
-                STATE.pk.audioLock = false;
-            },
-
-            playAudio() {
-                if (STATE.pk.audioLock) return;
-                const words = STATE.pk.wordList;
-                const idx = STATE.pk.currentQuestion;
-                if (idx >= words.length) return;
-                if (STATE.pk.isPlaying) return;
-                const word = words[idx].word;
-
-                STATE.pk.audioLock = true;
-                STATE.pk.isPlaying = true;
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-                pkStatus.textContent = '🔊 播放中 ...';
-                pkStatus.className = 'status-badge playing';
-
-                // 播放一次
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.pk.isPlaying = false;
-                        STATE.pk.audioLock = false;
-                        pkPlayBtn.disabled = false;
-                        pkReplayBtn.disabled = false;
-                        if (!STATE.pk.roundFinished) {
-                            pkStatus.textContent = '🔊 播放完毕，请选择答案';
-                            pkStatus.className = 'status-badge done';
-                            STATE.pk.played = true;
-                            // 启用选项
-                            pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
-                                if (!el.classList.contains('disabled')) {
-                                    // 不自动启用，由render控制
-                                }
-                            });
-                            this.renderQuestionForPlayers();
-                        }
-                    }
-                );
-            },
-
-            replayAudio() {
-                if (STATE.pk.audioLock) return;
-                if (STATE.pk.roundFinished) return;
-                const words = STATE.pk.wordList;
-                const idx = STATE.pk.currentQuestion;
-                if (idx >= words.length) return;
-                const word = words[idx].word;
-
-                STATE.pk.audioLock = true;
-                STATE.pk.isPlaying = true;
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-                pkStatus.textContent = '🔊 再听一次 ...';
-                pkStatus.className = 'status-badge playing';
-
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.pk.isPlaying = false;
-                        STATE.pk.audioLock = false;
-                        pkPlayBtn.disabled = false;
-                        pkReplayBtn.disabled = false;
-                        if (!STATE.pk.roundFinished) {
-                            pkStatus.textContent = '🔊 播放完毕，请选择答案';
-                            pkStatus.className = 'status-badge done';
-                            this.renderQuestionForPlayers();
-                        }
-                    }
-                );
-            },
-
-            start() {
-                const total = parseInt(pkTotalInput.value) || 10;
-                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
-                pkTotalInput.value = STATE.pk.totalQuestions;
-                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
-
-                if (STATE.pk.players.length < 2) {
-                    pkStatus.textContent = '⚠️ 至少需要 2 位玩家';
-                    pkStatus.className = 'status-badge';
-                    return;
-                }
-
-                AudioEngine.stop();
-                STATE.pk.isActive = true;
-                STATE.pk.currentQuestion = 0;
-                STATE.pk.roundFinished = false;
-                for (const p of STATE.pk.players) {
-                    p.score = 0;
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                    p.done = false;
-                }
-                this.loadWords();
-                this.loadQuestion(0);
-                pkStartBtn.disabled = true;
-                pkStatus.textContent = '🎧 点击「开始对局」听录音';
-                pkStatus.className = 'status-badge';
-                pkPlayBtn.disabled = false;
-                pkReplayBtn.disabled = true;
-                sfx.playStart();
-            },
-
-            reset() {
-                AudioEngine.stop();
-                STATE.pk.isActive = false;
-                STATE.pk.isPlaying = false;
-                STATE.pk.audioLock = false;
-                STATE.pk.roundFinished = false;
-                for (const p of STATE.pk.players) {
-                    p.score = 0;
-                    p.answered = false;
-                    p.selectedIdx = -1;
-                    p.done = false;
-                }
-                const total = parseInt(pkTotalInput.value) || 10;
-                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
-                pkTotalInput.value = STATE.pk.totalQuestions;
-                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
-                pkStartBtn.disabled = false;
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-                pkStatus.textContent = '🔄 已重置';
-                pkStatus.className = 'status-badge';
-                this.loadWords();
-                this.renderPlayers();
-                pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
-                    el.textContent = '-';
-                    el.className = 'pk-opt disabled';
-                });
-                pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
-                pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
-                sfx.reset();
-            },
-
-            endPK(winner, allSorted) {
-                STATE.pk.isActive = false;
-                STATE.pk.roundFinished = true;
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-                pkStartBtn.disabled = false;
-
-                sfx.cheer();
-
-                const sorted = allSorted || [...STATE.pk.players].sort((a, b) => b.score - a.score);
-                let rankHtml = '';
-                for (let i = 0; i < sorted.length; i++) {
-                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
-                    rankHtml += `<div class="rank-item"><span class="rank-pos">${medal}</span> 玩家 ${sorted[i].id} <span>${sorted[i].score} 分</span></div>`;
-                }
+                html += `</div><button class="history-close">关闭</button></div>`;
 
                 const modal = document.createElement('div');
-                modal.className = 'rank-modal';
-                modal.innerHTML = `
-                    <div class="rank-card">
-                        <h2>🏆 对局结束 🏆</h2>
-                        <div class="rank-list">${rankHtml}</div>
-                        <button class="rank-close">👏 太棒了！</button>
-                    </div>
-                `;
+                modal.className = 'history-modal';
+                modal.innerHTML = html;
                 document.body.appendChild(modal);
-                modal.querySelector('.rank-close').addEventListener('click', () => {
+
+                modal.querySelectorAll('.history-item').forEach(el => {
+                    el.addEventListener('click', () => {
+                        const idx = parseInt(el.dataset.index);
+                        const item = history[idx];
+                        AudioEngine.play(item.word,
+                            () => {
+                                singleStatus.textContent = `🔊 重听 "${item.word}" (复习)`;
+                                singleStatus.className = 'status-badge playing';
+                            },
+                            () => {
+                                singleStatus.textContent = `🔊 播放完毕 (复习)`;
+                                singleStatus.className = 'status-badge done';
+                            }
+                        );
+                    });
+                });
+
+                modal.querySelector('.history-close').addEventListener('click', () => {
                     modal.remove();
-                    const winnerCard = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${winner.id}"]`);
-                    if (winnerCard) showFirework(winnerCard);
                 });
-
-                pkStatus.textContent = `🏆 ${winner.id}号玩家 获胜！`;
-                pkStatus.className = 'status-badge done';
-            },
-
-            addPlayer() {
-                if (STATE.pk.players.length >= 8) return;
-                const id = STATE.pk.playerIdCounter++;
-                STATE.pk.players.push({
-                    id,
-                    score: 0,
-                    answered: false,
-                    selectedIdx: -1,
-                    done: false,
-                });
-                this.renderPlayers();
-                if (STATE.pk.isActive && !STATE.pk.roundFinished) {
-                    this.renderQuestionForPlayers();
-                } else {
-                    pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
-                        el.textContent = '-';
-                        el.className = 'pk-opt disabled';
-                    });
-                    pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
-                    pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
-                }
-                this.updateUI();
-                sfx.next();
-            },
-
-            removePlayer(id) {
-                if (STATE.pk.players.length <= 2) return;
-                const idx = STATE.pk.players.findIndex(p => p.id === id);
-                if (idx === -1) return;
-                STATE.pk.players.splice(idx, 1);
-                if (STATE.pk.isActive) {
-                    STATE.pk.isActive = false;
-                    STATE.pk.roundFinished = true;
-                    AudioEngine.stop();
-                }
-                this.renderPlayers();
-                if (!STATE.pk.isActive) {
-                    pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
-                        el.textContent = '-';
-                        el.className = 'pk-opt disabled';
-                    });
-                    pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
-                    pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
-                }
-                this.updateUI();
-                sfx.reset();
-            },
-
-            updateUI() {
-                const total = STATE.pk.totalQuestions;
-                const done = Math.min(STATE.pk.currentQuestion + 1, total);
-                pkProgress.textContent = `${STATE.pk.currentQuestion + (STATE.pk.isActive ? 1 : 0)}/${total}`;
-                pkTargetDisplay.textContent = total * 2;
             }
         };
 
         // ================================================================
-        //  9. 模式切换 & 年级/单元联动
+        //  8. 单元选择模态框
         // ================================================================
-        function switchMode(mode) {
-            STATE.mode = mode;
-            if (mode === 'single') {
-                singleMode.style.display = 'block';
-                pkMode.style.display = 'none';
-                modeSingleBtn.classList.add('active');
-                modePkBtn.classList.remove('active');
-                AudioEngine.stop();
-                STATE.pk.isActive = false;
-                Single.loadWords();
-            } else {
-                singleMode.style.display = 'none';
-                pkMode.style.display = 'block';
-                modeSingleBtn.classList.remove('active');
-                modePkBtn.classList.add('active');
-                AudioEngine.stop();
-                STATE.single.isPlaying = false;
-                if (STATE.pk.players.length === 0) {
-                    STATE.pk.playerIdCounter = 1;
-                    STATE.pk.players = [];
-                    PK.addPlayer();
-                    PK.addPlayer();
-                }
-                PK.init();
-                PK.loadWords();
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
+        function renderUnitModal() {
+            const units = getUnits(STATE.grade, STATE.book);
+            let html = `<div class="unit-list">`;
+            for (const unit of units) {
+                const checked = STATE.selectedUnits.includes(unit) ? 'checked' : '';
+                const allWords = getWords(STATE.grade, STATE.book, unit);
+                const selectedWords = STATE.selectedWordsPerUnit[unit] || [];
+                const count = selectedWords.length > 0 ? selectedWords.length : allWords.length;
+                const total = allWords.length;
+                html += `
+                    <div class="unit-item" data-unit="${unit}">
+                        <input type="checkbox" class="unit-checkbox" value="${unit}" ${checked}>
+                        <span class="unit-name">${unit}</span>
+                        <span class="unit-count">${count}/${total}</span>
+                        <div class="unit-actions">
+                            <button class="unit-word-btn" data-unit="${unit}">📝</button>
+                        </div>
+                    </div>
+                `;
             }
-            sfx.next();
+            html += `</div>`;
+            unitModalBody.innerHTML = html;
+
+            // 绑定事件：复选框
+            unitModalBody.querySelectorAll('.unit-checkbox').forEach(cb => {
+                cb.addEventListener('change', function() {
+                    const unit = this.value;
+                    if (this.checked) {
+                        if (!STATE.selectedUnits.includes(unit)) {
+                            STATE.selectedUnits.push(unit);
+                        }
+                    } else {
+                        STATE.selectedUnits = STATE.selectedUnits.filter(u => u !== unit);
+                    }
+                    updateUnitModalCounts();
+                });
+            });
+
+            // 绑定事件：单词按钮
+            unitModalBody.querySelectorAll('.unit-word-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const unit = this.dataset.unit;
+                    openWordSelectModal(unit);
+                });
+            });
+
+            // 更新计数显示
+            function updateUnitModalCounts() {
+                const items = unitModalBody.querySelectorAll('.unit-item');
+                for (const item of items) {
+                    const unit = item.dataset.unit;
+                    const allWords = getWords(STATE.grade, STATE.book, unit);
+                    const selectedWords = STATE.selectedWordsPerUnit[unit] || [];
+                    const count = selectedWords.length > 0 ? selectedWords.length : allWords.length;
+                    const total = allWords.length;
+                    const countSpan = item.querySelector('.unit-count');
+                    if (countSpan) countSpan.textContent = `${count}/${total}`;
+                }
+            }
         }
 
+        function openWordSelectModal(unit) {
+            const words = getWords(STATE.grade, STATE.book, unit);
+            const selected = STATE.selectedWordsPerUnit[unit] || [];
+            // 如果 selected 为空，默认全选
+            const selectedSet = new Set(selected.length > 0 ? selected : words.map(w => w.word));
+
+            wordSelectTitle.textContent = `选择单词 - ${unit}`;
+            let html = `
+                <div class="word-list-actions">
+                    <button class="select-all">全选</button>
+                    <button class="deselect-all">全不选</button>
+                    <button class="select-bold">仅粗体</button>
+                </div>
+                <div class="word-list">
+            `;
+            for (const w of words) {
+                const checked = selectedSet.has(w.word) ? 'checked' : '';
+                const boldTag = w.bold ? '<span class="bold-tag">粗体</span>' : '';
+                html += `
+                    <div class="word-item">
+                        <input type="checkbox" class="word-checkbox" value="${w.word}" ${checked}>
+                        <span class="word-text">${w.word}</span>
+                        <span class="word-mean">${w.meaning}</span>
+                        ${boldTag}
+                    </div>
+                `;
+            }
+            html += `</div>`;
+            wordSelectBody.innerHTML = html;
+
+            // 绑定全选等按钮
+            wordSelectBody.querySelector('.select-all').addEventListener('click', () => {
+                wordSelectBody.querySelectorAll('.word-checkbox').forEach(cb => cb.checked = true);
+            });
+            wordSelectBody.querySelector('.deselect-all').addEventListener('click', () => {
+                wordSelectBody.querySelectorAll('.word-checkbox').forEach(cb => cb.checked = false);
+            });
+            wordSelectBody.querySelector('.select-bold').addEventListener('click', () => {
+                const items = wordSelectBody.querySelectorAll('.word-item');
+                items.forEach(item => {
+                    const cb = item.querySelector('.word-checkbox');
+                    const boldTag = item.querySelector('.bold-tag');
+                    cb.checked = !!boldTag;
+                });
+            });
+
+            // 存储当前操作的单元
+            wordSelectModal.dataset.unit = unit;
+
+            // 显示子模态框
+            wordSelectModal.classList.add('show');
+            unitModal.classList.remove('show');
+        }
+
+        // ================================================================
+        //  9. 模态框事件绑定
+        // ================================================================
+        // 打开单元选择
+        unitSelectBtn.addEventListener('click', () => {
+            renderUnitModal();
+            unitModal.classList.add('show');
+        });
+
+        // 关闭单元选择
+        unitModalCancel.addEventListener('click', () => {
+            unitModal.classList.remove('show');
+        });
+
+        // 确认单元选择
+        unitModalConfirm.addEventListener('click', () => {
+            // 确保选中的单元有效
+            const units = getUnits(STATE.grade, STATE.book);
+            STATE.selectedUnits = STATE.selectedUnits.filter(u => units.includes(u));
+            if (STATE.selectedUnits.length === 0) {
+                alert('请至少选择一个单元');
+                return;
+            }
+            unitModal.classList.remove('show');
+            // 重新加载单词
+            Single.loadWords();
+        });
+
+        // 点击“选词”按钮（从单元选择中）
+        unitWordSelectBtn.addEventListener('click', () => {
+            // 如果没有选中单元，则默认选中第一个
+            if (STATE.selectedUnits.length === 0) {
+                const units = getUnits(STATE.grade, STATE.book);
+                if (units.length > 0) {
+                    STATE.selectedUnits = [units[0]];
+                    renderUnitModal(); // 刷新显示
+                }
+            }
+            // 如果有多个单元，选词是针对当前激活的单元？我们选择第一个选中单元
+            if (STATE.selectedUnits.length > 0) {
+                const unit = STATE.selectedUnits[0];
+                openWordSelectModal(unit);
+            } else {
+                alert('请先选择单元');
+            }
+        });
+
+        // 子模态框 - 返回
+        wordSelectBack.addEventListener('click', () => {
+            wordSelectModal.classList.remove('show');
+            unitModal.classList.add('show');
+        });
+
+        wordSelectCancel.addEventListener('click', () => {
+            wordSelectModal.classList.remove('show');
+            unitModal.classList.add('show');
+        });
+
+        wordSelectConfirm.addEventListener('click', () => {
+            const unit = wordSelectModal.dataset.unit;
+            if (!unit) return;
+            const checkboxes = wordSelectBody.querySelectorAll('.word-checkbox');
+            const selected = [];
+            checkboxes.forEach(cb => {
+                if (cb.checked) selected.push(cb.value);
+            });
+            if (selected.length === 0) {
+                // 如果全不选，则视为选择全部（或清空配置）
+                STATE.selectedWordsPerUnit[unit] = []; // 空数组表示全选
+            } else {
+                STATE.selectedWordsPerUnit[unit] = selected;
+            }
+            wordSelectModal.classList.remove('show');
+            unitModal.classList.add('show');
+            // 刷新单元模态框显示
+            renderUnitModal();
+        });
+
+        // ================================================================
+        //  10. 年级/册别联动
+        // ================================================================
         function populateGrades() {
             const grades = Object.keys(wordBank);
             gradeSelect.innerHTML = grades.map(g => `<option value="${g}">${g}年级</option>`).join('');
@@ -2864,32 +2698,26 @@
         }
 
         function updateUnits() {
+            // 清空之前的单元选择
+            STATE.selectedUnits = [];
+            STATE.selectedWordsPerUnit = {};
             const units = getUnits(STATE.grade, STATE.book);
-            unitSelect.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
-            if (units.length) {
-                STATE.unit = units[0];
-                unitSelect.value = STATE.unit;
+            if (units.length > 0) {
+                STATE.selectedUnits = [units[0]];
             }
-            onUnitChange();
+            renderUnitModal(); // 预渲染
+            Single.loadWords();
         }
 
         function onUnitChange() {
             STATE.grade = gradeSelect.value;
             STATE.book = bookSelect.value;
-            STATE.unit = unitSelect.value;
-            if (STATE.mode === 'single') {
-                Single.loadWords();
-            } else {
-                PK.init();
-                PK.loadWords();
-                pkPlayBtn.disabled = true;
-                pkReplayBtn.disabled = true;
-            }
+            updateUnits();
             sfx.next();
         }
 
         // ================================================================
-        //  10. 高级渲染 (iOS 26 风格)
+        //  11. 高级渲染
         // ================================================================
         function toggleGlass() {
             STATE.glass = !STATE.glass;
@@ -2907,7 +2735,6 @@
             localStorage.setItem('glassEnabled', STATE.glass ? 'true' : 'false');
         }
 
-        // 恢复玻璃状态
         const savedGlass = localStorage.getItem('glassEnabled');
         if (savedGlass === 'true') {
             STATE.glass = true;
@@ -2918,56 +2745,45 @@
         }
 
         // ================================================================
-        //  11. 事件绑定
+        //  12. 事件绑定
         // ================================================================
         gradeSelect.addEventListener('change', () => {
             STATE.grade = gradeSelect.value;
             updateUnits();
+            onUnitChange();
         });
         bookSelect.addEventListener('change', () => {
             STATE.book = bookSelect.value;
             updateUnits();
+            onUnitChange();
         });
-        unitSelect.addEventListener('change', onUnitChange);
-
-        modeSingleBtn.addEventListener('click', () => switchMode('single'));
-        modePkBtn.addEventListener('click', () => switchMode('pk'));
 
         glassToggleBtn.addEventListener('click', toggleGlass);
 
-        // 单人
         singlePlayBtn.addEventListener('click', () => Single.playAudio());
         singleReplayBtn.addEventListener('click', () => Single.replayAudio());
-        singleNextBtn.addEventListener('click', () => Single.next());
         singleResetBtn.addEventListener('click', () => Single.reset());
+        historyBtn.addEventListener('click', () => Single.showHistory());
 
-        // PK
-        pkPlayBtn.addEventListener('click', () => PK.playAudio());
-        pkReplayBtn.addEventListener('click', () => PK.replayAudio());
-        pkStartBtn.addEventListener('click', () => PK.start());
-        pkResetBtn.addEventListener('click', () => PK.reset());
-        pkAddPlayerBtn.addEventListener('click', () => PK.addPlayer());
-
-        // 键盘快捷键
         document.addEventListener('keydown', (e) => {
             if (e.key === ' ' || e.code === 'Space') {
-                if (STATE.mode === 'single') {
+                if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
                     e.preventDefault();
-                    if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
-                        Single.playAudio();
-                    }
-                } else if (STATE.mode === 'pk') {
-                    if (STATE.pk.isActive && !STATE.pk.isPlaying && !STATE.pk.audioLock && !STATE.pk
-                        .roundFinished) {
-                        e.preventDefault();
-                        PK.playAudio();
-                    }
+                    Single.playAudio();
                 }
             }
         });
 
+        // 点击模态框外部关闭
+        unitModal.addEventListener('click', (e) => {
+            if (e.target === unitModal) unitModal.classList.remove('show');
+        });
+        wordSelectModal.addEventListener('click', (e) => {
+            if (e.target === wordSelectModal) wordSelectModal.classList.remove('show');
+        });
+
         // ================================================================
-        //  12. 启动
+        //  13. 启动
         // ================================================================
         populateGrades();
         STATE.grade = '4';
@@ -2975,18 +2791,20 @@
         gradeSelect.value = '4';
         bookSelect.value = 'upper';
         updateUnits();
-        switchMode('single');
+        // 初始加载
+        Single.loadWords();
 
         setTimeout(() => {
             singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
             singleStatus.className = 'status-badge';
         }, 300);
 
-        console.log('🎧 听力练习已启动！');
+        console.log('🎧 听力练习场已启动！');
         console.log('📁 录音文件放于 ./audio/ 目录，命名为 "单词.mp3"');
         console.log('💡 无录音文件时自动使用语音合成 (TTS)');
-        console.log('⌨️ 空格键快速播放 (单人模式)');
-        console.log('✨ 高级渲染已启用 iOS 26 风格');
+        console.log('⌨️ 空格键快速播放');
+        console.log('✨ 高级渲染已启用 iOS 26 风格，动效全面优化');
+        console.log('📌 单元选择支持多选，点击 📝 可精细选择单词');
     </script>
 </body>
 </html>
