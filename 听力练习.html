@@ -1,0 +1,2992 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>👂 听力练习 · 四年级上册</title>
+    <style>
+        /* ===== 全局 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', -apple-system, 'PingFang SC', Roboto, system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            background: linear-gradient(145deg, #f5f9e6 0%, #e2f0d6 100%);
+            transition: background 0.4s ease;
+        }
+        /* ===== 容器 ===== */
+        .app-container {
+            max-width: 1200px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 48px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 20px 60px rgba(80, 120, 60, 0.12);
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
+        }
+        /* ===== 顶部 ===== */
+        .header {
+            background: rgba(255, 255, 255, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 14px 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px 20px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #3a6b2a;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: -0.3px;
+        }
+        .logo span {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            font-size: 0.65rem;
+            padding: 2px 14px;
+            border-radius: 30px;
+            margin-left: 4px;
+        }
+        .header-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+            align-items: center;
+        }
+        .ctrl-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .ctrl-group label {
+            font-size: 0.55rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: #5a7a4a;
+            font-weight: 700;
+        }
+        .ctrl-group select,
+        .ctrl-group .mode-btn {
+            background: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(180, 200, 140, 0.4);
+            padding: 5px 16px;
+            border-radius: 30px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: #2a4a1a;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            outline: none;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .ctrl-group select:hover,
+        .ctrl-group .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            border-color: #a0c870;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(80, 140, 40, 0.08);
+        }
+        .mode-toggle-group {
+            display: flex;
+            gap: 4px;
+            background: rgba(200, 220, 160, 0.2);
+            padding: 3px 8px;
+            border-radius: 40px;
+            align-items: center;
+        }
+        .mode-toggle-group .mode-btn {
+            padding: 4px 16px;
+            font-size: 0.72rem;
+            background: transparent;
+            border-color: transparent;
+        }
+        .mode-toggle-group .mode-btn.active {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(139, 195, 74, 0.25);
+        }
+        /* ===== 主内容 ===== */
+        .main-content {
+            padding: 18px 24px 24px;
+        }
+        .single-mode {
+            display: block;
+        }
+        .pk-mode {
+            display: none;
+        }
+        /* ===== 信息栏 ===== */
+        .info-bar {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border-radius: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #2a4a1a;
+        }
+        .info-item .num {
+            background: rgba(139, 195, 74, 0.15);
+            padding: 2px 14px;
+            border-radius: 30px;
+            font-weight: 700;
+            color: #3a6b2a;
+        }
+        .info-item .score-num {
+            background: linear-gradient(135deg, #ffb74d, #ff8a65);
+            color: #fff;
+            padding: 2px 16px;
+            border-radius: 30px;
+            font-weight: 700;
+        }
+        /* ===== 听力区 ===== */
+        .listening-area {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 36px;
+            padding: 20px 24px 22px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            margin-bottom: 16px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .status-badge {
+            display: inline-block;
+            padding: 5px 24px;
+            border-radius: 40px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            background: rgba(200, 220, 160, 0.25);
+            color: #3a6b2a;
+            border: 1px solid rgba(180, 200, 140, 0.2);
+            transition: all 0.3s;
+            margin-bottom: 12px;
+        }
+        .status-badge.playing {
+            background: #d4e8c0;
+            color: #2a5a1a;
+            border-color: #8bc34a;
+            animation: pulse-badge 0.9s infinite;
+        }
+        .status-badge.done {
+            background: #d4e8c0;
+            color: #2a6a2a;
+            border-color: #8bc34a;
+        }
+        .status-badge.correct {
+            background: #c8e6c9;
+            color: #1a6a2a;
+            border-color: #66bb6a;
+        }
+        .status-badge.wrong {
+            background: #ffcdd2;
+            color: #a33a3a;
+            border-color: #ef9a9a;
+        }
+        @keyframes pulse-badge {
+            0%,
+            100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+        .audio-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            margin: 6px 0 12px;
+        }
+        .audio-btn {
+            padding: 9px 28px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+        }
+        .audio-btn:active {
+            transform: scale(0.94);
+        }
+        .audio-btn.primary {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.25);
+        }
+        .audio-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(139, 195, 74, 0.3);
+        }
+        .audio-btn.primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .audio-btn.secondary {
+            background: rgba(255, 255, 255, 0.6);
+            color: #3a6b2a;
+            border: 1px solid rgba(180, 200, 140, 0.3);
+        }
+        .audio-btn.secondary:hover {
+            background: #fff;
+            border-color: #8bc34a;
+            transform: translateY(-2px);
+        }
+        .audio-btn .icon {
+            font-size: 1.1rem;
+        }
+        /* ===== 选项 ===== */
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin: 14px 0 10px;
+        }
+        .option-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 2px solid rgba(180, 200, 140, 0.3);
+            border-radius: 40px;
+            padding: 14px 12px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #1a3a0a;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            text-align: center;
+            user-select: none;
+            position: relative;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .option-card .letter {
+            background: rgba(180, 200, 140, 0.2);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: #3a6b2a;
+            flex-shrink: 0;
+        }
+        .option-card:hover:not(.disabled) {
+            transform: translateY(-3px);
+            border-color: #8bc34a;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.10);
+        }
+        .option-card.selected {
+            border-color: #8bc34a;
+            background: rgba(139, 195, 74, 0.10);
+        }
+        .option-card.correct {
+            border-color: #66bb6a;
+            background: rgba(102, 187, 106, 0.18);
+            color: #1a6a2a;
+        }
+        .option-card.wrong {
+            border-color: #ef5350;
+            background: rgba(239, 83, 80, 0.12);
+            color: #a33a3a;
+        }
+        .option-card.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .option-card .check-mark {
+            font-size: 1.3rem;
+        }
+        /* ===== 底部按钮 ===== */
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 14px;
+        }
+        .action-btn {
+            padding: 10px 30px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .action-btn:active {
+            transform: scale(0.94);
+        }
+        .action-btn.next {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.2);
+        }
+        .action-btn.next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(139, 195, 74, 0.25);
+        }
+        .action-btn.next:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .action-btn.reset {
+            background: rgba(180, 200, 140, 0.25);
+            color: #3a6b2a;
+            border: 1px solid rgba(180, 200, 140, 0.2);
+        }
+        .action-btn.reset:hover {
+            background: rgba(180, 200, 140, 0.4);
+            transform: translateY(-2px);
+        }
+        /* ===== PK 模式 ===== */
+        .pk-layout {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px;
+        }
+        .pk-players-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+        .pk-player-card {
+            background: rgba(255, 255, 255, 0.55);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 32px;
+            padding: 14px 14px 16px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            transition: all 0.25s;
+            position: relative;
+        }
+        .pk-player-card .pname {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #2a4a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .pk-player-card .pname .pscore {
+            background: linear-gradient(135deg, #ffb74d, #ff8a65);
+            color: #fff;
+            padding: 0 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+        }
+        .pk-player-card .pk-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
+            margin: 6px 0 4px;
+        }
+        .pk-player-card .pk-opt {
+            background: rgba(255, 255, 255, 0.5);
+            border: 1.5px solid rgba(180, 200, 140, 0.3);
+            border-radius: 30px;
+            padding: 8px 4px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: #1a3a0a;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            word-break: break-word;
+        }
+        .pk-player-card .pk-opt:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.85);
+            border-color: #8bc34a;
+        }
+        .pk-player-card .pk-opt.selected {
+            border-color: #8bc34a;
+            background: rgba(139, 195, 74, 0.12);
+        }
+        .pk-player-card .pk-opt.correct {
+            border-color: #66bb6a;
+            background: rgba(102, 187, 106, 0.18);
+            color: #1a6a2a;
+        }
+        .pk-player-card .pk-opt.wrong {
+            border-color: #ef5350;
+            background: rgba(239, 83, 80, 0.12);
+            color: #a33a3a;
+        }
+        .pk-player-card .pk-opt.disabled {
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+        .pk-player-card .pk-status {
+            font-size: 0.65rem;
+            color: #5a7a4a;
+            margin-top: 4px;
+            text-align: center;
+        }
+        .pk-player-card .remove-pk {
+            position: absolute;
+            top: 6px;
+            right: 10px;
+            background: rgba(239, 83, 80, 0.10);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            font-size: 14px;
+            cursor: pointer;
+            color: #a03a3a;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .pk-player-card .remove-pk:hover {
+            background: rgba(239, 83, 80, 0.2);
+            transform: scale(1.08);
+        }
+        .pk-player-card.flash-correct {
+            background: rgba(102, 187, 106, 0.15) !important;
+            border-color: #66bb6a;
+        }
+        .pk-player-card.flash-wrong {
+            background: rgba(239, 83, 80, 0.10) !important;
+            border-color: #ef5350;
+        }
+        .pk-player-card .pk-progress {
+            font-size: 0.6rem;
+            color: #5a7a4a;
+            text-align: center;
+            margin-top: 2px;
+        }
+        /* PK 控制栏 */
+        .pk-control-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 0 4px;
+            border-top: 1px solid rgba(180, 200, 140, 0.15);
+            margin-top: 8px;
+        }
+        .pk-control-bar label {
+            font-weight: 600;
+            color: #3a6b2a;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pk-control-bar input[type="number"] {
+            width: 56px;
+            padding: 5px 8px;
+            border-radius: 30px;
+            border: 1px solid rgba(180, 200, 140, 0.3);
+            font-weight: 600;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.5);
+            font-size: 0.85rem;
+            outline: none;
+            font-family: inherit;
+        }
+        .pk-control-bar input[type="number"]:focus {
+            border-color: #8bc34a;
+            box-shadow: 0 0 0 3px rgba(139, 195, 74, 0.10);
+        }
+        .pk-control-bar .pk-btn {
+            padding: 7px 22px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.78rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .pk-control-bar .pk-btn.start {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            box-shadow: 0 4px 16px rgba(139, 195, 74, 0.2);
+        }
+        .pk-control-bar .pk-btn.start:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.25);
+        }
+        .pk-control-bar .pk-btn.start:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .pk-control-bar .pk-btn.reset-pk {
+            background: rgba(180, 200, 140, 0.2);
+            color: #3a6b2a;
+            border: 1px solid rgba(180, 200, 140, 0.15);
+        }
+        .pk-control-bar .pk-btn.reset-pk:hover {
+            background: rgba(180, 200, 140, 0.35);
+            transform: translateY(-2px);
+        }
+        .pk-control-bar .pk-btn.add-player {
+            background: rgba(255, 215, 150, 0.25);
+            color: #8a7a3a;
+            border: 1px solid rgba(255, 215, 150, 0.2);
+        }
+        .pk-control-bar .pk-btn.add-player:hover {
+            background: rgba(255, 215, 150, 0.4);
+            transform: translateY(-2px);
+        }
+        /* ===== 排行榜 ===== */
+        .rank-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(40, 60, 20, 0.3);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .rank-card {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-radius: 48px;
+            padding: 30px 28px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.08);
+        }
+        .rank-card h2 {
+            color: #2a4a1a;
+            margin-bottom: 14px;
+            font-size: 1.4rem;
+        }
+        .rank-list {
+            text-align: left;
+            margin: 14px 0;
+        }
+        .rank-item {
+            padding: 7px 14px;
+            border-bottom: 1px solid rgba(180, 200, 140, 0.2);
+            font-size: 0.95rem;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            color: #2a4a1a;
+        }
+        .rank-item .rank-pos {
+            font-weight: 700;
+            color: #8bc34a;
+        }
+        .rank-close {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            border: none;
+            padding: 10px 32px;
+            border-radius: 40px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.9rem;
+            margin-top: 8px;
+        }
+        .rank-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.2);
+        }
+        /* ===== 礼花 ===== */
+        .firework-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+        /* ===== 响应式 ===== */
+        @media (max-width: 720px) {
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .header-controls {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .header-controls .ctrl-group {
+                width: 100%;
+            }
+            .header-controls select,
+            .header-controls .mode-btn {
+                width: 100%;
+            }
+            .mode-toggle-group {
+                width: 100%;
+                justify-content: center;
+            }
+            .info-bar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                gap: 4px;
+            }
+            .info-item {
+                justify-content: center;
+            }
+            .listening-area {
+                padding: 14px 16px;
+            }
+            .options-grid {
+                grid-template-columns: 1fr;
+            }
+            .pk-players-grid {
+                grid-template-columns: 1fr;
+            }
+            .pk-player-card .pk-options {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+            .main-content {
+                padding: 10px 12px 16px;
+            }
+            .audio-btn {
+                padding: 7px 18px;
+                font-size: 0.8rem;
+            }
+            .action-btn {
+                padding: 8px 18px;
+                font-size: 0.8rem;
+            }
+            .option-card .letter {
+                width: 26px;
+                height: 26px;
+                font-size: 0.65rem;
+            }
+            .option-card {
+                padding: 10px 8px;
+                min-height: 50px;
+                font-size: 0.95rem;
+            }
+        }
+        @media (max-width: 480px) {
+            .app-container {
+                border-radius: 28px;
+            }
+            .logo {
+                font-size: 1rem;
+            }
+            .pk-player-card .pk-options {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 4px;
+            }
+            .pk-player-card .pk-opt {
+                font-size: 0.6rem;
+                padding: 6px 2px;
+                min-height: 34px;
+            }
+        }
+        /* ===== 工具 ===== */
+        .hidden {
+            display: none !important;
+        }
+        .text-muted {
+            color: #5a7a4a;
+            font-size: 0.8rem;
+        }
+        .mt-8 {
+            margin-top: 8px;
+        }
+        .flex-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        /* ==============================================================
+                   iOS 26 高级渲染 (通过 data-glass 开启)
+                   ============================================================== */
+        [data-glass="enabled"] body {
+            background: radial-gradient(circle at 20% 25%, #e8f5e9, #c8e6c9 60%, #a5d6a7 100%);
+        }
+        [data-glass="enabled"] .app-container {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 30px 80px rgba(40, 80, 20, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.7);
+            border-radius: 56px;
+        }
+        [data-glass="enabled"] .header {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 56px 56px 0 0;
+        }
+        [data-glass="enabled"] .ctrl-group select,
+        [data-glass="enabled"] .ctrl-group .mode-btn {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #1a3a0a;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+        }
+        [data-glass="enabled"] .ctrl-group select:hover,
+        [data-glass="enabled"] .ctrl-group .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.5);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+        [data-glass="enabled"] .mode-toggle-group .mode-btn.active {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            backdrop-filter: blur(8px);
+            border-color: rgba(255, 255, 255, 0.2);
+            color: #fff;
+        }
+        [data-glass="enabled"] .info-bar {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 48px;
+        }
+        [data-glass="enabled"] .listening-area {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 44px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+        }
+        [data-glass="enabled"] .status-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .status-badge.playing {
+            background: rgba(139, 195, 74, 0.25);
+            border-color: rgba(139, 195, 74, 0.4);
+        }
+        [data-glass="enabled"] .audio-btn.primary {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.75), rgba(85, 139, 47, 0.75));
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .audio-btn.secondary {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .audio-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        [data-glass="enabled"] .option-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+        }
+        [data-glass="enabled"] .option-card:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.35);
+            border-color: rgba(139, 195, 74, 0.3);
+        }
+        [data-glass="enabled"] .option-card .letter {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        [data-glass="enabled"] .option-card.correct {
+            background: rgba(102, 187, 106, 0.2);
+            border-color: rgba(102, 187, 106, 0.3);
+        }
+        [data-glass="enabled"] .option-card.wrong {
+            background: rgba(239, 83, 80, 0.15);
+            border-color: rgba(239, 83, 80, 0.25);
+        }
+        [data-glass="enabled"] .action-btn.next {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .action-btn.reset {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        [data-glass="enabled"] .pk-player-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 40px;
+        }
+        [data-glass="enabled"] .pk-player-card .pk-opt {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+        }
+        [data-glass="enabled"] .pk-player-card .pk-opt:hover:not(.disabled) {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(139, 195, 74, 0.2);
+        }
+        [data-glass="enabled"] .pk-control-bar .pk-btn.start {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .pk-control-bar .pk-btn.reset-pk {
+            background: rgba(255, 255, 255, 0.10);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        [data-glass="enabled"] .pk-control-bar .pk-btn.add-player {
+            background: rgba(255, 215, 150, 0.15);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 215, 150, 0.15);
+        }
+        [data-glass="enabled"] .rank-card {
+            background: rgba(255, 255, 255, 0.30);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 56px;
+        }
+        [data-glass="enabled"] .rank-close {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .info-item .num {
+            background: rgba(139, 195, 74, 0.15);
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        [data-glass="enabled"] .info-item .score-num {
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.7), rgba(255, 138, 101, 0.7));
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .pk-control-bar input[type="number"] {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        [data-glass="enabled"] .pk-control-bar label {
+            color: #1a3a0a;
+        }
+        [data-glass="enabled"] .logo {
+            color: #1a3a0a;
+        }
+        [data-glass="enabled"] .logo span {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        [data-glass="enabled"] .ctrl-group label {
+            color: #3a6b2a;
+        }
+        [data-glass="enabled"] .text-muted {
+            color: #4a7a3a;
+        }
+        [data-glass="enabled"] .pk-player-card .pname {
+            color: #1a3a0a;
+        }
+        [data-glass="enabled"] .pk-player-card .pk-status {
+            color: #4a7a3a;
+        }
+        [data-glass="enabled"] .pk-player-card .pk-progress {
+            color: #4a7a3a;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container" id="app">
+        <!-- ===== 顶部 ===== -->
+        <header class="header">
+            <div class="logo">
+                🎧 听力练习
+                <span>四上</span>
+            </div>
+            <div class="header-controls">
+                <div class="ctrl-group">
+                    <label>📚 年级</label>
+                    <select id="gradeSelect"></select>
+                </div>
+                <div class="ctrl-group">
+                    <label>📖 册别</label>
+                    <select id="bookSelect">
+                        <option value="upper">上册</option>
+                        <option value="lower">下册</option>
+                    </select>
+                </div>
+                <div class="ctrl-group">
+                    <label>📌 单元</label>
+                    <select id="unitSelect"></select>
+                </div>
+                <div class="mode-toggle-group">
+                    <button id="modeSingleBtn" class="mode-btn active">🧑 单人</button>
+                    <button id="modePkBtn" class="mode-btn">👥 PK</button>
+                </div>
+                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:4px 14px;font-size:0.7rem;font-weight:600;color:#3a6b2a;cursor:pointer;backdrop-filter:blur(4px);font-family:inherit;">💎 高级渲染</button>
+            </div>
+        </header>
+
+        <!-- ===== 主内容 ===== -->
+        <div class="main-content">
+
+            <!-- ===== 单人模式 ===== -->
+            <div id="singleMode" class="single-mode">
+                <div class="info-bar">
+                    <div class="info-item">📝 第 <span class="num" id="singleProgress">0/0</span> 题</div>
+                    <div class="info-item">⭐ 得分 <span class="score-num" id="singleScore">0</span> 分</div>
+                    <div class="info-item text-muted">✅ 每题 2 分</div>
+                </div>
+
+                <div class="listening-area">
+                    <div class="status-badge" id="singleStatus">🎧 准备就绪</div>
+                    <div class="audio-controls">
+                        <button class="audio-btn primary" id="singlePlayBtn">▶ 开始练习</button>
+                        <button class="audio-btn secondary" id="singleReplayBtn">🔊 再听一次</button>
+                    </div>
+                    <div class="options-grid" id="singleOptions">
+                        <div class="option-card disabled" data-idx="0"><span class="letter">A</span>---</div>
+                        <div class="option-card disabled" data-idx="1"><span class="letter">B</span>---</div>
+                        <div class="option-card disabled" data-idx="2"><span class="letter">C</span>---</div>
+                    </div>
+                    <div class="action-row">
+                        <button class="action-btn next" id="singleNextBtn" disabled>➡ 下一题</button>
+                        <button class="action-btn reset" id="singleResetBtn">🔄 重新开始</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== PK 模式 ===== -->
+            <div id="pkMode" class="pk-mode">
+                <div class="info-bar">
+                    <div class="info-item">📝 第 <span class="num" id="pkProgress">0/0</span> 题</div>
+                    <div class="info-item">🎯 目标 <span class="num" id="pkTargetDisplay">20</span> 分</div>
+                    <div class="info-item text-muted">✅ 每题 2 分 · 独立抢答</div>
+                </div>
+
+                <div class="listening-area">
+                    <div class="status-badge" id="pkStatus">🎧 等待开始</div>
+                    <div class="audio-controls">
+                        <button class="audio-btn primary" id="pkPlayBtn">▶ 开始对局</button>
+                        <button class="audio-btn secondary" id="pkReplayBtn">🔊 再听一次</button>
+                    </div>
+                    <div class="text-muted" style="font-size:0.75rem; margin-top:2px;">⚡ 各玩家独立抢答，答对即得分，自动进入下一题</div>
+                </div>
+
+                <div class="pk-layout">
+                    <div class="pk-players-grid" id="pkPlayersGrid"></div>
+                    <div class="pk-control-bar">
+                        <label>📊 题数 <input type="number" id="pkTotalInput" value="10" min="1" max="50"></label>
+                        <button class="pk-btn add-player" id="pkAddPlayerBtn">➕ 添加玩家</button>
+                        <button class="pk-btn start" id="pkStartBtn">▶ 开始对局</button>
+                        <button class="pk-btn reset-pk" id="pkResetBtn">🔄 重置</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="padding:6px 24px 14px; text-align:center; font-size:0.65rem; color:#6a8a5a; border-top:1px solid rgba(180,200,140,0.15);">
+            🔊 录音文件放于 ./audio/ 目录，命名为 “单词.mp3” · 无录音则使用语音合成
+        </div>
+    </div>
+
+    <canvas id="fireworkCanvas" class="firework-canvas"></canvas>
+
+    <!-- ============================================================ -->
+    <!-- JavaScript -->
+    <!-- ============================================================ -->
+    <script>
+        // ================================================================
+        //  1. 词库 (全年级)
+        // ================================================================
+        const wordBank = {
+            3: {
+                upper: {
+                    "Unit 1": [{ word: "name", meaning: "名字", bold: false }, { word: "nice", meaning: "美好的",
+                            bold: false }, { word: "ear", meaning: "耳朵", bold: true }, { word: "hand",
+                            meaning: "手", bold: true }, { word: "eye", meaning: "眼睛", bold: true },
+                        { word: "mouth", meaning: "嘴巴", bold: true }, { word: "arm", meaning: "手臂",
+                            bold: true }, { word: "can", meaning: "能；可以", bold: false },
+                        { word: "share", meaning: "分享", bold: true }, { word: "smile", meaning: "微笑",
+                            bold: true }, { word: "listen", meaning: "听", bold: true },
+                        { word: "help", meaning: "帮助", bold: true }, { word: "say", meaning: "说",
+                            bold: false }, { word: "friend", meaning: "朋友", bold: false },
+                        { word: "good", meaning: "好的", bold: false }],
+                    "Unit 2": [{ word: "mum", meaning: "妈妈", bold: true }, { word: "dad", meaning: "爸爸",
+                            bold: true }, { word: "grandma", meaning: "奶奶", bold: true },
+                        { word: "grandpa", meaning: "爷爷", bold: true }, { word: "grandfather",
+                            meaning: "祖父", bold: true }, { word: "grandmother", meaning: "祖母",
+                            bold: true }, { word: "mother", meaning: "母亲", bold: true },
+                        { word: "father", meaning: "父亲", bold: true }, { word: "me", meaning: "我",
+                            bold: true }, { word: "sister", meaning: "姐妹", bold: true },
+                        { word: "family", meaning: "家庭", bold: true }, { word: "big", meaning: "大的",
+                            bold: true }, { word: "cousin", meaning: "表兄妹", bold: true },
+                        { word: "brother", meaning: "兄弟", bold: true }, { word: "baby", meaning: "婴儿",
+                            bold: true }, { word: "uncle", meaning: "叔叔", bold: true },
+                        { word: "aunt", meaning: "阿姨", bold: true }, { word: "small", meaning: "小的",
+                            bold: true }],
+                    "Unit 3": [{ word: "like", meaning: "喜欢", bold: true }, { word: "dog", meaning: "狗",
+                            bold: true }, { word: "pet", meaning: "宠物", bold: false },
+                        { word: "cat", meaning: "猫", bold: true }, { word: "fish", meaning: "鱼",
+                            bold: true }, { word: "bird", meaning: "鸟", bold: true },
+                        { word: "rabbit", meaning: "兔子", bold: true }, { word: "go", meaning: "去",
+                            bold: false }, { word: "zoo", meaning: "动物园", bold: false },
+                        { word: "fox", meaning: "狐狸", bold: false }, { word: "Miss", meaning: "小姐",
+                            bold: false }, { word: "panda", meaning: "熊猫", bold: true },
+                        { word: "red panda", meaning: "小熊猫", bold: false }, { word: "cute",
+                            meaning: "可爱的", bold: false }, { word: "monkey", meaning: "猴子",
+                            bold: true }, { word: "tiger", meaning: "老虎", bold: true },
+                        { word: "elephant", meaning: "大象", bold: true }, { word: "lion", meaning: "狮子",
+                            bold: true }, { word: "animal", meaning: "动物", bold: false },
+                        { word: "giraffe", meaning: "长颈鹿", bold: true }, { word: "tall", meaning: "高的",
+                            bold: true }, { word: "fast", meaning: "快速的", bold: true }],
+                    "Unit 4": [{ word: "apple", meaning: "苹果", bold: true }, { word: "banana", meaning: "香蕉",
+                            bold: true }, { word: "farm", meaning: "农场", bold: false },
+                        { word: "air", meaning: "空气", bold: true }, { word: "orange", meaning: "橙子；橙色",
+                            bold: true }, { word: "grape", meaning: "葡萄", bold: true },
+                        { word: "school", meaning: "学校", bold: false }, { word: "garden", meaning: "花园",
+                            bold: false }, { word: "need", meaning: "需要", bold: false },
+                        { word: "water", meaning: "水", bold: true }, { word: "flower", meaning: "花",
+                            bold: true }, { word: "grass", meaning: "草", bold: false },
+                        { word: "plant", meaning: "植物", bold: false }, { word: "new", meaning: "新的",
+                            bold: false }, { word: "tree", meaning: "树", bold: true },
+                        { word: "sun", meaning: "太阳", bold: true }, { word: "give", meaning: "给予",
+                            bold: false }, { word: "them", meaning: "他们", bold: false }],
+                    "Unit 5": [{ word: "colour", meaning: "颜色", bold: false }, { word: "orange", meaning: "橙色",
+                            bold: true }, { word: "green", meaning: "绿色", bold: true },
+                        { word: "red", meaning: "红色", bold: true }, { word: "make", meaning: "制作",
+                            bold: false }, { word: "purple", meaning: "紫色", bold: true },
+                        { word: "brown", meaning: "棕色", bold: true }, { word: "bear", meaning: "熊",
+                            bold: false }, { word: "yellow", meaning: "黄色", bold: true },
+                        { word: "duck", meaning: "鸭子", bold: false }, { word: "sea", meaning: "海洋",
+                            bold: false }, { word: "some", meaning: "一些", bold: false },
+                        { word: "pink", meaning: "粉色", bold: true }, { word: "draw", meaning: "画画",
+                            bold: false }, { word: "white", meaning: "白色", bold: true },
+                        { word: "black", meaning: "黑色", bold: true }],
+                    "Unit 6": [{ word: "one", meaning: "一", bold: true }, { word: "two", meaning: "二",
+                            bold: true }, { word: "three", meaning: "三", bold: true },
+                        { word: "four", meaning: "四", bold: true }, { word: "five", meaning: "五",
+                            bold: true }, { word: "six", meaning: "六", bold: true },
+                        { word: "seven", meaning: "七", bold: true }, { word: "eight", meaning: "八",
+                            bold: true }, { word: "nine", meaning: "九", bold: true },
+                        { word: "ten", meaning: "十", bold: true }, { word: "old", meaning: "年老的",
+                            bold: false }, { word: "year", meaning: "年", bold: false },
+                        { word: "o'clock", meaning: "点钟", bold: false }, { word: "cut", meaning: "切",
+                            bold: false }, { word: "eat", meaning: "吃", bold: false },
+                        { word: "cake", meaning: "蛋糕", bold: false }]
+                },
+                lower: {
+                    "Unit 1": [{ word: "where", meaning: "哪里", bold: false }, { word: "from", meaning: "从...",
+                            bold: false }, { word: "about", meaning: "关于", bold: false },
+                        { word: "today", meaning: "今天", bold: false }, { word: "teacher", meaning: "老师",
+                            bold: true }, { word: "student", meaning: "学生", bold: true },
+                        { word: "after", meaning: "在...之后", bold: false }, { word: "who", meaning: "谁",
+                            bold: false }, { word: "girl", meaning: "女孩", bold: true },
+                        { word: "neighbour", meaning: "邻居", bold: false }, { word: "boy", meaning: "男孩",
+                            bold: true }, { word: "woman", meaning: "女人", bold: true },
+                        { word: "man", meaning: "男人", bold: true }, { word: "Mr", meaning: "先生",
+                            bold: false }, { word: "classmate", meaning: "同学", bold: false },
+                        { word: "he", meaning: "他", bold: false }, { word: "also", meaning: "也",
+                            bold: false }, { word: "English", meaning: "英语", bold: false },
+                        { word: "she", meaning: "她", bold: false }, { word: "very", meaning: "非常",
+                            bold: false }, { word: "UK", meaning: "英国", bold: true },
+                        { word: "China", meaning: "中国", bold: true }, { word: "Canada", meaning: "加拿大",
+                            bold: true }, { word: "USA", meaning: "美国", bold: true }],
+                    "Unit 2": [{ word: "has", meaning: "有", bold: false }, { word: "long", meaning: "长的",
+                            bold: true }, { word: "body", meaning: "身体", bold: false },
+                        { word: "short", meaning: "短的", bold: true }, { word: "leg", meaning: "腿",
+                            bold: false }, { word: "right", meaning: "正确的；右边", bold: false },
+                        { word: "fat", meaning: "胖的", bold: true }, { word: "thin", meaning: "瘦的",
+                            bold: true }, { word: "slow", meaning: "慢的", bold: true },
+                        { word: "love", meaning: "爱", bold: false }, { word: "tail", meaning: "尾巴",
+                            bold: false }, { word: "her", meaning: "她的", bold: false },
+                        { word: "gift", meaning: "礼物", bold: false }, { word: "picture", meaning: "图画",
+                            bold: true }, { word: "card", meaning: "卡片", bold: true },
+                        { word: "sing", meaning: "唱歌", bold: true }, { word: "dance", meaning: "跳舞",
+                            bold: true }, { word: "talk", meaning: "说话", bold: false },
+                        { word: "face", meaning: "脸", bold: false }, { word: "all", meaning: "全部",
+                            bold: false }, { word: "song", meaning: "歌曲", bold: false },
+                        { word: "or", meaning: "或者", bold: false }, { word: "much", meaning: "许多",
+                            bold: false }],
+                    "Unit 3": [{ word: "eraser", meaning: "橡皮", bold: false }, { word: "find", meaning: "找到",
+                            bold: false }, { word: "ruler", meaning: "尺子", bold: true },
+                        { word: "pen", meaning: "钢笔", bold: true }, { word: "pencil", meaning: "铅笔",
+                            bold: true }, { word: "book", meaning: "书", bold: true },
+                        { word: "bag", meaning: "书包", bold: true }, { word: "paper", meaning: "纸",
+                            bold: false }, { word: "these", meaning: "这些", bold: false },
+                        { word: "see", meaning: "看见", bold: true }, { word: "smell", meaning: "闻",
+                            bold: true }, { word: "taste", meaning: "品尝", bold: true },
+                        { word: "hear", meaning: "听见", bold: true }, { word: "touch", meaning: "触摸",
+                            bold: true }, { word: "nose", meaning: "鼻子", bold: false },
+                        { word: "tongue", meaning: "舌头", bold: false }, { word: "class", meaning: "班级",
+                            bold: false }, { word: "in", meaning: "在...里", bold: false },
+                        { word: "computer", meaning: "电脑", bold: false }, { word: "learn", meaning: "学习",
+                            bold: false }],
+                    "Unit 4": [{ word: "breakfast", meaning: "早餐", bold: false }, { word: "time", meaning: "时间",
+                            bold: false }, { word: "bread", meaning: "面包", bold: true },
+                        { word: "egg", meaning: "鸡蛋", bold: true }, { word: "milk", meaning: "牛奶",
+                            bold: true }, { word: "noodle", meaning: "面条", bold: true },
+                        { word: "juice", meaning: "果汁", bold: true }, { word: "rice", meaning: "米饭",
+                            bold: true }, { word: "meat", meaning: "肉", bold: true },
+                        { word: "vegetable", meaning: "蔬菜", bold: true }, { word: "healthy",
+                            meaning: "健康的", bold: false }, { word: "plate", meaning: "盘子",
+                            bold: false }, { word: "soup", meaning: "汤", bold: true },
+                        { word: "fruit", meaning: "水果", bold: true }, { word: "colourful",
+                            meaning: "色彩缤纷", bold: false }, { word: "candy", meaning: "糖果",
+                            bold: false }, { word: "yummy", meaning: "美味的", bold: false }],
+                    "Unit 5": [{ word: "boat", meaning: "小船", bold: true }, { word: "cool", meaning: "酷的",
+                            bold: false }, { word: "keep", meaning: "保持", bold: false },
+                        { word: "at", meaning: "在", bold: false }, { word: "home", meaning: "家",
+                            bold: false }, { word: "ball", meaning: "球", bold: true },
+                        { word: "doll", meaning: "玩偶", bold: true }, { word: "car", meaning: "汽车",
+                            bold: true }, { word: "on", meaning: "在...上", bold: true },
+                        { word: "shelf", meaning: "架子", bold: false }, { word: "in", meaning: "在...里",
+                            bold: true }, { word: "box", meaning: "盒子", bold: false },
+                        { word: "cap", meaning: "帽子", bold: true }, { word: "map", meaning: "地图",
+                            bold: true }, { word: "under", meaning: "在下面", bold: true },
+                        { word: "still", meaning: "仍然", bold: false }, { word: "put", meaning: "放置",
+                            bold: false }],
+                    "Unit 6": [{ word: "fifteen", meaning: "十五", bold: false }, { word: "twelve", meaning: "十二",
+                            bold: true }, { word: "fourteen", meaning: "十四", bold: true },
+                        { word: "thirteen", meaning: "十三", bold: true }, { word: "eleven", meaning: "十一",
+                            bold: true }, { word: "twenty", meaning: "二十", bold: false },
+                        { word: "seventeen", meaning: "十七", bold: true }, { word: "sixteen", meaning: "十六",
+                            bold: true }, { word: "eighteen", meaning: "十八", bold: false },
+                        { word: "nineteen", meaning: "十九", bold: false }, { word: "piggy bank",
+                            meaning: "储蓄罐", bold: false }, { word: "pay", meaning: "支付", bold: false },
+                        { word: "back", meaning: "背部；返回", bold: false }]
+                }
+            },
+            4: {
+                upper: {
+                    "Unit 1": [{ word: "PE", meaning: "体育", bold: false }, { word: "job", meaning: "工作",
+                            bold: false }, { word: "doctor", meaning: "医生", bold: true },
+                        { word: "farmer", meaning: "农民", bold: true }, { word: "nurse", meaning: "护士",
+                            bold: true }, { word: "office worker", meaning: "办公室职员", bold: true },
+                        { word: "factory worker", meaning: "工厂工人", bold: true }, { word: "busy",
+                            meaning: "忙碌的", bold: false }, { word: "tired", meaning: "疲倦的",
+                            bold: false }, { word: "chore", meaning: "家务", bold: false },
+                        { word: "cook", meaning: "厨师；烹饪", bold: true }, { word: "clean", meaning: "清洁",
+                            bold: false }, { word: "room", meaning: "房间", bold: false },
+                        { word: "look after", meaning: "照顾", bold: true }, { word: "sweep",
+                            meaning: "打扫", bold: true }, { word: "floor", meaning: "地板", bold: true },
+                        { word: "together", meaning: "一起", bold: false }, { word: "people",
+                            meaning: "人们", bold: false }, { word: "child", meaning: "孩子",
+                            bold: false }],
+                    "Unit 2": [{ word: "his", meaning: "他的", bold: false }, { word: "strong", meaning: "强壮的",
+                            bold: true }, { word: "hair", meaning: "头发", bold: true },
+                        { word: "also", meaning: "也", bold: false }, { word: "kind", meaning: "和蔼的",
+                            bold: true }, { word: "quiet", meaning: "安静的", bold: true },
+                        { word: "read", meaning: "阅读", bold: true }, { word: "Chinese",
+                            meaning: "语文；中国人", bold: true }, { word: "play", meaning: "玩",
+                            bold: true }, { word: "game", meaning: "游戏", bold: true },
+                        { word: "football", meaning: "足球", bold: true }, { word: "basketball",
+                            meaning: "篮球", bold: false }, { word: "always", meaning: "总是",
+                            bold: false }, { word: "best", meaning: "最好的", bold: false }],
+                    "Unit 3": [{ word: "afternoon", meaning: "下午", bold: false }, { word: "there",
+                            meaning: "那里", bold: false }, { word: "playground", meaning: "操场",
+                            bold: true }, { word: "park", meaning: "公园", bold: true },
+                        { word: "over", meaning: "结束", bold: false }, { word: "hospital", meaning: "医院",
+                            bold: true }, { word: "shop", meaning: "商店", bold: true },
+                        { word: "toilet", meaning: "厕所", bold: true }, { word: "bus stop",
+                            meaning: "公交站", bold: true }, { word: "sport", meaning: "运动",
+                            bold: true }, { word: "walk", meaning: "步行", bold: true },
+                        { word: "library", meaning: "图书馆", bold: false }, { word: "favourite",
+                            meaning: "最喜欢的", bold: false }, { word: "place", meaning: "地方",
+                            bold: false }, { word: "photo", meaning: "照片", bold: false },
+                        { word: "story", meaning: "故事", bold: false }, { word: "buy", meaning: "买",
+                            bold: false }],
+                    "Unit 4": [{ word: "firefighter", meaning: "消防员", bold: false }, { word: "why",
+                            meaning: "为什么", bold: false }, { word: "driver", meaning: "司机",
+                            bold: true }, { word: "cleaner", meaning: "清洁工", bold: true },
+                        { word: "cook", meaning: "厨师", bold: true }, { word: "delivery worker",
+                            meaning: "快递员", bold: true }, { word: "police officer", meaning: "警察",
+                            bold: true }, { word: "a lot of", meaning: "许多", bold: false },
+                        { word: "now", meaning: "现在", bold: false }, { word: "make the bed",
+                            meaning: "整理床铺", bold: false }, { word: "old", meaning: "老的",
+                            bold: true }, { word: "ell", meaning: "？", bold: false },
+                        { word: "everyone", meaning: "每个人", bold: false }, { word: "Ms", meaning: "女士",
+                            bold: false }],
+                    "Unit 5": [{ word: "speak", meaning: "说", bold: false }, { word: "weather", meaning: "天气",
+                            bold: false }, { word: "sunny", meaning: "晴朗的", bold: true },
+                        { word: "hot", meaning: "热的", bold: true }, { word: "cold", meaning: "冷的",
+                            bold: true }, { word: "windy", meaning: "有风的", bold: true },
+                        { word: "cloudy", meaning: "多云的", bold: true }, { word: "rainy", meaning: "下雨的",
+                            bold: true }, { word: "snowy", meaning: "下雪的", bold: true },
+                        { word: "cool", meaning: "凉爽的", bold: true }, { word: "warm", meaning: "温暖的",
+                            bold: true }, { word: "film", meaning: "电影", bold: false },
+                        { word: "fly", meaning: "飞", bold: false }, { word: "kite", meaning: "风筝",
+                            bold: false }, { word: "snowman", meaning: "雪人", bold: false },
+                        { word: "fun", meaning: "乐趣", bold: false }, { word: "their", meaning: "他们的",
+                            bold: false }, { word: "swim", meaning: "游泳", bold: false },
+                        { word: "Sydney", meaning: "悉尼", bold: false }],
+                    "Unit 6": [{ word: "whose", meaning: "谁的", bold: false }, { word: "sweater", meaning: "毛衣",
+                            bold: true }, { word: "sock", meaning: "袜子", bold: true },
+                        { word: "shirt", meaning: "衬衫", bold: true }, { word: "mine", meaning: "我的",
+                            bold: false }, { word: "wear", meaning: "穿", bold: false },
+                        { word: "coat", meaning: "外套", bold: true }, { word: "dress", meaning: "连衣裙",
+                            bold: true }, { word: "winter", meaning: "冬天", bold: true },
+                        { word: "spring", meaning: "春天", bold: true }, { word: "summer", meaning: "夏天",
+                            bold: true }, { word: "autumn", meaning: "秋天", bold: true },
+                        { word: "which", meaning: "哪一个", bold: false }, { word: "season", meaning: "季节",
+                            bold: true }, { word: "snow", meaning: "雪", bold: false },
+                        { word: "get together", meaning: "团聚", bold: false }, { word: "T-shirt",
+                            meaning: "T恤", bold: false }, { word: "fall", meaning: "秋天",
+                            bold: false }, { word: "leaf", meaning: "叶子", bold: false },
+                        { word: "leaves", meaning: "叶子（复数）", bold: false }, { word: "glove",
+                            meaning: "手套", bold: false }, { word: "then", meaning: "然后",
+                            bold: false }]
+                },
+                lower: {
+                    "Unit 1": [{ word: "sorry", meaning: "抱歉", bold: false }, { word: "hurry", meaning: "赶快",
+                            bold: false }, { word: "late", meaning: "迟到", bold: true },
+                        { word: "class", meaning: "班级", bold: true }, { word: "ready", meaning: "准备好",
+                            bold: false }, { word: "rule", meaning: "规则", bold: false },
+                        { word: "classroom", meaning: "教室", bold: true }, { word: "turn off",
+                            meaning: "关闭", bold: true }, { word: "light", meaning: "灯", bold: true },
+                        { word: "blackboard", meaning: "黑板", bold: false }, { word: "desk",
+                            meaning: "书桌", bold: true }, { word: "chair", meaning: "椅子", bold: true },
+                        { word: "tidy", meaning: "整洁的", bold: false }, { word: "music", meaning: "音乐",
+                            bold: false }, { word: "door", meaning: "门", bold: true },
+                        { word: "window", meaning: "窗户", bold: true }, { word: "fan", meaning: "风扇",
+                            bold: true }, { word: "when", meaning: "什么时候", bold: false },
+                        { word: "understand", meaning: "理解", bold: false }, { word: "wall", meaning: "墙",
+                            bold: false }, { word: "newspaper", meaning: "报纸", bold: false },
+                        { word: "hand out", meaning: "分发", bold: false }, { word: "workbook",
+                            meaning: "练习册", bold: false }],
+                    "Unit 2": [{ word: "watch", meaning: "手表", bold: false }, { word: "TV", meaning: "电视",
+                            bold: false }, { word: "homework", meaning: "作业", bold: true },
+                        { word: "first", meaning: "第一", bold: false }, { word: "wet", meaning: "湿的",
+                            bold: false }, { word: "run", meaning: "跑", bold: false },
+                        { word: "living room", meaning: "客厅", bold: true }, { word: "safe",
+                            meaning: "安全的", bold: false }, { word: "word", meaning: "单词",
+                            bold: true }, { word: "wash", meaning: "洗", bold: true },
+                        { word: "helpful", meaning: "有帮助的", bold: false }, { word: "loud",
+                            meaning: "大声的", bold: false }, { word: "sleep", meaning: "睡觉",
+                            bold: false }, { word: "bedroom", meaning: "卧室", bold: true },
+                        { word: "kitchen", meaning: "厨房", bold: true }, { word: "study", meaning: "书房",
+                            bold: true }, { word: "bathroom", meaning: "浴室", bold: true },
+                        { word: "think", meaning: "思考", bold: false }, { word: "work", meaning: "工作",
+                            bold: false }, { word: "hard", meaning: "努力地", bold: false },
+                        { word: "follow", meaning: "跟随", bold: false }, { word: "feel", meaning: "感觉",
+                            bold: false }],
+                    "Unit 3": [{ word: "over", meaning: "结束", bold: false }, { word: "kid", meaning: "小孩",
+                            bold: false }, { word: "dinner", meaning: "晚餐", bold: true },
+                        { word: "art", meaning: "美术", bold: true }, { word: "lunch", meaning: "午餐",
+                            bold: true }, { word: "maths", meaning: "数学", bold: true },
+                        { word: "get up", meaning: "起床", bold: true }, { word: "go to school",
+                            meaning: "上学", bold: true }, { word: "go home", meaning: "回家",
+                            bold: true }, { word: "go to bed", meaning: "上床睡觉", bold: true },
+                        { word: "want", meaning: "想要", bold: false }, { word: "clock", meaning: "时钟",
+                            bold: false }, { word: "just", meaning: "只是", bold: false },
+                        { word: "minute", meaning: "分钟", bold: false }],
+                    "Unit 4": [{ word: "trousers", meaning: "裤子", bold: true }, { word: "pair", meaning: "一对",
+                            bold: false }, { word: "clothes", meaning: "衣服", bold: false },
+                        { word: "those", meaning: "那些", bold: false }, { word: "shorts", meaning: "短裤",
+                            bold: true }, { word: "jacket", meaning: "夹克", bold: true },
+                        { word: "skirt", meaning: "裙子", bold: true }, { word: "expensive",
+                            meaning: "昂贵的", bold: true }, { word: "cheap", meaning: "便宜的",
+                            bold: true }, { word: "shoe", meaning: "鞋子", bold: true },
+                        { word: "dear", meaning: "亲爱的", bold: false }, { word: "beautiful",
+                            meaning: "美丽的", bold: true }, { word: "take", meaning: "拿",
+                            bold: false }, { word: "hat", meaning: "帽子", bold: true },
+                        { word: "sunglasses", meaning: "太阳镜", bold: true }, { word: "free",
+                            meaning: "免费的", bold: false }, { word: "large", meaning: "大的",
+                            bold: false }, { word: "size", meaning: "尺寸", bold: false },
+                        { word: "list", meaning: "清单", bold: false }, { word: "try on", meaning: "试穿",
+                            bold: false }, { word: "any", meaning: "任何", bold: false }],
+                    "Unit 5": [{ word: "cow", meaning: "奶牛", bold: true }, { word: "horse", meaning: "马",
+                            bold: true }, { word: "sheep", meaning: "绵羊", bold: true },
+                        { word: "pig", meaning: "猪", bold: true }, { word: "chicken", meaning: "鸡",
+                            bold: true }, { word: "tomato", meaning: "西红柿", bold: true },
+                        { word: "bee", meaning: "蜜蜂", bold: false }, { word: "mouse", meaning: "老鼠",
+                            bold: false }, { word: "carrot", meaning: "胡萝卜", bold: true },
+                        { word: "potato", meaning: "土豆", bold: true }, { word: "green bean",
+                            meaning: "豆角", bold: false }, { word: "can", meaning: "罐子",
+                            bold: false }, { word: "a box of", meaning: "一盒", bold: false }],
+                    "Unit 6": [{ word: "feed", meaning: "喂", bold: true }, { word: "pass", meaning: "传递",
+                            bold: false }, { word: "pick", meaning: "摘", bold: true },
+                        { word: "milk", meaning: "挤奶", bold: true }, { word: "knife", meaning: "刀",
+                            bold: true }, { word: "fork", meaning: "叉", bold: true },
+                        { word: "chopstick", meaning: "筷子", bold: true }, { word: "bowl", meaning: "碗",
+                            bold: true }, { word: "waste", meaning: "浪费", bold: false },
+                        { word: "food", meaning: "食物", bold: false }, { word: "delicious",
+                            meaning: "美味的", bold: false }, { word: "clear the table", meaning: "收拾餐桌",
+                            bold: false }, { word: "set the table", meaning: "摆餐具", bold: false },
+                        { word: "supermarket", meaning: "超市", bold: false }, { word: "herself",
+                            meaning: "她自己", bold: false }, { word: "week", meaning: "星期",
+                            bold: false }, { word: "salad", meaning: "沙拉", bold: false }]
+                }
+            },
+            5: {
+                upper: {
+                    "Unit 1": [{ word: "team", meaning: "团队", bold: false }, { word: "player", meaning: "运动员",
+                            bold: false }, { word: "him", meaning: "他（宾格）", bold: false },
+                        { word: "lovely", meaning: "可爱的", bold: true }, { word: "clever", meaning: "聪明的",
+                            bold: true }, { word: "young", meaning: "年轻的", bold: true },
+                        { word: "hard-working", meaning: "勤奋的", bold: true }, { word: "robot",
+                            meaning: "机器人", bold: true }, { word: "jump", meaning: "跳", bold: true },
+                        { word: "rope", meaning: "绳子", bold: true }, { word: "piano", meaning: "钢琴",
+                            bold: true }, { word: "chess", meaning: "国际象棋", bold: true },
+                        { word: "front", meaning: "前面", bold: false }, { word: "easy", meaning: "容易的",
+                            bold: false }, { word: "star", meaning: "星星", bold: false },
+                        { word: "wonderful", meaning: "精彩的", bold: false }, { word: "Australia",
+                            meaning: "澳大利亚", bold: false }],
+                    "Unit 2": [{ word: "sad", meaning: "悲伤的", bold: true }, { word: "matter", meaning: "事情",
+                            bold: false }, { word: "project", meaning: "项目", bold: false },
+                        { word: "centre", meaning: "中心", bold: false }, { word: "agree", meaning: "同意",
+                            bold: false }, { word: "finish", meaning: "完成", bold: false },
+                        { word: "worried", meaning: "担心的", bold: true }, { word: "both", meaning: "两者都",
+                            bold: false }, { word: "excited", meaning: "兴奋的", bold: false },
+                        { word: "wroong", meaning: "错误的（原词）", bold: false }, { word: "angry",
+                            meaning: "生气的", bold: true }, { word: "afraid", meaning: "害怕的",
+                            bold: true }, { word: "parent", meaning: "父/母", bold: true },
+                        { word: "ask", meaning: "问", bold: true }, { word: "laugh", meaning: "笑",
+                            bold: true }, { word: "move", meaning: "移动", bold: true },
+                        { word: "yours", meaning: "你的（名词性物主代词）", bold: true }],
+                    "Unit 3": [{ word: "Wednesday", meaning: "星期三", bold: true }, { word: "subject",
+                            meaning: "科目", bold: false }, { word: "Tuesday", meaning: "星期二",
+                            bold: true }, { word: "Friday", meaning: "星期五", bold: true },
+                        { word: "Monday", meaning: "星期一", bold: true }, { word: "Thursday",
+                            meaning: "星期四", bold: true }, { word: "Saturday", meaning: "星期六",
+                            bold: true }, { word: "Sunday", meaning: "星期日", bold: true },
+                        { word: "start", meaning: "开始", bold: false }, { word: "usually", meaning: "通常",
+                            bold: false }, { word: "weekend", meaning: "周末", bold: false },
+                        { word: "sometimes", meaning: "有时", bold: false }, { word: "lesson",
+                            meaning: "课", bold: true }, { word: "evening", meaning: "晚上",
+                            bold: true }, { word: "answer", meaning: "回答", bold: true },
+                        { word: "ping-pong", meaning: "乒乓球", bold: true }, { word: "night",
+                            meaning: "夜晚", bold: true }, { word: "visit", meaning: "参观",
+                            bold: true }, { word: "grandparent", meaning: "祖父母", bold: true }],
+                    "Unit 4": [{ word: "stay", meaning: "停留", bold: false }, { word: "should", meaning: "应该",
+                            bold: true }, { word: "flu", meaning: "流感", bold: true },
+                        { word: "else", meaning: "其他", bold: true }, { word: "exercise", meaning: "锻炼",
+                            bold: true }, { word: "enough", meaning: "足够的", bold: true },
+                        { word: "if", meaning: "如果", bold: true }, { word: "habit", meaning: "习惯",
+                            bold: true }, { word: "house", meaning: "房屋", bold: true },
+                        { word: "show", meaning: "展示", bold: true }, { word: "phone", meaning: "电话",
+                            bold: true }, { word: "then", meaning: "然后", bold: true },
+                        { word: "rest", meaning: "休息", bold: true }, { word: "take care of",
+                            meaning: "照顾", bold: true }, { word: "check", meaning: "检查",
+                            bold: true }, { word: "less", meaning: "更少的", bold: true },
+                        { word: "brush", meaning: "刷", bold: true }, { word: "tooth", meaning: "牙齿（单数）",
+                            bold: true }, { word: "teeth", meaning: "牙齿（复数）", bold: true },
+                        { word: "twice", meaning: "两次", bold: true }, { word: "hour", meaning: "小时",
+                            bold: true }, { word: "free", meaning: "免费的/自由的", bold: true }],
+                    "Unit 5": [{ word: "hungry", meaning: "饥饿的", bold: false }, { word: "beef", meaning: "牛肉",
+                            bold: true }, { word: "ice cream", meaning: "冰淇淋", bold: true },
+                        { word: "dumpling", meaning: "饺子", bold: true }, { word: "tea", meaning: "茶",
+                            bold: true }, { word: "hamburger", meaning: "汉堡包", bold: true },
+                        { word: "Mrs", meaning: "太太", bold: false }, { word: "coconut", meaning: "椰子",
+                            bold: false }, { word: "interesting", meaning: "有趣的", bold: false },
+                        { word: "seed", meaning: "种子", bold: true }, { word: "pull", meaning: "拉",
+                            bold: false }, { word: "stem", meaning: "茎", bold: true },
+                        { word: "root", meaning: "根", bold: true }, { word: "lotus", meaning: "莲花",
+                            bold: true }, { word: "lake", meaning: "湖", bold: true },
+                        { word: "world", meaning: "世界", bold: true }, { word: "round", meaning: "圆的",
+                            bold: true }, { word: "different", meaning: "不同的", bold: true },
+                        { word: "way", meaning: "方式", bold: true }],
+                    "Unit 6": [{ word: "river", meaning: "河流", bold: true }, { word: "nature", meaning: "自然",
+                            bold: false }, { word: "waterfall", meaning: "瀑布", bold: true },
+                        { word: "forest", meaning: "森林", bold: true }, { word: "famous", meaning: "著名的",
+                            bold: true }, { word: "mountain", meaning: "山", bold: true },
+                        { word: "wind", meaning: "风", bold: true }, { word: "trip", meaning: "旅行",
+                            bold: true }, { word: "dangerous", meaning: "危险的", bold: true },
+                        { word: "heavy", meaning: "重的", bold: true }, { word: "hotel", meaning: "旅馆",
+                            bold: true }, { word: "close", meaning: "关闭", bold: true },
+                        { word: "umbrella", meaning: "雨伞", bold: true }, { word: "raincoat",
+                            meaning: "雨衣", bold: true }, { word: "worry", meaning: "担心",
+                            bold: true }, { word: "fine", meaning: "好的", bold: true },
+                        { word: "fog", meaning: "雾", bold: true }, { word: "flood", meaning: "洪水",
+                            bold: true }, { word: "fire", meaning: "火", bold: true },
+                        { word: "know", meaning: "知道", bold: true }, { word: "before", meaning: "在...之前",
+                            bold: true }, { word: "go hiking", meaning: "去远足", bold: true },
+                        { word: "bring", meaning: "带来", bold: true }]
+                },
+                lower: {
+                    "Unit 1": [{ word: "eat breakfast", meaning: "吃早餐", bold: true },
+                    { word: "play sports", meaning: "做运动", bold: true }, { word: "have...class",
+                            meaning: "上课", bold: true }, { word: "exercise", meaning: "锻炼",
+                            bold: true }, { word: "do morning exercises", meaning: "做早操",
+                            bold: true }, { word: "eat dinner", meaning: "吃晚餐", bold: true },
+                        { word: "clean my room", meaning: "打扫房间", bold: true },
+                        { word: "go for a walk", meaning: "散步", bold: true },
+                        { word: "go shopping", meaning: "购物", bold: true }, { word: "take",
+                            meaning: "学习；上课", bold: true }, { word: "dancing", meaning: "跳舞",
+                            bold: true }, { word: "take a dancing class", meaning: "上舞蹈课",
+                            bold: true }, { word: "when", meaning: "什么时候", bold: false },
+                        { word: "usually", meaning: "通常", bold: false }, { word: "a.m.",
+                            meaning: "上午", bold: false }, { word: "p.m.", meaning: "下午",
+                            bold: false }, { word: "why", meaning: "为什么", bold: false },
+                        { word: "work", meaning: "工作", bold: false }, { word: "always",
+                            meaning: "总是", bold: false }, { word: "go swimming", meaning: "去游泳",
+                            bold: false }],
+                    "Unit 2": [{ word: "spring", meaning: "春天", bold: true }, { word: "summer", meaning: "夏天",
+                            bold: true }, { word: "autumn", meaning: "秋天", bold: true },
+                        { word: "winter", meaning: "冬天", bold: true }, { word: "season", meaning: "季节",
+                            bold: true }, { word: "picnic", meaning: "野餐", bold: true },
+                        { word: "go on a picnic", meaning: "去野餐", bold: true }, { word: "pick",
+                            meaning: "摘", bold: true }, { word: "pick apples", meaning: "摘苹果",
+                            bold: true }, { word: "snowman", meaning: "雪人", bold: true },
+                        { word: "make a snowman", meaning: "堆雪人", bold: true },
+                        { word: "go swimming", meaning: "去游泳", bold: true }, { word: "which",
+                            meaning: "哪一个", bold: false }, { word: "best", meaning: "最",
+                            bold: false }, { word: "snow", meaning: "雪", bold: false },
+                        { word: "good job", meaning: "做得好", bold: false }, { word: "because",
+                            meaning: "因为", bold: false }, { word: "vacation", meaning: "假期",
+                            bold: false }],
+                    "Unit 3": [{ word: "January", meaning: "一月", bold: true }, { word: "February",
+                            meaning: "二月", bold: true }, { word: "March", meaning: "三月",
+                            bold: true }, { word: "April", meaning: "四月", bold: true },
+                        { word: "May", meaning: "五月", bold: true }, { word: "June", meaning: "六月",
+                            bold: true }, { word: "July", meaning: "七月", bold: true },
+                        { word: "August", meaning: "八月", bold: true }, { word: "September",
+                            meaning: "九月", bold: true }, { word: "October", meaning: "十月",
+                            bold: true }, { word: "November", meaning: "十一月", bold: true },
+                        { word: "December", meaning: "十二月", bold: true }, { word: "few",
+                            meaning: "很少", bold: false }, { word: "a few", meaning: "一些",
+                            bold: false }, { word: "sports", meaning: "运动", bold: false },
+                        { word: "sports meet", meaning: "运动会", bold: false }, { word: "trip",
+                            meaning: "旅行", bold: false }, { word: "plant", meaning: "种植",
+                            bold: false }, { word: "contest", meaning: "比赛", bold: false },
+                        { word: "Labour Day", meaning: "劳动节", bold: false },
+                        { word: "the Great Wall", meaning: "长城", bold: false },
+                        { word: "national", meaning: "国家的", bold: false },
+                        { word: "National Day", meaning: "国庆节", bold: false },
+                        { word: "Thanksgiving Day", meaning: "感恩节", bold: false },
+                        { word: "Christmas", meaning: "圣诞节", bold: false }],
+                    "Unit 4": [{ word: "first", meaning: "第一", bold: true }, { word: "second", meaning: "第二",
+                            bold: true }, { word: "third", meaning: "第三", bold: true },
+                        { word: "fourth", meaning: "第四", bold: true }, { word: "fifth", meaning: "第五",
+                            bold: true }, { word: "twelfth", meaning: "第十二", bold: true },
+                        { word: "twentieth", meaning: "第二十", bold: true },
+                        { word: "twenty-first", meaning: "第二十一", bold: true },
+                        { word: "twenty-third", meaning: "第二十三", bold: true },
+                        { word: "thirtieth", meaning: "第三十", bold: true }],
+                    "Unit 5": [{ word: "mine", meaning: "我的", bold: true }, { word: "yours", meaning: "你的",
+                            bold: true }, { word: "his", meaning: "他的", bold: true },
+                        { word: "hers", meaning: "她的", bold: true }, { word: "theirs", meaning: "他们的",
+                            bold: true }, { word: "ours", meaning: "我们的", bold: true },
+                        { word: "climbing", meaning: "攀爬", bold: true }, { word: "eating",
+                            meaning: "吃", bold: true }, { word: "playing", meaning: "玩",
+                            bold: true }, { word: "jumping", meaning: "跳", bold: true },
+                        { word: "drinking", meaning: "喝", bold: true }, { word: "sleeping",
+                            meaning: "睡觉", bold: true }],
+                    "Unit 6": [{ word: "doing morning exercises", meaning: "做早操", bold: true },
+                        { word: "having lunch", meaning: "吃午餐", bold: true },
+                        { word: "reading a book", meaning: "读书", bold: true },
+                        { word: "listening to music", meaning: "听音乐", bold: true },
+                        { word: "keep", meaning: "保持", bold: true },
+                        { word: "keep to the right", meaning: "靠右", bold: true },
+                        { word: "keep your desk clean", meaning: "保持课桌整洁", bold: true },
+                        { word: "talk quietly", meaning: "小声说话", bold: true },
+                        { word: "turn", meaning: "轮流", bold: true }, { word: "take turns",
+                            meaning: "轮流", bold: true }, { word: "bamboo", meaning: "竹子",
+                            bold: false }, { word: "say", meaning: "说", bold: false },
+                        { word: "teach", meaning: "教", bold: false }]
+                }
+            },
+            6: {
+                upper: {
+                    "Unit 1": [{ word: "was", meaning: "是（过去式）", bold: false }, { word: "clomb",
+                            meaning: "攀登（原词）", bold: false }, { word: "kilometre", meaning: "公里",
+                            bold: false }, { word: "gingerbread house", meaning: "姜饼屋",
+                            bold: false }, { word: "send", meaning: "发送", bold: false },
+                        { word: "went", meaning: "去（过去式）", bold: false }, { word: "thousand",
+                            meaning: "千", bold: false }, { word: "clay", meaning: "粘土",
+                            bold: false }, { word: "saw", meaning: "看见（过去式）", bold: false },
+                        { word: "village", meaning: "村庄", bold: false }, { word: "ate",
+                            meaning: "吃（过去式）", bold: false }, { word: "dry", meaning: "干的",
+                            bold: false }, { word: "took", meaning: "拿（过去式）", bold: false },
+                        { word: "view", meaning: "景色", bold: false }, { word: "inspiring",
+                            meaning: "鼓舞人心的", bold: false }, { word: "bamboo", meaning: "竹子",
+                            bold: false }, { word: "pumpkin", meaning: "南瓜", bold: false },
+                        { word: "restaurant", meaning: "餐厅", bold: false }, { word: "airport",
+                            meaning: "机场", bold: false }, { word: "New Zealand", meaning: "新西兰",
+                            bold: false },
+                        { word: "Hong Kong-Zhuhai-Macao Bridge", meaning: "港珠澳大桥",
+                            bold: false }, { word: "Paris", meaning: "巴黎", bold: false },
+                        { word: "Eiffel Tower", meaning: "埃菲尔铁塔", bold: false },
+                        { word: "Terracotta Warriors", meaning: "兵马俑", bold: false },
+                        { word: "Jinggangshan Revolution Museum", meaning: "井冈山革命博物馆",
+                            bold: false }, { word: "the Red Army", meaning: "红军", bold: false }],
+                    "Unit 2": [{ word: "paste", meaning: "粘贴", bold: false }, { word: "dress", meaning: "连衣裙",
+                            bold: false }, { word: "gala", meaning: "盛会", bold: false },
+                        { word: "count down", meaning: "倒计时", bold: false },
+                        { word: "marathon", meaning: "马拉松", bold: false }, { word: "as",
+                            meaning: "作为", bold: false }, { word: "race", meaning: "比赛",
+                            bold: false }, { word: "ran", meaning: "跑（过去式）", bold: false },
+                        { word: "cheer", meaning: "欢呼", bold: false }, { word: "book fair",
+                            meaning: "书展", bold: false }, { word: "writer", meaning: "作家",
+                            bold: false }, { word: "read", meaning: "读（过去式）", bold: false },
+                        { word: "made", meaning: "制作（过去式）", bold: false },
+                        { word: "sang", meaning: "唱歌（过去式）", bold: false },
+                        { word: "wore", meaning: "穿（过去式）", bold: false },
+                        { word: "yesterday", meaning: "昨天", bold: false },
+                        { word: "notice", meaning: "通知", bold: false },
+                        { word: "woke", meaning: "醒来（过去式）", bold: false },
+                        { word: "later", meaning: "后来", bold: false }, { word: "judge",
+                            meaning: "评判", bold: false }, { word: "begin", meaning: "开始",
+                            bold: false }, { word: "won", meaning: "赢（过去式）", bold: false },
+                        { word: "winner", meaning: "获胜者", bold: false }, { word: "ever",
+                            meaning: "曾经", bold: false }, { word: "exciting", meaning: "令人兴奋的",
+                            bold: false }],
+                    "Unit 3": [{ word: "cold", meaning: "感冒", bold: false }, { word: "ill", meaning: "生病的",
+                            bold: false }, { word: "head", meaning: "头", bold: false },
+                        { word: "runny nose", meaning: "流鼻涕", bold: false }, { word: "soon",
+                            meaning: "不久", bold: false }, { word: "fever", meaning: "发烧",
+                            bold: false }, { word: "cough", meaning: "咳嗽", bold: false },
+                        { word: "discuss", meaning: "讨论", bold: false }, { word: "diet",
+                            meaning: "饮食", bold: false }, { word: "stay up", meaning: "熬夜",
+                            bold: false }, { word: "cry", meaning: "哭", bold: false },
+                        { word: "another", meaning: "另一个", bold: false }, { word: "call",
+                            meaning: "打电话", bold: false }, { word: "email", meaning: "电子邮件",
+                            bold: false }, { word: "unhappy", meaning: "不高兴的", bold: false },
+                        { word: "glass", meaning: "玻璃", bold: false }, { word: "may",
+                            meaning: "可以", bold: false }, { word: "add", meaning: "添加",
+                            bold: false }, { word: "video", meaning: "视频", bold: false },
+                        { word: "better", meaning: "更好的", bold: false }],
+                    "Unit 4": [{ word: "money", meaning: "钱", bold: false }, { word: "money pocket",
+                            meaning: "钱袋", bold: false }, { word: "schoolbag", meaning: "书包",
+                            bold: false }, { word: "goods", meaning: "商品", bold: false },
+                        { word: "drink", meaning: "饮料", bold: false }, { word: "servise",
+                            meaning: "服务", bold: false }, { word: "haircut", meaning: "理发",
+                            bold: false }, { word: "microscope", meaning: "显微镜", bold: false },
+                        { word: "lucky", meaning: "幸运的", bold: false }, { word: "half",
+                            meaning: "一半", bold: false }, { word: "save up", meaning: "储蓄",
+                            bold: false }, { word: "sale", meaning: "促销", bold: false },
+                        { word: "ticket", meaning: "票", bold: false }, { word: "manage",
+                            meaning: "管理", bold: false }, { word: "sell", meaning: "卖",
+                            bold: false }, { word: "jar", meaning: "罐子", bold: false },
+                        { word: "for example", meaning: "例如", bold: false }],
+                    "Unit 5": [{ word: "planet", meaning: "行星", bold: false }, { word: "earth", meaning: "地球",
+                            bold: false }, { word: "sky", meaning: "天空", bold: false },
+                        { word: "daytime", meaning: "白天", bold: false }, { word: "cloud",
+                            meaning: "云", bold: false }, { word: "moon", meaning: "月亮",
+                            bold: false }, { word: "star", meaning: "星星", bold: false },
+                        { word: "space", meaning: "太空", bold: false },
+                        { word: "outer space", meaning: "外层空间", bold: false },
+                        { word: "space station", meaning: "空间站", bold: false },
+                        { word: "scean", meaning: "场景（原词）", bold: false },
+                        { word: "marble", meaning: "大理石", bold: false },
+                        { word: "satellite", meaning: "卫星", bold: false }, { word: "soil",
+                            meaning: "土壤", bold: false }, { word: "alien", meaning: "外星人",
+                            bold: false }, { word: "sunrise", meaning: "日出", bold: false },
+                        { word: "rover", meaning: "漫游者", bold: false }, { word: "into",
+                            meaning: "进入", bold: false }, { word: "telescope", meaning: "望远镜",
+                            bold: false }, { word: "astronaut", meaning: "宇航员", bold: false },
+                        { word: "spaceship", meaning: "宇宙飞船", bold: false }, { word: "month",
+                            meaning: "月", bold: false }, { word: "taikonaut", meaning: "中国宇航员",
+                            bold: false }, { word: "cloth", meaning: "布料", bold: false },
+                        { word: "toothpaste", meaning: "牙膏", bold: false },
+                        { word: "question", meaning: "问题", bold: false },
+                        { word: "sunset", meaning: "日落", bold: false }, { word: "time",
+                            meaning: "时间", bold: false }, { word: "Mars", meaning: "火星",
+                            bold: false }],
+                    "Unit 6": [{ word: "power", meaning: "电力", bold: false }, { word: "electricity",
+                            meaning: "电", bold: false }, { word: "solar", meaning: "太阳的",
+                            bold: false }, { word: "type", meaning: "类型", bold: false },
+                        { word: "energy", meaning: "能量", bold: false }, { word: "light",
+                            meaning: "光", bold: false }, { word: "head", meaning: "头",
+                            bold: false }, { word: "cool", meaning: "凉爽的", bold: false },
+                        { word: "run", meaning: "使...运转", bold: false }, { word: "resource",
+                            meaning: "资源", bold: false }, { word: "run out", meaning: "耗尽",
+                            bold: false }, { word: "change", meaning: "变化", bold: false },
+                        { word: "quick", meaning: "快速的", bold: false }, { word: "shower",
+                            meaning: "淋浴", bold: false }, { word: "unplug", meaning: "拔掉插头",
+                            bold: false }, { word: "difference", meaning: "差异", bold: false },
+                        { word: "reduce", meaning: "减少", bold: false },
+                        { word: "air conditioner", meaning: "空调", bold: false },
+                        { word: "drive", meaning: "驾驶", bold: false }, { word: "reuse",
+                            meaning: "再利用", bold: false }, { word: "own", meaning: "自己的",
+                            bold: false }, { word: "market", meaning: "市场", bold: false },
+                        { word: "bottle", meaning: "瓶子", bold: false }, { word: "top",
+                            meaning: "顶部", bold: false }, { word: "useful", meaning: "有用的",
+                            bold: false }, { word: "dirty", meaning: "肮脏的", bold: false },
+                        { word: "side", meaning: "侧面", bold: false }]
+                },
+                lower: {
+                    "Unit 1": [{ word: "younger", meaning: "更年轻的", bold: true }, { word: "older",
+                            meaning: "更年长的", bold: true }, { word: "taller", meaning: "更高的",
+                            bold: true }, { word: "shorter", meaning: "更矮的", bold: true },
+                        { word: "longer", meaning: "更长的", bold: true }, { word: "thinner",
+                            meaning: "更瘦的", bold: true }, { word: "heavier", meaning: "更重的",
+                            bold: true }, { word: "bigger", meaning: "更大的", bold: true },
+                        { word: "smaller", meaning: "更小的", bold: true }, { word: "stronger",
+                            meaning: "更强壮的", bold: true }, { word: "dinosaur", meaning: "恐龙",
+                            bold: false }, { word: "hall", meaning: "大厅", bold: false },
+                        { word: "metre", meaning: "米", bold: false }, { word: "than", meaning: "比",
+                            bold: false }, { word: "both", meaning: "两者都", bold: false },
+                        { word: "kilogram", meaning: "千克", bold: false },
+                        { word: "countryside", meaning: "乡村", bold: false },
+                        { word: "lower", meaning: "更低的", bold: false }, { word: "shadow",
+                            meaning: "影子", bold: false }, { word: "become", meaning: "变成",
+                            bold: false }],
+                    "Unit 2": [{ word: "cleaned", meaning: "打扫了", bold: true }, { word: "stayed",
+                            meaning: "待了", bold: true }, { word: "washed", meaning: "洗了",
+                            bold: true }, { word: "watched", meaning: "看了", bold: true },
+                        { word: "had", meaning: "有；吃", bold: true }, { word: "had a cold",
+                            meaning: "感冒了", bold: true }, { word: "slept", meaning: "睡了",
+                            bold: true }, { word: "read", meaning: "读了", bold: true },
+                        { word: "saw", meaning: "看见了", bold: true }, { word: "last", meaning: "上一个",
+                            bold: true }, { word: "yesterday", meaning: "昨天", bold: true },
+                        { word: "before", meaning: "在...之前", bold: true }, { word: "drank",
+                            meaning: "喝了", bold: false }, { word: "show", meaning: "演出",
+                            bold: false }, { word: "magazine", meaning: "杂志", bold: false },
+                        { word: "better", meaning: "更好的", bold: false }, { word: "faster",
+                            meaning: "更快的", bold: false }, { word: "hotel", meaning: "旅馆",
+                            bold: false }, { word: "fixed", meaning: "修理了", bold: false },
+                        { word: "broken", meaning: "破碎的", bold: false }, { word: "lamp",
+                            meaning: "台灯", bold: false }, { word: "loud", meaning: "大声的",
+                            bold: false }, { word: "enjoy", meaning: "享受", bold: false },
+                        { word: "stay", meaning: "停留", bold: false }],
+                    "Unit 3": [{ word: "went", meaning: "去了", bold: true }, { word: "camp", meaning: "露营",
+                            bold: true }, { word: "went camping", meaning: "去露营", bold: true },
+                        { word: "fish", meaning: "鱼；钓鱼", bold: true },
+                        { word: "went fishing", meaning: "去钓鱼", bold: true }, { word: "rode",
+                            meaning: "骑了", bold: true }, { word: "hurt", meaning: "受伤",
+                            bold: true }, { word: "ate", meaning: "吃了", bold: true },
+                        { word: "took", meaning: "拿了", bold: true },
+                        { word: "took pictures", meaning: "拍照", bold: true },
+                        { word: "bought", meaning: "买了", bold: true }, { word: "gift",
+                            meaning: "礼物", bold: true }, { word: "fell", meaning: "摔倒",
+                            bold: false }, { word: "off", meaning: "离开", bold: false },
+                        { word: "mule", meaning: "骡子", bold: false }, { word: "Turpan",
+                            meaning: "吐鲁番", bold: false }, { word: "could", meaning: "可以",
+                            bold: false }, { word: "till", meaning: "直到", bold: false },
+                        { word: "beach", meaning: "海滩", bold: false }, { word: "laughed",
+                            meaning: "笑了", bold: false }],
+                    "Unit 4": [{ word: "dining hall", meaning: "餐厅", bold: true }, { word: "grass",
+                            meaning: "草", bold: true }, { word: "gym", meaning: "体育馆",
+                            bold: true }, { word: "ago", meaning: "以前", bold: true },
+                        { word: "cycling", meaning: "骑自行车", bold: true },
+                        { word: "go cycling", meaning: "去骑自行车", bold: true },
+                        { word: "ice-skate", meaning: "滑冰", bold: true },
+                        { word: "badminton", meaning: "羽毛球", bold: true }, { word: "star",
+                            meaning: "星星", bold: false }, { word: "easy", meaning: "容易的",
+                            bold: false }, { word: "look up", meaning: "查阅", bold: false },
+                        { word: "Internet", meaning: "互联网", bold: false },
+                        { word: "different", meaning: "不同的", bold: false },
+                        { word: "active", meaning: "活跃的", bold: false }, { word: "race",
+                            meaning: "赛跑", bold: false }, { word: "nothing", meaning: "什么都没有",
+                            bold: false }, { word: "thought", meaning: "想", bold: false },
+                        { word: "felt", meaning: "感觉", bold: false }, { word: "cheetah",
+                            meaning: "猎豹", bold: false }, { word: "trip", meaning: "绊倒",
+                            bold: false }, { word: "woke", meaning: "醒来", bold: false },
+                        { word: "dream", meaning: "梦", bold: false }]
+                }
+            }
+        };
+
+        // ================================================================
+        //  2. 工具
+        // ================================================================
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        function getWords(grade, book, unit) {
+            return wordBank[grade]?.[book]?.[unit] || [];
+        }
+
+        function getUnits(grade, book) {
+            const data = wordBank[grade]?.[book];
+            return data ? Object.keys(data).sort() : [];
+        }
+
+        function pickOptions(correct, pool, count = 3) {
+            const others = pool.filter(w => w.word !== correct);
+            const shuffled = shuffle([...others]);
+            const selected = [correct, ...shuffled.slice(0, count - 1).map(w => w.word)];
+            while (selected.length < count) {
+                const fallback = ['apple', 'book', 'cat', 'dog', 'fish', 'school', 'teacher', 'student'];
+                for (const f of fallback) {
+                    if (!selected.includes(f)) { selected.push(f); break; }
+                }
+                if (selected.length >= count) break;
+            }
+            return shuffle(selected);
+        }
+
+        function getAudioUrl(word) {
+            return `./audio/${encodeURIComponent(word)}.mp3`;
+        }
+
+        // ================================================================
+        //  3. 音效 & 礼花
+        // ================================================================
+        const sfx = {
+            ctx: null,
+            playTone(freq, dur, type = 'sine', vol = 0.2) {
+                try {
+                    if (!this.ctx) this.ctx = new(window.AudioContext || window.webkitAudioContext)();
+                    const osc = this.ctx.createOscillator();
+                    const gain = this.ctx.createGain();
+                    osc.type = type;
+                    osc.frequency.value = freq;
+                    gain.gain.value = vol;
+                    osc.connect(gain);
+                    gain.connect(this.ctx.destination);
+                    osc.start();
+                    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+                    osc.stop(this.ctx.currentTime + dur);
+                } catch (_) {}
+            },
+            correct() { this.playTone(880, 0.10);
+                setTimeout(() => this.playTone(1108, 0.14), 90); },
+            wrong() { this.playTone(280, 0.2, 'sawtooth', 0.12); },
+            next() { this.playTone(660, 0.07); },
+            cheer() { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => this.playTone(f, 0.16), i * 110)); },
+            reset() { this.playTone(440, 0.08);
+                setTimeout(() => this.playTone(554, 0.08), 70); },
+            playStart() { this.playTone(880, 0.06);
+                setTimeout(() => this.playTone(1108, 0.06), 70); }
+        };
+
+        // 礼花
+        const fwCanvas = document.getElementById('fireworkCanvas');
+        const fwCtx = fwCanvas.getContext('2d');
+        let fwParticles = [];
+        let fwAnimId = null;
+
+        function resizeFw() { fwCanvas.width = window.innerWidth;
+            fwCanvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeFw);
+        resizeFw();
+
+        class FwParticle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#9b59b6', '#ff8a5c', '#a29bfe', '#8bc34a'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+                this.size = 3 + Math.random() * 4;
+                this.vx = (Math.random() - 0.5) * 8;
+                this.vy = (Math.random() - 0.5) * 8 - 2;
+                this.gravity = 0.15;
+                this.alpha = 1;
+                this.decay = 0.015 + Math.random() * 0.025;
+            }
+            update() {
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.alpha -= this.decay;
+                return this.alpha > 0;
+            }
+            draw() {
+                fwCtx.globalAlpha = this.alpha;
+                fwCtx.fillStyle = this.color;
+                fwCtx.beginPath();
+                fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                fwCtx.fill();
+                fwCtx.globalAlpha = 1;
+            }
+        }
+
+        function firework(x, y) {
+            for (let i = 0; i < 60; i++) fwParticles.push(new FwParticle(x, y));
+            if (!fwAnimId) fwAnimId = requestAnimationFrame(animateFw);
+        }
+
+        function animateFw() {
+            fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
+            let alive = false;
+            for (const p of fwParticles) {
+                if (p.update()) { alive = true;
+                    p.draw(); }
+            }
+            fwParticles = fwParticles.filter(p => p.alpha > 0);
+            if (alive) fwAnimId = requestAnimationFrame(animateFw);
+            else { fwAnimId = null;
+                fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height); }
+        }
+
+        function showFirework(el) {
+            if (!el) return;
+            const r = el.getBoundingClientRect();
+            firework(r.left + r.width / 2, r.top + r.height / 3);
+        }
+
+        // ================================================================
+        //  4. 音频引擎 (支持 MP3 + TTS 降级)
+        // ================================================================
+        const AudioEngine = {
+            audio: null,
+            isPlaying: false,
+            word: '',
+            useTTS: false,
+            ttsCache: new Map(),
+
+            // 检测音频文件是否存在
+            checkAudioFile(word) {
+                return new Promise((resolve) => {
+                    const url = getAudioUrl(word);
+                    const audio = new Audio();
+                    audio.preload = 'none';
+                    const timeout = setTimeout(() => {
+                        audio.src = '';
+                        resolve(false);
+                    }, 2000);
+                    audio.oncanplaythrough = () => {
+                        clearTimeout(timeout);
+                        audio.src = '';
+                        resolve(true);
+                    };
+                    audio.onerror = () => {
+                        clearTimeout(timeout);
+                        audio.src = '';
+                        resolve(false);
+                    };
+                    audio.src = url;
+                    audio.load();
+                });
+            },
+
+            // 播放 (返回 Promise)
+            play(word, onStart, onEnd) {
+                return new Promise(async (resolve) => {
+                    this.stop();
+                    this.word = word;
+
+                    // 检查是否有可用 MP3
+                    const hasFile = await this.checkAudioFile(word);
+                    if (hasFile) {
+                        this.useTTS = false;
+                        this.audio = new Audio(getAudioUrl(word));
+                        this.audio.oncanplaythrough = () => {
+                            if (onStart) onStart();
+                        };
+                        this.audio.onended = () => {
+                            this.isPlaying = false;
+                            if (onEnd) onEnd();
+                            resolve();
+                        };
+                        this.audio.onerror = () => {
+                            // MP3 加载失败，降级到 TTS
+                            this.isPlaying = false;
+                            this.playTTS(word, onStart, onEnd).then(resolve);
+                        };
+                        this.audio.play().catch(() => {
+                            this.isPlaying = false;
+                            this.playTTS(word, onStart, onEnd).then(resolve);
+                        });
+                        this.isPlaying = true;
+                    } else {
+                        // 使用 TTS
+                        this.playTTS(word, onStart, onEnd).then(resolve);
+                    }
+                });
+            },
+
+            // TTS 降级
+            playTTS(word, onStart, onEnd) {
+                return new Promise((resolve) => {
+                    this.useTTS = true;
+                    if (!window.speechSynthesis) {
+                        if (onEnd) onEnd();
+                        resolve();
+                        return;
+                    }
+                    // 取消任何正在进行的语音
+                    window.speechSynthesis.cancel();
+
+                    const utterance = new SpeechSynthesisUtterance(word);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.9;
+                    utterance.pitch = 1.0;
+                    utterance.volume = 1.0;
+
+                    // 尝试选择英语语音
+                    const voices = window.speechSynthesis.getVoices();
+                    const enVoice = voices.find(v => v.lang.startsWith('en'));
+                    if (enVoice) utterance.voice = enVoice;
+
+                    utterance.onstart = () => {
+                        this.isPlaying = true;
+                        if (onStart) onStart();
+                    };
+                    utterance.onend = () => {
+                        this.isPlaying = false;
+                        if (onEnd) onEnd();
+                        resolve();
+                    };
+                    utterance.onerror = () => {
+                        this.isPlaying = false;
+                        if (onEnd) onEnd();
+                        resolve();
+                    };
+                    window.speechSynthesis.speak(utterance);
+                });
+            },
+
+            stop() {
+                if (this.audio) {
+                    this.audio.pause();
+                    this.audio.currentTime = 0;
+                    this.audio = null;
+                }
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+                this.isPlaying = false;
+            },
+
+            isPlayingNow() {
+                return this.isPlaying;
+            }
+        };
+
+        // 预加载语音列表
+        if (window.speechSynthesis) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        // ================================================================
+        //  5. 全局状态
+        // ================================================================
+        const STATE = {
+            grade: '4',
+            book: 'upper',
+            unit: 'Unit 1',
+            mode: 'single', // 'single' | 'pk'
+            glass: false,
+            // 单人
+            single: {
+                words: [],
+                index: 0,
+                score: 0,
+                total: 0,
+                answered: false,
+                selectedIdx: -1,
+                correctWord: '',
+                options: [],
+                isPlaying: false,
+                played: false,
+                audioLock: false, // 防止重复触发
+            },
+            // PK
+            pk: {
+                players: [], // { id, score, answered, selectedIdx, correctWord, options, done }
+                totalQuestions: 10,
+                currentQuestion: 0,
+                maxScore: 0,
+                isActive: false,
+                isPlaying: false,
+                played: false,
+                wordList: [],
+                correctWord: '',
+                options: [],
+                playerIdCounter: 1,
+                audioLock: false,
+                roundFinished: false, // 当前回合是否已结束
+            }
+        };
+
+        // ================================================================
+        //  6. DOM 引用
+        // ================================================================
+        const $ = id => document.getElementById(id);
+        const gradeSelect = $('gradeSelect');
+        const bookSelect = $('bookSelect');
+        const unitSelect = $('unitSelect');
+        const modeSingleBtn = $('modeSingleBtn');
+        const modePkBtn = $('modePkBtn');
+        const singleMode = $('singleMode');
+        const pkMode = $('pkMode');
+        const glassToggleBtn = $('glassToggleBtn');
+
+        const singleProgress = $('singleProgress');
+        const singleScore = $('singleScore');
+        const singleStatus = $('singleStatus');
+        const singlePlayBtn = $('singlePlayBtn');
+        const singleReplayBtn = $('singleReplayBtn');
+        const singleOptions = $('singleOptions');
+        const singleNextBtn = $('singleNextBtn');
+        const singleResetBtn = $('singleResetBtn');
+
+        const pkProgress = $('pkProgress');
+        const pkTargetDisplay = $('pkTargetDisplay');
+        const pkStatus = $('pkStatus');
+        const pkPlayBtn = $('pkPlayBtn');
+        const pkReplayBtn = $('pkReplayBtn');
+        const pkPlayersGrid = $('pkPlayersGrid');
+        const pkTotalInput = $('pkTotalInput');
+        const pkAddPlayerBtn = $('pkAddPlayerBtn');
+        const pkStartBtn = $('pkStartBtn');
+        const pkResetBtn = $('pkResetBtn');
+
+        // ================================================================
+        //  7. 单人模式
+        // ================================================================
+        const Single = {
+            loadWords() {
+                const all = getWords(STATE.grade, STATE.book, STATE.unit);
+                const valid = all.filter(w => w.word && w.word.trim().length > 0);
+                STATE.single.words = shuffle([...valid]);
+                STATE.single.index = 0;
+                STATE.single.score = 0;
+                STATE.single.total = STATE.single.words.length;
+                STATE.single.answered = false;
+                STATE.single.selectedIdx = -1;
+                STATE.single.played = false;
+                STATE.single.isPlaying = false;
+                STATE.single.audioLock = false;
+                this.updateUI();
+                this.renderQuestion();
+            },
+
+            renderQuestion() {
+                const words = STATE.single.words;
+                const idx = STATE.single.index;
+                if (idx >= words.length || words.length === 0) {
+                    singleOptions.innerHTML =
+                        `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#5a7a4a;">🎉 全部完成！点击「重新开始」再来一轮</div>`;
+                    singleStatus.textContent = '🎉 全部完成！';
+                    singleStatus.className = 'status-badge done';
+                    singlePlayBtn.disabled = true;
+                    singleReplayBtn.disabled = true;
+                    singleNextBtn.disabled = true;
+                    singleProgress.textContent = `${words.length}/${words.length}`;
+                    return;
+                }
+
+                const word = words[idx];
+                const pool = words;
+                const opts = pickOptions(word.word, pool, 3);
+                STATE.single.options = opts;
+                STATE.single.correctWord = word.word;
+                STATE.single.answered = false;
+                STATE.single.selectedIdx = -1;
+                STATE.single.played = false;
+                STATE.single.isPlaying = false;
+                STATE.single.audioLock = false;
+
+                const letters = ['A', 'B', 'C'];
+                let html = '';
+                opts.forEach((opt, i) => {
+                    html += `<div class="option-card" data-idx="${i}" data-word="${opt}">
+                                <span class="letter">${letters[i]}</span>
+                                <span class="opt-text">${opt}</span>
+                                <span class="check-mark"></span>
+                             </div>`;
+                });
+                singleOptions.innerHTML = html;
+
+                singleOptions.querySelectorAll('.option-card').forEach(el => {
+                    el.addEventListener('click', () => {
+                        if (STATE.single.answered || STATE.single.isPlaying || STATE.single
+                            .audioLock) return;
+                        const idx = parseInt(el.dataset.idx);
+                        this.selectOption(idx);
+                    });
+                });
+
+                singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
+                singleStatus.className = 'status-badge';
+                singlePlayBtn.disabled = false;
+                singleReplayBtn.disabled = true;
+                singleNextBtn.disabled = true;
+                singleProgress.textContent = `${idx+1}/${words.length}`;
+                this.updateUI();
+
+                singleOptions.querySelectorAll('.option-card').forEach(el => {
+                    el.className = 'option-card';
+                    el.querySelector('.check-mark').textContent = '';
+                });
+            },
+
+            selectOption(idx) {
+                if (STATE.single.answered || STATE.single.audioLock) return;
+                const cards = singleOptions.querySelectorAll('.option-card');
+                const selectedWord = cards[idx].dataset.word;
+                const correct = STATE.single.correctWord;
+                const isCorrect = selectedWord === correct;
+
+                STATE.single.answered = true;
+                STATE.single.selectedIdx = idx;
+
+                // 立即截停录音
+                AudioEngine.stop();
+                STATE.single.isPlaying = false;
+                STATE.single.audioLock = false;
+                singlePlayBtn.disabled = false;
+                singleReplayBtn.disabled = true;
+
+                cards.forEach((el, i) => {
+                    el.classList.add('disabled');
+                    const w = el.dataset.word;
+                    if (w === correct) {
+                        el.classList.add('correct');
+                        el.querySelector('.check-mark').textContent = '✅';
+                    } else if (i === idx && !isCorrect) {
+                        el.classList.add('wrong');
+                        el.querySelector('.check-mark').textContent = '❌';
+                    }
+                    if (i === idx) el.classList.add('selected');
+                });
+
+                if (isCorrect) {
+                    STATE.single.score += 2;
+                    sfx.correct();
+                    singleStatus.textContent = '✅ 答对了！ +2分';
+                    singleStatus.className = 'status-badge correct';
+                } else {
+                    sfx.wrong();
+                    singleStatus.textContent = `❌ 正确答案是 “${correct}”`;
+                    singleStatus.className = 'status-badge wrong';
+                }
+
+                this.updateUI();
+                singleNextBtn.disabled = false;
+                singleReplayBtn.disabled = true;
+            },
+
+            playAudio() {
+                if (STATE.single.audioLock) return;
+                const words = STATE.single.words;
+                const idx = STATE.single.index;
+                if (idx >= words.length) return;
+                if (STATE.single.isPlaying) return;
+                const word = words[idx].word;
+
+                STATE.single.audioLock = true;
+                STATE.single.isPlaying = true;
+                singlePlayBtn.disabled = true;
+                singleReplayBtn.disabled = true;
+                singleStatus.textContent = '🔊 播放中 ...';
+                singleStatus.className = 'status-badge playing';
+
+                // 播放一次
+                AudioEngine.play(word,
+                    () => {
+                        // 开始播放
+                    },
+                    () => {
+                        // 播放结束
+                        STATE.single.isPlaying = false;
+                        STATE.single.audioLock = false;
+                        singlePlayBtn.disabled = false;
+                        singleReplayBtn.disabled = false;
+                        if (!STATE.single.answered) {
+                            singleStatus.textContent = '🔊 播放完毕，请选择答案';
+                            singleStatus.className = 'status-badge done';
+                            STATE.single.played = true;
+                        } else {
+                            singleStatus.textContent = '✅ 已作答';
+                            singleStatus.className = 'status-badge correct';
+                        }
+                    }
+                );
+            },
+
+            replayAudio() {
+                if (STATE.single.audioLock) return;
+                if (STATE.single.answered) return;
+                const words = STATE.single.words;
+                const idx = STATE.single.index;
+                if (idx >= words.length) return;
+                const word = words[idx].word;
+
+                STATE.single.audioLock = true;
+                STATE.single.isPlaying = true;
+                singlePlayBtn.disabled = true;
+                singleReplayBtn.disabled = true;
+                singleStatus.textContent = '🔊 再听一次 ...';
+                singleStatus.className = 'status-badge playing';
+
+                AudioEngine.play(word,
+                    () => {},
+                    () => {
+                        STATE.single.isPlaying = false;
+                        STATE.single.audioLock = false;
+                        singlePlayBtn.disabled = false;
+                        singleReplayBtn.disabled = false;
+                        if (!STATE.single.answered) {
+                            singleStatus.textContent = '🔊 播放完毕，请选择答案';
+                            singleStatus.className = 'status-badge done';
+                        }
+                    }
+                );
+            },
+
+            next() {
+                if (!STATE.single.answered) return;
+                STATE.single.index++;
+                if (STATE.single.index >= STATE.single.words.length) {
+                    this.renderQuestion();
+                    singleStatus.textContent = '🎉 全部完成！';
+                    singleStatus.className = 'status-badge done';
+                    singlePlayBtn.disabled = true;
+                    singleReplayBtn.disabled = true;
+                    singleNextBtn.disabled = true;
+                    sfx.cheer();
+                    return;
+                }
+                sfx.next();
+                this.renderQuestion();
+                singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
+                singleStatus.className = 'status-badge';
+                singleReplayBtn.disabled = true;
+            },
+
+            reset() {
+                AudioEngine.stop();
+                STATE.single.isPlaying = false;
+                STATE.single.audioLock = false;
+                this.loadWords();
+                sfx.reset();
+                singleStatus.textContent = '🔄 已重置';
+                singleStatus.className = 'status-badge';
+                singlePlayBtn.disabled = false;
+                singleReplayBtn.disabled = true;
+                singleNextBtn.disabled = true;
+            },
+
+            updateUI() {
+                const total = STATE.single.words.length;
+                const done = STATE.single.index + (STATE.single.answered ? 1 : 0);
+                singleProgress.textContent = `${Math.min(done, total)}/${total}`;
+                singleScore.textContent = STATE.single.score;
+            }
+        };
+
+        // ================================================================
+        //  8. PK 模式
+        // ================================================================
+        const PK = {
+            init() {
+                const total = parseInt(pkTotalInput.value) || 10;
+                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
+                STATE.pk.currentQuestion = 0;
+                STATE.pk.isActive = false;
+                STATE.pk.isPlaying = false;
+                STATE.pk.played = false;
+                STATE.pk.audioLock = false;
+                STATE.pk.roundFinished = false;
+                STATE.pk.wordList = [];
+                STATE.pk.options = [];
+                STATE.pk.correctWord = '';
+                for (const p of STATE.pk.players) {
+                    p.score = 0;
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                    p.done = false;
+                }
+                this.updateUI();
+                this.renderPlayers();
+                pkStatus.textContent = '🎧 等待开始';
+                pkStatus.className = 'status-badge';
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
+                pkStartBtn.disabled = false;
+            },
+
+            loadWords() {
+                const all = getWords(STATE.grade, STATE.book, STATE.unit);
+                const valid = all.filter(w => w.word && w.word.trim().length > 0);
+                STATE.pk.wordList = shuffle([...valid]);
+                const total = STATE.pk.totalQuestions;
+                if (STATE.pk.wordList.length > total) {
+                    STATE.pk.wordList = STATE.pk.wordList.slice(0, total);
+                }
+                STATE.pk.currentQuestion = 0;
+                for (const p of STATE.pk.players) {
+                    p.score = 0;
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                    p.done = false;
+                }
+                this.updateUI();
+                this.renderPlayers();
+            },
+
+            renderPlayers() {
+                const players = STATE.pk.players;
+                if (players.length === 0) {
+                    pkPlayersGrid.innerHTML =
+                        `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#5a7a4a;">👥 点击「添加玩家」开始</div>`;
+                    return;
+                }
+                let html = '';
+                for (const p of players) {
+                    const progress = p.done ? '✅ 完成' : `${Math.min(p.score / 2, STATE.pk.totalQuestions)}/${STATE.pk.totalQuestions}`;
+                    html += `
+                        <div class="pk-player-card" data-pid="${p.id}">
+                            <button class="remove-pk" data-pid="${p.id}">✕</button>
+                            <div class="pname">
+                                <span>🧑‍🎓 玩家 ${p.id}</span>
+                                <span class="pscore">${p.score} 分</span>
+                            </div>
+                            <div class="pk-options" data-pid="${p.id}">
+                                <div class="pk-opt disabled" data-idx="0">-</div>
+                                <div class="pk-opt disabled" data-idx="1">-</div>
+                                <div class="pk-opt disabled" data-idx="2">-</div>
+                            </div>
+                            <div class="pk-status">${p.answered ? '✅ 已答' : '⏳ 等待'}</div>
+                            <div class="pk-progress">${progress}</div>
+                        </div>
+                    `;
+                }
+                pkPlayersGrid.innerHTML = html;
+
+                pkPlayersGrid.querySelectorAll('.remove-pk').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        const id = parseInt(btn.dataset.pid);
+                        this.removePlayer(id);
+                    });
+                });
+            },
+
+            renderQuestionForPlayers() {
+                const players = STATE.pk.players;
+                const opts = STATE.pk.options;
+                const letters = ['A', 'B', 'C'];
+                const isActive = STATE.pk.isActive && !STATE.pk.roundFinished;
+
+                for (const p of players) {
+                    const container = pkPlayersGrid.querySelector(`.pk-options[data-pid="${p.id}"]`);
+                    if (!container) continue;
+                    let html = '';
+                    for (let i = 0; i < opts.length; i++) {
+                        const word = opts[i] || '---';
+                        const cls = 'pk-opt' + (isActive && !p.answered && !p.done ? '' : ' disabled');
+                        const mark = (p.answered && p.selectedIdx === i) ? (p.selectedIdx === i && opts[i] === STATE.pk
+                            .correctWord ? ' ✅' : (p.selectedIdx === i ? ' ❌' : '')) : '';
+                        html += `<div class="${cls}" data-idx="${i}" data-word="${word}">${letters[i]}. ${word}${mark}</div>`;
+                    }
+                    container.innerHTML = html;
+
+                    if (isActive && !p.answered && !p.done) {
+                        container.querySelectorAll('.pk-opt').forEach(el => {
+                            el.addEventListener('click', () => {
+                                if (!STATE.pk.isActive || STATE.pk.roundFinished) return;
+                                if (p.answered || p.done) return;
+                                const idx = parseInt(el.dataset.idx);
+                                this.playerSelect(p.id, idx);
+                            });
+                        });
+                    }
+
+                    // 状态
+                    const statusEl = container.closest('.pk-player-card').querySelector('.pk-status');
+                    if (statusEl) {
+                        if (p.done) statusEl.textContent = '🏁 已完成';
+                        else if (p.answered) statusEl.textContent = '✅ 已答';
+                        else statusEl.textContent = isActive ? '⏳ 思考中' : '⏳ 等待';
+                    }
+                    const scoreEl = container.closest('.pk-player-card').querySelector('.pscore');
+                    if (scoreEl) scoreEl.textContent = p.score + ' 分';
+
+                    // 进度
+                    const progEl = container.closest('.pk-player-card').querySelector('.pk-progress');
+                    if (progEl) {
+                        const done = Math.min(p.score / 2, STATE.pk.totalQuestions);
+                        progEl.textContent = p.done ? '✅ 完成' : `${done}/${STATE.pk.totalQuestions}`;
+                    }
+                }
+            },
+
+            playerSelect(playerId, optIdx) {
+                if (STATE.pk.roundFinished) return;
+                const p = STATE.pk.players.find(p => p.id === playerId);
+                if (!p || p.answered || p.done || !STATE.pk.isActive) return;
+                const correct = STATE.pk.correctWord;
+                const selectedWord = STATE.pk.options[optIdx] || '';
+                const isCorrect = selectedWord === correct;
+
+                p.answered = true;
+                p.selectedIdx = optIdx;
+
+                if (isCorrect) {
+                    p.score += 2;
+                    sfx.correct();
+                    const card = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"]`);
+                    if (card) {
+                        card.classList.add('flash-correct');
+                        setTimeout(() => card.classList.remove('flash-correct'), 500);
+                        showFirework(card);
+                    }
+                } else {
+                    sfx.wrong();
+                    const card = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"]`);
+                    if (card) {
+                        card.classList.add('flash-wrong');
+                        setTimeout(() => card.classList.remove('flash-wrong'), 500);
+                    }
+                }
+
+                // 更新UI
+                const container = pkPlayersGrid.querySelector(`.pk-options[data-pid="${p.id}"]`);
+                if (container) {
+                    container.querySelectorAll('.pk-opt').forEach((el, i) => {
+                        el.classList.add('disabled');
+                        const w = el.dataset.word;
+                        let suffix = '';
+                        if (w === correct) suffix = ' ✅';
+                        else if (i === optIdx && !isCorrect) suffix = ' ❌';
+                        if (i === optIdx) {
+                            el.classList.add('selected');
+                            if (isCorrect) el.classList.add('correct');
+                            else el.classList.add('wrong');
+                        }
+                        if (w === correct && i !== optIdx) {
+                            el.classList.add('correct');
+                        }
+                        el.textContent = el.textContent.replace(/[✅❌]/g, '') + suffix;
+                    });
+                    const statusEl = container.closest('.pk-player-card').querySelector('.pk-status');
+                    if (statusEl) statusEl.textContent = isCorrect ? '✅ +2分' : '❌ 答错';
+                }
+                const scoreEl = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${p.id}"] .pscore`);
+                if (scoreEl) scoreEl.textContent = p.score + ' 分';
+
+                // 检查是否所有玩家都已答完或完成
+                const allDone = STATE.pk.players.every(p => p.answered || p.done);
+                if (allDone) {
+                    this.roundFinished = true;
+                    // 检查是否有玩家达到目标
+                    const target = STATE.pk.totalQuestions * 2;
+                    const winner = STATE.pk.players.find(p => p.score >= target);
+                    if (winner) {
+                        this.endPK(winner);
+                        return;
+                    }
+                    // 检查是否所有玩家都已完成所有题目
+                    const allCompleted = STATE.pk.players.every(p => p.score / 2 >= STATE.pk.totalQuestions);
+                    if (allCompleted) {
+                        const sorted = [...STATE.pk.players].sort((a, b) => b.score - a.score);
+                        this.endPK(sorted[0], sorted);
+                        return;
+                    }
+                    // 进入下一题
+                    setTimeout(() => {
+                        if (STATE.pk.isActive) {
+                            this.nextQuestion();
+                        }
+                    }, 1000);
+                }
+            },
+
+            nextQuestion() {
+                const words = STATE.pk.wordList;
+                const idx = STATE.pk.currentQuestion + 1;
+                if (idx >= words.length) {
+                    // 所有题目用完，按分数排名
+                    const sorted = [...STATE.pk.players].sort((a, b) => b.score - a.score);
+                    this.endPK(sorted[0], sorted);
+                    return;
+                }
+                STATE.pk.currentQuestion = idx;
+                STATE.pk.roundFinished = false;
+                for (const p of STATE.pk.players) {
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                }
+                this.loadQuestion(idx);
+            },
+
+            loadQuestion(idx) {
+                const words = STATE.pk.wordList;
+                if (idx >= words.length) return;
+                const word = words[idx];
+                const pool = words;
+                const opts = pickOptions(word.word, pool, 3);
+                STATE.pk.options = opts;
+                STATE.pk.correctWord = word.word;
+                STATE.pk.roundFinished = false;
+
+                for (const p of STATE.pk.players) {
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                }
+
+                this.updateUI();
+                this.renderQuestionForPlayers();
+                pkStatus.textContent = `🎧 第 ${idx+1}/${words.length} 题，听录音选词`;
+                pkStatus.className = 'status-badge';
+                pkPlayBtn.disabled = false;
+                pkReplayBtn.disabled = true;
+                pkStartBtn.disabled = true;
+                STATE.pk.played = false;
+                STATE.pk.isPlaying = false;
+                STATE.pk.audioLock = false;
+            },
+
+            playAudio() {
+                if (STATE.pk.audioLock) return;
+                const words = STATE.pk.wordList;
+                const idx = STATE.pk.currentQuestion;
+                if (idx >= words.length) return;
+                if (STATE.pk.isPlaying) return;
+                const word = words[idx].word;
+
+                STATE.pk.audioLock = true;
+                STATE.pk.isPlaying = true;
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+                pkStatus.textContent = '🔊 播放中 ...';
+                pkStatus.className = 'status-badge playing';
+
+                // 播放一次
+                AudioEngine.play(word,
+                    () => {},
+                    () => {
+                        STATE.pk.isPlaying = false;
+                        STATE.pk.audioLock = false;
+                        pkPlayBtn.disabled = false;
+                        pkReplayBtn.disabled = false;
+                        if (!STATE.pk.roundFinished) {
+                            pkStatus.textContent = '🔊 播放完毕，请选择答案';
+                            pkStatus.className = 'status-badge done';
+                            STATE.pk.played = true;
+                            // 启用选项
+                            pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
+                                if (!el.classList.contains('disabled')) {
+                                    // 不自动启用，由render控制
+                                }
+                            });
+                            this.renderQuestionForPlayers();
+                        }
+                    }
+                );
+            },
+
+            replayAudio() {
+                if (STATE.pk.audioLock) return;
+                if (STATE.pk.roundFinished) return;
+                const words = STATE.pk.wordList;
+                const idx = STATE.pk.currentQuestion;
+                if (idx >= words.length) return;
+                const word = words[idx].word;
+
+                STATE.pk.audioLock = true;
+                STATE.pk.isPlaying = true;
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+                pkStatus.textContent = '🔊 再听一次 ...';
+                pkStatus.className = 'status-badge playing';
+
+                AudioEngine.play(word,
+                    () => {},
+                    () => {
+                        STATE.pk.isPlaying = false;
+                        STATE.pk.audioLock = false;
+                        pkPlayBtn.disabled = false;
+                        pkReplayBtn.disabled = false;
+                        if (!STATE.pk.roundFinished) {
+                            pkStatus.textContent = '🔊 播放完毕，请选择答案';
+                            pkStatus.className = 'status-badge done';
+                            this.renderQuestionForPlayers();
+                        }
+                    }
+                );
+            },
+
+            start() {
+                const total = parseInt(pkTotalInput.value) || 10;
+                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
+                pkTotalInput.value = STATE.pk.totalQuestions;
+                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
+
+                if (STATE.pk.players.length < 2) {
+                    pkStatus.textContent = '⚠️ 至少需要 2 位玩家';
+                    pkStatus.className = 'status-badge';
+                    return;
+                }
+
+                AudioEngine.stop();
+                STATE.pk.isActive = true;
+                STATE.pk.currentQuestion = 0;
+                STATE.pk.roundFinished = false;
+                for (const p of STATE.pk.players) {
+                    p.score = 0;
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                    p.done = false;
+                }
+                this.loadWords();
+                this.loadQuestion(0);
+                pkStartBtn.disabled = true;
+                pkStatus.textContent = '🎧 点击「开始对局」听录音';
+                pkStatus.className = 'status-badge';
+                pkPlayBtn.disabled = false;
+                pkReplayBtn.disabled = true;
+                sfx.playStart();
+            },
+
+            reset() {
+                AudioEngine.stop();
+                STATE.pk.isActive = false;
+                STATE.pk.isPlaying = false;
+                STATE.pk.audioLock = false;
+                STATE.pk.roundFinished = false;
+                for (const p of STATE.pk.players) {
+                    p.score = 0;
+                    p.answered = false;
+                    p.selectedIdx = -1;
+                    p.done = false;
+                }
+                const total = parseInt(pkTotalInput.value) || 10;
+                STATE.pk.totalQuestions = Math.min(Math.max(total, 1), 50);
+                pkTotalInput.value = STATE.pk.totalQuestions;
+                pkTargetDisplay.textContent = STATE.pk.totalQuestions * 2;
+                pkStartBtn.disabled = false;
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+                pkStatus.textContent = '🔄 已重置';
+                pkStatus.className = 'status-badge';
+                this.loadWords();
+                this.renderPlayers();
+                pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
+                    el.textContent = '-';
+                    el.className = 'pk-opt disabled';
+                });
+                pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
+                pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
+                sfx.reset();
+            },
+
+            endPK(winner, allSorted) {
+                STATE.pk.isActive = false;
+                STATE.pk.roundFinished = true;
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+                pkStartBtn.disabled = false;
+
+                sfx.cheer();
+
+                const sorted = allSorted || [...STATE.pk.players].sort((a, b) => b.score - a.score);
+                let rankHtml = '';
+                for (let i = 0; i < sorted.length; i++) {
+                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : `${i+1}.`;
+                    rankHtml += `<div class="rank-item"><span class="rank-pos">${medal}</span> 玩家 ${sorted[i].id} <span>${sorted[i].score} 分</span></div>`;
+                }
+
+                const modal = document.createElement('div');
+                modal.className = 'rank-modal';
+                modal.innerHTML = `
+                    <div class="rank-card">
+                        <h2>🏆 对局结束 🏆</h2>
+                        <div class="rank-list">${rankHtml}</div>
+                        <button class="rank-close">👏 太棒了！</button>
+                    </div>
+                `;
+                document.body.appendChild(modal);
+                modal.querySelector('.rank-close').addEventListener('click', () => {
+                    modal.remove();
+                    const winnerCard = pkPlayersGrid.querySelector(`.pk-player-card[data-pid="${winner.id}"]`);
+                    if (winnerCard) showFirework(winnerCard);
+                });
+
+                pkStatus.textContent = `🏆 ${winner.id}号玩家 获胜！`;
+                pkStatus.className = 'status-badge done';
+            },
+
+            addPlayer() {
+                if (STATE.pk.players.length >= 8) return;
+                const id = STATE.pk.playerIdCounter++;
+                STATE.pk.players.push({
+                    id,
+                    score: 0,
+                    answered: false,
+                    selectedIdx: -1,
+                    done: false,
+                });
+                this.renderPlayers();
+                if (STATE.pk.isActive && !STATE.pk.roundFinished) {
+                    this.renderQuestionForPlayers();
+                } else {
+                    pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
+                        el.textContent = '-';
+                        el.className = 'pk-opt disabled';
+                    });
+                    pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
+                    pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
+                }
+                this.updateUI();
+                sfx.next();
+            },
+
+            removePlayer(id) {
+                if (STATE.pk.players.length <= 2) return;
+                const idx = STATE.pk.players.findIndex(p => p.id === id);
+                if (idx === -1) return;
+                STATE.pk.players.splice(idx, 1);
+                if (STATE.pk.isActive) {
+                    STATE.pk.isActive = false;
+                    STATE.pk.roundFinished = true;
+                    AudioEngine.stop();
+                }
+                this.renderPlayers();
+                if (!STATE.pk.isActive) {
+                    pkPlayersGrid.querySelectorAll('.pk-opt').forEach(el => {
+                        el.textContent = '-';
+                        el.className = 'pk-opt disabled';
+                    });
+                    pkPlayersGrid.querySelectorAll('.pk-status').forEach(el => el.textContent = '⏳ 等待');
+                    pkPlayersGrid.querySelectorAll('.pk-progress').forEach(el => el.textContent = '0/0');
+                }
+                this.updateUI();
+                sfx.reset();
+            },
+
+            updateUI() {
+                const total = STATE.pk.totalQuestions;
+                const done = Math.min(STATE.pk.currentQuestion + 1, total);
+                pkProgress.textContent = `${STATE.pk.currentQuestion + (STATE.pk.isActive ? 1 : 0)}/${total}`;
+                pkTargetDisplay.textContent = total * 2;
+            }
+        };
+
+        // ================================================================
+        //  9. 模式切换 & 年级/单元联动
+        // ================================================================
+        function switchMode(mode) {
+            STATE.mode = mode;
+            if (mode === 'single') {
+                singleMode.style.display = 'block';
+                pkMode.style.display = 'none';
+                modeSingleBtn.classList.add('active');
+                modePkBtn.classList.remove('active');
+                AudioEngine.stop();
+                STATE.pk.isActive = false;
+                Single.loadWords();
+            } else {
+                singleMode.style.display = 'none';
+                pkMode.style.display = 'block';
+                modeSingleBtn.classList.remove('active');
+                modePkBtn.classList.add('active');
+                AudioEngine.stop();
+                STATE.single.isPlaying = false;
+                if (STATE.pk.players.length === 0) {
+                    STATE.pk.playerIdCounter = 1;
+                    STATE.pk.players = [];
+                    PK.addPlayer();
+                    PK.addPlayer();
+                }
+                PK.init();
+                PK.loadWords();
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+            }
+            sfx.next();
+        }
+
+        function populateGrades() {
+            const grades = Object.keys(wordBank);
+            gradeSelect.innerHTML = grades.map(g => `<option value="${g}">${g}年级</option>`).join('');
+            gradeSelect.value = STATE.grade;
+            updateUnits();
+        }
+
+        function updateUnits() {
+            const units = getUnits(STATE.grade, STATE.book);
+            unitSelect.innerHTML = units.map(u => `<option value="${u}">${u}</option>`).join('');
+            if (units.length) {
+                STATE.unit = units[0];
+                unitSelect.value = STATE.unit;
+            }
+            onUnitChange();
+        }
+
+        function onUnitChange() {
+            STATE.grade = gradeSelect.value;
+            STATE.book = bookSelect.value;
+            STATE.unit = unitSelect.value;
+            if (STATE.mode === 'single') {
+                Single.loadWords();
+            } else {
+                PK.init();
+                PK.loadWords();
+                pkPlayBtn.disabled = true;
+                pkReplayBtn.disabled = true;
+            }
+            sfx.next();
+        }
+
+        // ================================================================
+        //  10. 高级渲染 (iOS 26 风格)
+        // ================================================================
+        function toggleGlass() {
+            STATE.glass = !STATE.glass;
+            if (STATE.glass) {
+                document.documentElement.setAttribute('data-glass', 'enabled');
+                glassToggleBtn.textContent = '💎 高级渲染 (开)';
+                glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
+                glassToggleBtn.style.borderColor = '#8bc34a';
+            } else {
+                document.documentElement.removeAttribute('data-glass');
+                glassToggleBtn.textContent = '💎 高级渲染';
+                glassToggleBtn.style.background = 'rgba(255,255,255,0.3)';
+                glassToggleBtn.style.borderColor = 'rgba(180,200,140,0.2)';
+            }
+            localStorage.setItem('glassEnabled', STATE.glass ? 'true' : 'false');
+        }
+
+        // 恢复玻璃状态
+        const savedGlass = localStorage.getItem('glassEnabled');
+        if (savedGlass === 'true') {
+            STATE.glass = true;
+            document.documentElement.setAttribute('data-glass', 'enabled');
+            glassToggleBtn.textContent = '💎 高级渲染 (开)';
+            glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
+            glassToggleBtn.style.borderColor = '#8bc34a';
+        }
+
+        // ================================================================
+        //  11. 事件绑定
+        // ================================================================
+        gradeSelect.addEventListener('change', () => {
+            STATE.grade = gradeSelect.value;
+            updateUnits();
+        });
+        bookSelect.addEventListener('change', () => {
+            STATE.book = bookSelect.value;
+            updateUnits();
+        });
+        unitSelect.addEventListener('change', onUnitChange);
+
+        modeSingleBtn.addEventListener('click', () => switchMode('single'));
+        modePkBtn.addEventListener('click', () => switchMode('pk'));
+
+        glassToggleBtn.addEventListener('click', toggleGlass);
+
+        // 单人
+        singlePlayBtn.addEventListener('click', () => Single.playAudio());
+        singleReplayBtn.addEventListener('click', () => Single.replayAudio());
+        singleNextBtn.addEventListener('click', () => Single.next());
+        singleResetBtn.addEventListener('click', () => Single.reset());
+
+        // PK
+        pkPlayBtn.addEventListener('click', () => PK.playAudio());
+        pkReplayBtn.addEventListener('click', () => PK.replayAudio());
+        pkStartBtn.addEventListener('click', () => PK.start());
+        pkResetBtn.addEventListener('click', () => PK.reset());
+        pkAddPlayerBtn.addEventListener('click', () => PK.addPlayer());
+
+        // 键盘快捷键
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ' || e.code === 'Space') {
+                if (STATE.mode === 'single') {
+                    e.preventDefault();
+                    if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
+                        Single.playAudio();
+                    }
+                } else if (STATE.mode === 'pk') {
+                    if (STATE.pk.isActive && !STATE.pk.isPlaying && !STATE.pk.audioLock && !STATE.pk
+                        .roundFinished) {
+                        e.preventDefault();
+                        PK.playAudio();
+                    }
+                }
+            }
+        });
+
+        // ================================================================
+        //  12. 启动
+        // ================================================================
+        populateGrades();
+        STATE.grade = '4';
+        STATE.book = 'upper';
+        gradeSelect.value = '4';
+        bookSelect.value = 'upper';
+        updateUnits();
+        switchMode('single');
+
+        setTimeout(() => {
+            singleStatus.textContent = '🎧 点击「开始练习」听录音选词';
+            singleStatus.className = 'status-badge';
+        }, 300);
+
+        console.log('🎧 听力练习已启动！');
+        console.log('📁 录音文件放于 ./audio/ 目录，命名为 "单词.mp3"');
+        console.log('💡 无录音文件时自动使用语音合成 (TTS)');
+        console.log('⌨️ 空格键快速播放 (单人模式)');
+        console.log('✨ 高级渲染已启用 iOS 26 风格');
+    </script>
+</body>
+</html>
