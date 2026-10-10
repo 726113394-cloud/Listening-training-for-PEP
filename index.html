@@ -999,6 +999,58 @@
             background: rgba(139, 195, 74, 0.25);
             transform: scale(1.05);
         }
+        .unit-picker-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 6px;
+            align-items: center;
+        }
+        .unit-picker-nav .nav-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #5a7a4a;
+            min-width: 32px;
+        }
+        .nav-chip {
+            padding: 4px 14px;
+            border-radius: 30px;
+            border: 1px solid rgba(180, 200, 140, 0.35);
+            background: rgba(255, 255, 255, 0.4);
+            color: #3a6b2a;
+            font-size: 0.75rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .nav-chip:hover {
+            background: rgba(139, 195, 74, 0.18);
+        }
+        .nav-chip.active {
+            background: linear-gradient(135deg, #8bc34a, #558b2f);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(139, 195, 74, 0.3);
+        }
+        .unit-picked {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 16px;
+            background: rgba(139, 195, 74, 0.1);
+            border: 1px dashed rgba(139, 195, 74, 0.35);
+            font-size: 0.7rem;
+            color: #3a6b2a;
+            line-height: 1.8;
+        }
+        .unit-picked .picked-tag {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 20px;
+            padding: 1px 10px;
+            margin: 0 4px 3px 0;
+            font-weight: 600;
+        }
         .word-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
@@ -1553,17 +1605,6 @@
                     <button class="active" data-mode="single">🧑 单人</button>
                     <button data-mode="multi">👥 多人抢答</button>
                 </div>
-                <div class="ctrl-group">
-                    <label>📚 年级</label>
-                    <select id="gradeSelect"></select>
-                </div>
-                <div class="ctrl-group">
-                    <label>📖 册别</label>
-                    <select id="bookSelect">
-                        <option value="upper">上册</option>
-                        <option value="lower">下册</option>
-                    </select>
-                </div>
                 <button class="btn-unit-select" id="unitSelectBtn">
                     📌 选择单元 <span class="badge" id="unitBadge">0</span>
                 </button>
@@ -1639,8 +1680,7 @@
         </div>
 
         <div style="padding:4px 20px 12px; text-align:center; font-size:0.6rem; color:#6a8a5a; border-top:1px solid rgba(180,200,140,0.15);">
-            🔊 录音文件放于 ./audio/ 目录，命名为 “单词.mp3” · 无录音则使用语音合成
-        </div>
+            🔊 使用录音文件：与本网页同目录的 audio 文件夹（每个单词读两遍，中间停顿 2 秒）· 不要把网页单独拷走</div>
     </div>
 
     <!-- ===== 模态框 ===== -->
@@ -2040,7 +2080,7 @@
                             bold: false }, { word: "finish", meaning: "完成", bold: false },
                         { word: "worried", meaning: "担心的", bold: true }, { word: "both", meaning: "两者都",
                             bold: false }, { word: "excited", meaning: "兴奋的", bold: false },
-                        { word: "wroong", meaning: "错误的（原词）", bold: false }, { word: "angry",
+                        { word: "wrong", meaning: "错误的", bold: false }, { word: "angry",
                             meaning: "生气的", bold: true }, { word: "afraid", meaning: "害怕的",
                             bold: true }, { word: "parent", meaning: "父/母", bold: true },
                         { word: "ask", meaning: "问", bold: true }, { word: "laugh", meaning: "笑",
@@ -2112,7 +2152,7 @@
                 },
                 lower: {
                     "Unit 1": [{ word: "eat breakfast", meaning: "吃早餐", bold: true },
-                    { word: "play sports", meaning: "做运动", bold: true }, { word: "have...class",
+                    { word: "play sports", meaning: "做运动", bold: true }, { word: "have class",
                             meaning: "上课", bold: true }, { word: "exercise", meaning: "锻炼",
                             bold: true }, { word: "do morning exercises", meaning: "做早操",
                             bold: true }, { word: "eat dinner", meaning: "吃晚餐", bold: true },
@@ -2265,7 +2305,7 @@
                     "Unit 4": [{ word: "money", meaning: "钱", bold: false }, { word: "money pocket",
                             meaning: "钱袋", bold: false }, { word: "schoolbag", meaning: "书包",
                             bold: false }, { word: "goods", meaning: "商品", bold: false },
-                        { word: "drink", meaning: "饮料", bold: false }, { word: "servise",
+                        { word: "drink", meaning: "饮料", bold: false }, { word: "service",
                             meaning: "服务", bold: false }, { word: "haircut", meaning: "理发",
                             bold: false }, { word: "microscope", meaning: "显微镜", bold: false },
                         { word: "lucky", meaning: "幸运的", bold: false }, { word: "half",
@@ -2284,7 +2324,7 @@
                         { word: "space", meaning: "太空", bold: false },
                         { word: "outer space", meaning: "外层空间", bold: false },
                         { word: "space station", meaning: "空间站", bold: false },
-                        { word: "scean", meaning: "场景（原词）", bold: false },
+                        { word: "scene", meaning: "场景", bold: false },
                         { word: "marble", meaning: "大理石", bold: false },
                         { word: "satellite", meaning: "卫星", bold: false }, { word: "soil",
                             meaning: "土壤", bold: false }, { word: "alien", meaning: "外星人",
@@ -2419,6 +2459,24 @@
         function getUnits(grade, book) {
             const data = wordBank[grade]?.[book];
             return data ? Object.keys(data).sort() : [];
+        }
+
+        // 单元选择键把「年级 + 上册/下册 + 单元」合成一个字符串，
+        // 这样一次练习才能跨册、跨年级累积多个单元。
+        const BOOK_LABEL = { upper: '上册', lower: '下册' };
+
+        function unitKey(grade, book, unit) {
+            return `${grade}|${book}|${unit}`;
+        }
+
+        function parseUnitKey(key) {
+            const parts = String(key).split('|');
+            return { grade: parts[0], book: parts[1], unit: parts.slice(2).join('|') };
+        }
+
+        function unitShortLabel(key) {
+            const { grade, book, unit } = parseUnitKey(key);
+            return `${grade}${book === 'lower' ? '下' : '上'}·${unit}`;
         }
 
         function pickOptions(correct, pool, count = 3) {
@@ -2603,40 +2661,40 @@
             },
 
             playTTS(word, onStart, onEnd) {
+                // 本版本已移除网页语音合成（语音合成）。
+                // 每个单词都必须有录音文件：./audio/<单词>.mp3
+                // 缺录音时明确报错，不再用 TTS 顶替，避免学生听到机器腔或错音。
                 return new Promise((resolve) => {
-                    this.useTTS = true;
-                    if (!window.speechSynthesis) {
-                        if (onEnd) onEnd();
-                        resolve();
-                        return;
+                    this.useTTS = true;          // 语义变为「本条没有录音」
+                    // 连续多条都缺，几乎肯定是「audio 文件夹没和网页放在一起」，
+                    // 而不是个别单词漏录 —— 直接说清楚，省得逐条排查。
+                    window.__missCount = (window.__missCount || 0) + 1;
+                    if (window.__missCount === 1) {
+                        window.__missUrl = './audio/' + encodeURIComponent(word) + '.mp3';
                     }
-                    window.speechSynthesis.cancel();
-
-                    const utterance = new SpeechSynthesisUtterance(word);
-                    utterance.lang = 'en-US';
-                    utterance.rate = 0.9;
-                    utterance.pitch = 1.0;
-                    utterance.volume = 1.0;
-
-                    const voices = window.speechSynthesis.getVoices();
-                    const enVoice = voices.find(v => v.lang.startsWith('en'));
-                    if (enVoice) utterance.voice = enVoice;
-
-                    utterance.onstart = () => {
-                        this.isPlaying = true;
-                        if (onStart) onStart();
-                    };
-                    utterance.onend = () => {
-                        this.isPlaying = false;
-                        if (onEnd) onEnd();
-                        resolve();
-                    };
-                    utterance.onerror = () => {
-                        this.isPlaying = false;
-                        if (onEnd) onEnd();
-                        resolve();
-                    };
-                    window.speechSynthesis.speak(utterance);
+                    if (window.__missCount === 3) {
+                        var probe = new Image();
+                        probe.onerror = function () {};   // 只为触发一次探测
+                        fetch(window.__missUrl, { method: 'HEAD' })
+                            .then(function (r) {
+                                window.__showToast(
+                                    '⚠️ 找不到音频文件夹\n请确认网页和 audio 文件夹在同一目录\n' +
+                                    '（在「听力练习场」文件夹里，直接双击 听力练习场.html）', 6000);
+                            })
+                            .catch(function () {
+                                window.__showToast(
+                                    '⚠️ 找不到音频文件夹\n请确认网页和 audio 文件夹在同一目录\n' +
+                                    '（在「听力练习场」文件夹里，直接双击 听力练习场.html）', 6000);
+                            });
+                    } else if (window.__missCount < 3) {
+                        window.__showToast('⚠️ 缺少录音：' + word + '\n（需要 ./audio/' +
+                                           word + '.mp3）');
+                    }
+                    console.warn('[听力练习场] 缺少录音文件:', word,
+                                 '-> 期望 ./audio/' + word + '.mp3');
+                    if (onStart) onStart();
+                    if (onEnd) onEnd();
+                    resolve();
                 });
             },
 
@@ -2646,9 +2704,7 @@
                     this.audio.currentTime = 0;
                     this.audio = null;
                 }
-                if (window.speechSynthesis) {
-                    window.speechSynthesis.cancel();
-                }
+                
                 this.isPlaying = false;
             },
 
@@ -2657,19 +2713,14 @@
             }
         };
 
-        if (window.speechSynthesis) {
-            window.speechSynthesis.getVoices();
-            window.speechSynthesis.onvoiceschanged = () => {
-                window.speechSynthesis.getVoices();
-            };
-        }
 
         // ================================================================
         //  5. 全局状态
         // ================================================================
         const STATE = {
-            grade: '4',
-            book: 'upper',
+            // 弹窗里正在浏览的年级/册别；真正练什么由 selectedUnits 决定
+            pickGrade: '4',
+            pickBook: 'upper',
             glass: false,
             selectedUnits: [],
             selectedWordsPerUnit: {},
@@ -2710,9 +2761,9 @@
         };
 
         function initDefaultSelection() {
-            const units = getUnits(STATE.grade, STATE.book);
+            const units = getUnits(STATE.pickGrade, STATE.pickBook);
             if (units.length > 0) {
-                STATE.selectedUnits = [units[0]];
+                STATE.selectedUnits = [unitKey(STATE.pickGrade, STATE.pickBook, units[0])];
                 STATE.selectedWordsPerUnit = {};
             }
         }
@@ -2722,8 +2773,6 @@
         //  6. DOM 引用
         // ================================================================
         const $ = id => document.getElementById(id);
-        const gradeSelect = $('gradeSelect');
-        const bookSelect = $('bookSelect');
         const unitSelectBtn = $('unitSelectBtn');
         const unitBadge = $('unitBadge');
         const glassToggleBtn = $('glassToggleBtn');
@@ -2773,12 +2822,10 @@
         const Single = {
             buildWordList() {
                 let allWords = [];
-                const units = STATE.selectedUnits;
-                const grade = STATE.grade;
-                const book = STATE.book;
-                for (const unit of units) {
+                for (const key of STATE.selectedUnits) {
+                    const { grade, book, unit } = parseUnitKey(key);
                     const unitWords = getWords(grade, book, unit);
-                    const selected = STATE.selectedWordsPerUnit[unit];
+                    const selected = STATE.selectedWordsPerUnit[key];
                     let wordsToAdd = unitWords;
                     if (selected && selected.length > 0) {
                         wordsToAdd = unitWords.filter(w => selected.includes(w.word));
@@ -3144,12 +3191,10 @@
 
             buildWordList() {
                 let allWords = [];
-                const units = STATE.selectedUnits;
-                const grade = STATE.grade;
-                const book = STATE.book;
-                for (const unit of units) {
+                for (const key of STATE.selectedUnits) {
+                    const { grade, book, unit } = parseUnitKey(key);
                     const unitWords = getWords(grade, book, unit);
-                    const selected = STATE.selectedWordsPerUnit[unit];
+                    const selected = STATE.selectedWordsPerUnit[key];
                     let wordsToAdd = unitWords;
                     if (selected && selected.length > 0) {
                         wordsToAdd = unitWords.filter(w => selected.includes(w.word));
@@ -3583,70 +3628,89 @@
         //  9. 单元选择模态框
         // ================================================================
         function renderUnitModal() {
-            const units = getUnits(STATE.grade, STATE.book);
-            let html = `<div class="unit-list">`;
+            const grades = Object.keys(wordBank);
+            let html = `
+                <div class="unit-picker-nav">
+                    <span class="nav-label">年级</span>
+                    ${grades.map(g => `<button class="nav-chip ${g === STATE.pickGrade ? 'active' : ''}" data-grade="${g}">${g}年级</button>`).join('')}
+                </div>
+                <div class="unit-picker-nav">
+                    <span class="nav-label">册别</span>
+                    <button class="nav-chip ${STATE.pickBook === 'upper' ? 'active' : ''}" data-book="upper">上册</button>
+                    <button class="nav-chip ${STATE.pickBook === 'lower' ? 'active' : ''}" data-book="lower">下册</button>
+                </div>
+            `;
+            const units = getUnits(STATE.pickGrade, STATE.pickBook);
+            html += `<div class="unit-list">`;
             for (const unit of units) {
-                const checked = STATE.selectedUnits.includes(unit) ? 'checked' : '';
-                const allWords = getWords(STATE.grade, STATE.book, unit);
-                const selectedWords = STATE.selectedWordsPerUnit[unit] || [];
+                const key = unitKey(STATE.pickGrade, STATE.pickBook, unit);
+                const checked = STATE.selectedUnits.includes(key) ? 'checked' : '';
+                const allWords = getWords(STATE.pickGrade, STATE.pickBook, unit);
+                const selectedWords = STATE.selectedWordsPerUnit[key] || [];
                 const count = selectedWords.length > 0 ? selectedWords.length : allWords.length;
                 const total = allWords.length;
                 html += `
-                    <div class="unit-item" data-unit="${unit}">
-                        <input type="checkbox" class="unit-checkbox" value="${unit}" ${checked}>
+                    <div class="unit-item" data-key="${key}">
+                        <input type="checkbox" class="unit-checkbox" value="${key}" ${checked}>
                         <span class="unit-name">${unit}</span>
                         <span class="unit-count">${count}/${total}</span>
                         <div class="unit-actions">
-                            <button class="unit-word-btn" data-unit="${unit}">📝</button>
+                            <button class="unit-word-btn" data-key="${key}">📝</button>
                         </div>
                     </div>
                 `;
             }
             html += `</div>`;
+            html += `<div class="unit-picked">${pickedSummaryInner()}</div>`;
             unitModalBody.innerHTML = html;
+
+            unitModalBody.querySelectorAll('.nav-chip').forEach(chip => {
+                chip.addEventListener('click', function() {
+                    if (this.dataset.grade) STATE.pickGrade = this.dataset.grade;
+                    if (this.dataset.book) STATE.pickBook = this.dataset.book;
+                    renderUnitModal();
+                });
+            });
 
             unitModalBody.querySelectorAll('.unit-checkbox').forEach(cb => {
                 cb.addEventListener('change', function() {
-                    const unit = this.value;
+                    const key = this.value;
                     if (this.checked) {
-                        if (!STATE.selectedUnits.includes(unit)) {
-                            STATE.selectedUnits.push(unit);
+                        if (!STATE.selectedUnits.includes(key)) {
+                            STATE.selectedUnits.push(key);
                         }
                     } else {
-                        STATE.selectedUnits = STATE.selectedUnits.filter(u => u !== unit);
+                        STATE.selectedUnits = STATE.selectedUnits.filter(k => k !== key);
                     }
-                    updateUnitModalCounts();
+                    const box = unitModalBody.querySelector('.unit-picked');
+                    if (box) box.innerHTML = pickedSummaryInner();
+                    unitBadge.textContent = STATE.selectedUnits.length;
                 });
             });
 
             unitModalBody.querySelectorAll('.unit-word-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
-                    const unit = this.dataset.unit;
-                    openWordSelectModal(unit);
+                    openWordSelectModal(this.dataset.key);
                 });
             });
 
-            function updateUnitModalCounts() {
-                const items = unitModalBody.querySelectorAll('.unit-item');
-                for (const item of items) {
-                    const unit = item.dataset.unit;
-                    const allWords = getWords(STATE.grade, STATE.book, unit);
-                    const selectedWords = STATE.selectedWordsPerUnit[unit] || [];
-                    const count = selectedWords.length > 0 ? selectedWords.length : allWords.length;
-                    const total = allWords.length;
-                    const countSpan = item.querySelector('.unit-count');
-                    if (countSpan) countSpan.textContent = `${count}/${total}`;
-                }
-            }
         }
 
-        function openWordSelectModal(unit) {
-            const words = getWords(STATE.grade, STATE.book, unit);
-            const selected = STATE.selectedWordsPerUnit[unit] || [];
+        function pickedSummaryInner() {
+            const keys = STATE.selectedUnits;
+            const tags = keys.map(k => `<span class="picked-tag">${unitShortLabel(k)}</span>`).join('');
+            return `✅ 已选 <b>${keys.length}</b> 个单元（可跨年级、跨册多选）：<br>` +
+                (tags || '<span style="color:#8a9a7a">还没有选择单元，请至少勾选一个</span>');
+        }
+
+        function openWordSelectModal(key) {
+            const { grade, book, unit } = parseUnitKey(key);
+            const words = getWords(grade, book, unit);
+            const selected = STATE.selectedWordsPerUnit[key] || [];
             const selectedSet = new Set(selected.length > 0 ? selected : words.map(w => w.word));
 
-            wordSelectTitle.textContent = `选择单词 - ${unit}`;
+            wordSelectTitle.textContent = `选择单词 - ${grade}年级${BOOK_LABEL[book]} ${unit}`;
             let html = `
                 <div class="word-list-actions">
                     <button class="select-all">全选</button>
@@ -3685,7 +3749,7 @@
                 });
             });
 
-            wordSelectModal.dataset.unit = unit;
+            wordSelectModal.dataset.key = key;
             wordSelectModal.classList.add('show');
             unitModal.classList.remove('show');
         }
@@ -3703,8 +3767,6 @@
         });
 
         unitModalConfirm.addEventListener('click', () => {
-            const units = getUnits(STATE.grade, STATE.book);
-            STATE.selectedUnits = STATE.selectedUnits.filter(u => units.includes(u));
             if (STATE.selectedUnits.length === 0) {
                 alert('请至少选择一个单元');
                 return;
@@ -3719,18 +3781,10 @@
 
         unitWordSelectBtn.addEventListener('click', () => {
             if (STATE.selectedUnits.length === 0) {
-                const units = getUnits(STATE.grade, STATE.book);
-                if (units.length > 0) {
-                    STATE.selectedUnits = [units[0]];
-                    renderUnitModal();
-                }
-            }
-            if (STATE.selectedUnits.length > 0) {
-                const unit = STATE.selectedUnits[0];
-                openWordSelectModal(unit);
-            } else {
                 alert('请先选择单元');
+                return;
             }
+            openWordSelectModal(STATE.selectedUnits[0]);
         });
 
         wordSelectBack.addEventListener('click', () => {
@@ -3744,39 +3798,28 @@
         });
 
         wordSelectConfirm.addEventListener('click', () => {
-            const unit = wordSelectModal.dataset.unit;
-            if (!unit) return;
+            const key = wordSelectModal.dataset.key;
+            if (!key) return;
             const checkboxes = wordSelectBody.querySelectorAll('.word-checkbox');
             const selected = [];
             checkboxes.forEach(cb => {
                 if (cb.checked) selected.push(cb.value);
             });
-            if (selected.length === 0) {
-                STATE.selectedWordsPerUnit[unit] = [];
-            } else {
-                STATE.selectedWordsPerUnit[unit] = selected;
-            }
+            STATE.selectedWordsPerUnit[key] = selected;
             wordSelectModal.classList.remove('show');
             unitModal.classList.add('show');
             renderUnitModal();
         });
 
         // ================================================================
-        //  11. 年级/册别联动
+        //  11. 练习内容装配（已选单元 -> 词表）
         // ================================================================
-        function populateGrades() {
-            const grades = Object.keys(wordBank);
-            gradeSelect.innerHTML = grades.map(g => `<option value="${g}">${g}年级</option>`).join('');
-            gradeSelect.value = STATE.grade;
-            updateUnits();
-        }
-
         function updateUnits() {
-            STATE.selectedUnits = [];
-            STATE.selectedWordsPerUnit = {};
-            const units = getUnits(STATE.grade, STATE.book);
-            if (units.length > 0) {
-                STATE.selectedUnits = [units[0]];
+            if (STATE.selectedUnits.length === 0) {
+                const units = getUnits(STATE.pickGrade, STATE.pickBook);
+                if (units.length > 0) {
+                    STATE.selectedUnits = [unitKey(STATE.pickGrade, STATE.pickBook, units[0])];
+                }
             }
             renderUnitModal();
             Single.loadWords();
@@ -3784,13 +3827,6 @@
             Multi.renderPlayers();
             Multi.renderQuestion();
             Multi.updateUI();
-        }
-
-        function onUnitChange() {
-            STATE.grade = gradeSelect.value;
-            STATE.book = bookSelect.value;
-            updateUnits();
-            sfx.next();
         }
 
         // ================================================================
@@ -3859,8 +3895,6 @@
         // ================================================================
         //  14. 事件绑定
         // ================================================================
-        gradeSelect.addEventListener('change', onUnitChange);
-        bookSelect.addEventListener('change', onUnitChange);
         glassToggleBtn.addEventListener('click', toggleGlass);
 
         singlePlayBtn.addEventListener('click', () => Single.playAudio());
@@ -3921,11 +3955,6 @@
         // ================================================================
         //  15. 启动
         // ================================================================
-        populateGrades();
-        STATE.grade = '4';
-        STATE.book = 'upper';
-        gradeSelect.value = '4';
-        bookSelect.value = 'upper';
         updateUnits();
         Multi.init();
 
@@ -3950,5 +3979,19 @@
         console.log('🎆 答对时礼花会在对应玩家卡片位置绽放');
         console.log('✨ 高级渲染已启用 iOS 26 风格毛玻璃与高光');
     </script>
+
+<style>
+#__toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);max-width:86vw;
+ background:rgba(24,30,44,.96);color:#ffe6a8;border:1px solid #6b5a2a;border-radius:12px;
+ padding:12px 18px;font-size:14px;line-height:1.5;white-space:pre-line;text-align:center;
+ z-index:99999;box-shadow:0 8px 28px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
+#__toast.on{opacity:1}
+</style>
+<script>
+window.__showToast=function(msg,ms){var el=document.getElementById('__toast');
+ if(!el){el=document.createElement('div');el.id='__toast';document.body.appendChild(el);}
+ el.textContent=msg;el.classList.add('on');clearTimeout(window.__toastTimer);
+ window.__toastTimer=setTimeout(function(){el.classList.remove('on');},ms||2600);};
+</script>
 </body>
 </html>
