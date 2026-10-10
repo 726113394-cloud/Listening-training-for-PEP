@@ -34,9 +34,7 @@
             transition: all 0.4s cubic-bezier(0.34, 1.2, 0.64, 1);
         }
         .header {
-            background: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            background: rgba(255, 255, 255, 0.45);
             padding: 12px 20px;
             display: flex;
             flex-wrap: wrap;
@@ -92,8 +90,6 @@
             transition: all 0.2s;
             font-family: inherit;
             outline: none;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
         }
         .ctrl-group select:hover {
             background: rgba(255, 255, 255, 0.9);
@@ -112,8 +108,6 @@
             cursor: pointer;
             transition: all 0.25s ease;
             font-family: inherit;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
             display: flex;
             align-items: center;
             gap: 6px;
@@ -161,25 +155,28 @@
         }
         .main-content {
             position: relative;
-            min-height: 420px;
+            min-height: 320px;
             padding: 14px 20px 20px;
-            transition: height 0.35s ease;
         }
+        /* 两个面板用 display 切换：隐藏的那个彻底不参与合成，也不用再量高度
+           去改容器高度（那一步会强制重排，在毛玻璃下特别贵）。 */
         .mode-panel {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            opacity: 0;
-            transform: translateY(12px);
-            pointer-events: none;
-            transition: opacity 0.35s ease, transform 0.35s ease;
+            display: none;
             padding: 0 4px;
         }
         .mode-panel.active {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
+            display: block;
+            animation: panelIn 0.3s ease both;
+        }
+        @keyframes panelIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: none;
+            }
         }
 
         /* ===== 单人模式 ===== */
@@ -191,9 +188,7 @@
             gap: 8px;
             margin-bottom: 12px;
             padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.45);
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
@@ -244,9 +239,7 @@
             transform: translateY(-2px) scale(1.02);
         }
         .listening-area {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.55);
             border-radius: 36px;
             padding: 16px 20px 18px;
             border: 1px solid rgba(255, 255, 255, 0.5);
@@ -413,9 +406,7 @@
             margin: 10px 0 8px;
         }
         .option-card {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.8);
             border: 2px solid rgba(180, 200, 140, 0.3);
             border-radius: 40px;
             padding: 12px 10px;
@@ -432,7 +423,7 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            will-change: transform, border-color, background;
+            will-change: transform;
         }
         .option-card .letter {
             background: rgba(180, 200, 140, 0.2);
@@ -555,9 +546,7 @@
             align-items: center;
             margin-bottom: 12px;
             padding: 6px 16px;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
+            background: rgba(255, 255, 255, 0.45);
             border-radius: 40px;
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
@@ -618,9 +607,7 @@
             flex: 1 1 140px;
             max-width: 220px;
             min-width: 120px;
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            background: rgba(255, 255, 255, 0.6);
             border-radius: 28px;
             padding: 10px 12px 12px;
             border: 2px solid rgba(180, 200, 140, 0.2);
@@ -668,8 +655,8 @@
             margin: 4px 0;
         }
         .player-card .p-options button {
-            width: 32px;
-            height: 32px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: 2px solid rgba(180, 200, 140, 0.3);
             background: rgba(255, 255, 255, 0.5);
@@ -783,8 +770,6 @@
             cursor: pointer;
             transition: all 0.25s ease;
             font-family: inherit;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
             min-width: 140px;
             height: 48px;
         }
@@ -828,9 +813,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(40, 60, 20, 0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(40, 60, 20, 0.34);
             display: none;
             justify-content: center;
             align-items: center;
@@ -1120,9 +1103,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(40, 60, 20, 0.3);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(40, 60, 20, 0.34);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -1205,6 +1186,8 @@
             height: 100%;
             pointer-events: none;
             z-index: 9998;
+            /* 独立成一个合成层：粒子每帧重绘就不会把底下毛玻璃带着重算 */
+            contain: layout paint style;
         }
 
         /* ===== 响应式 ===== */
@@ -1252,20 +1235,23 @@
             }
             .main-content {
                 padding: 8px 10px 14px;
-                min-height: 380px;
+                min-height: 300px;
             }
+            /* 学生用平板/手机点，按钮和字都不能小：主按钮 ≥46px、选项 ≥44px */
             .audio-btn {
-                padding: 6px 16px;
-                font-size: 0.75rem;
+                padding: 10px 22px;
+                font-size: 0.9rem;
+                min-height: 46px;
             }
             .action-btn {
-                padding: 6px 16px;
-                font-size: 0.75rem;
+                padding: 10px 22px;
+                font-size: 0.85rem;
+                min-height: 44px;
             }
             .option-card {
-                padding: 8px 6px;
-                min-height: 44px;
-                font-size: 0.85rem;
+                padding: 10px 8px;
+                min-height: 50px;
+                font-size: 0.95rem;
             }
             .modal-card {
                 padding: 16px;
@@ -1280,9 +1266,9 @@
                 padding: 8px 8px 10px;
             }
             .player-card .p-options button {
-                width: 28px;
-                height: 28px;
-                font-size: 0.6rem;
+                width: 36px;
+                height: 36px;
+                font-size: 0.7rem;
             }
             .players-area {
                 gap: 6px;
@@ -1326,9 +1312,9 @@
                 padding: 6px 6px 8px;
             }
             .player-card .p-options button {
-                width: 24px;
-                height: 24px;
-                font-size: 0.5rem;
+                width: 32px;
+                height: 32px;
+                font-size: 0.6rem;
             }
             .player-add-btn {
                 min-width: 100px;
@@ -1345,220 +1331,193 @@
             font-size: 0.75rem;
         }
 
-        /* ===== 高级渲染 (iOS 26 风格) ===== */
+        /* ===== 高级渲染 (iOS 26 风格毛玻璃) =====
+           只有最外层容器和浮层各留一层 backdrop-filter。
+           原来是 43 个元素带毛玻璃、其中 40 个是嵌套的（毛玻璃套毛玻璃），
+           每帧都要把整页反复重新模糊；实测玻璃模式帧耗比普通模式高 30%~45%，
+           低端机直接卡住。子元素改用「半透明 + 高光内描边」表达玻璃质感，
+           视觉效果基本不变，开销降一个量级。 */
         [data-glass="enabled"] body {
             background: radial-gradient(circle at 20% 25%, #e8f5e9, #c8e6c9 60%, #a5d6a7 100%);
         }
         [data-glass="enabled"] .app-container {
-            background: rgba(255, 255, 255, 0.20);
-            backdrop-filter: blur(50px) saturate(200%);
-            -webkit-backdrop-filter: blur(50px) saturate(200%);
+            background: linear-gradient(150deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.12) 45%, rgba(255, 255, 255, 0.30));
+            backdrop-filter: blur(24px) saturate(160%);
+            -webkit-backdrop-filter: blur(24px) saturate(160%);
             border: 1px solid rgba(255, 255, 255, 0.7);
             box-shadow: 0 30px 80px rgba(40, 80, 20, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.8);
             border-radius: 56px;
         }
         [data-glass="enabled"] .header {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.06));
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
             border-radius: 56px 56px 0 0;
         }
         [data-glass="enabled"] .ctrl-group select,
         [data-glass="enabled"] .btn-unit-select,
         [data-glass="enabled"] .mode-toggle {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             color: #1a3a0a;
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
         [data-glass="enabled"] .ctrl-group select:hover,
         [data-glass="enabled"] .btn-unit-select:hover {
-            background: rgba(255, 255, 255, 0.35);
-            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(255, 255, 255, 0.55);
         }
         [data-glass="enabled"] .mode-toggle button.active {
-            background: rgba(139, 195, 74, 0.20);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(139, 195, 74, 0.1);
+            background: rgba(139, 195, 74, 0.22);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
         [data-glass="enabled"] .info-bar,
         [data-glass="enabled"] .multi-topbar {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             border-radius: 48px;
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
-        }
-        [data-glass="enabled"] .listening-area {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            border-radius: 44px;
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
+        [data-glass="enabled"] .listening-area {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 44px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+        }
         [data-glass="enabled"] .status-badge {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.28);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
         [data-glass="enabled"] .status-badge.playing {
-            background: rgba(139, 195, 74, 0.20);
-            border-color: rgba(139, 195, 74, 0.3);
+            background: rgba(139, 195, 74, 0.24);
+            border-color: rgba(139, 195, 74, 0.35);
         }
         [data-glass="enabled"] .audio-btn.primary {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.70), rgba(85, 139, 47, 0.70));
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.15);
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.75), rgba(85, 139, 47, 0.75));
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 4px 20px rgba(139, 195, 74, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
         [data-glass="enabled"] .audio-btn.primary:hover:not(:disabled) {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.85), rgba(85, 139, 47, 0.85));
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.88), rgba(85, 139, 47, 0.88));
             box-shadow: 0 8px 30px rgba(139, 195, 74, 0.25);
         }
         [data-glass="enabled"] .audio-btn.secondary {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
         }
         [data-glass="enabled"] .audio-btn.secondary:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.4);
         }
         [data-glass="enabled"] .option-card {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 2px solid rgba(255, 255, 255, 0.10);
-            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+            background: rgba(255, 255, 255, 0.14);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
         }
         [data-glass="enabled"] .option-card:hover:not(.disabled) {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(139, 195, 74, 0.3);
-            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.06);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(139, 195, 74, 0.4);
+            box-shadow: 0 8px 24px rgba(139, 195, 74, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.5);
         }
         [data-glass="enabled"] .option-card .letter {
-            background: rgba(255, 255, 255, 0.10);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
         [data-glass="enabled"] .option-card.correct {
-            background: rgba(102, 187, 106, 0.15);
-            border-color: rgba(102, 187, 106, 0.3);
+            background: rgba(102, 187, 106, 0.22);
+            border-color: rgba(102, 187, 106, 0.4);
         }
         [data-glass="enabled"] .option-card.wrong {
-            background: rgba(239, 83, 80, 0.12);
-            border-color: rgba(239, 83, 80, 0.25);
+            background: rgba(239, 83, 80, 0.18);
+            border-color: rgba(239, 83, 80, 0.35);
         }
         [data-glass="enabled"] .action-btn.reset {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.16);
         }
         [data-glass="enabled"] .action-btn.reset:hover {
-            background: rgba(255, 255, 255, 0.20);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.26);
+            border-color: rgba(255, 255, 255, 0.28);
         }
-        [data-glass="enabled"] .modal-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(50px);
-            -webkit-backdrop-filter: blur(50px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+        /* 浮层这两处保留毛玻璃：它们在最高层，不会跟别的毛玻璃嵌套。
+           模糊半径从 50px 收到 24px —— 半径是开销大头。 */
+        [data-glass="enabled"] .modal-card,
+        [data-glass="enabled"] .history-card,
+        [data-glass="enabled"] .rank-card {
+            background: rgba(255, 255, 255, 0.22);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
             border-radius: 56px;
             box-shadow: 0 30px 60px rgba(0, 0, 0, 0.05);
         }
-        [data-glass="enabled"] .modal-card .modal-footer .btn-confirm {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        [data-glass="enabled"] .modal-card .modal-footer .btn-confirm,
+        [data-glass="enabled"] .history-close,
+        [data-glass="enabled"] .rank-close {
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.70), rgba(85, 139, 47, 0.70));
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
         [data-glass="enabled"] .modal-card .modal-footer .btn-cancel,
         [data-glass="enabled"] .modal-card .modal-footer .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.16);
         }
         [data-glass="enabled"] .unit-item,
         [data-glass="enabled"] .word-item {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
         [data-glass="enabled"] .player-card {
-            background: rgba(255, 255, 255, 0.10);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 2px solid rgba(255, 255, 255, 0.10);
-            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.16);
+            border: 2px solid rgba(255, 255, 255, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
         [data-glass="enabled"] .player-card .p-options button {
-            background: rgba(255, 255, 255, 0.12);
-            border-color: rgba(255, 255, 255, 0.10);
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.14);
         }
         [data-glass="enabled"] .player-card .p-options button:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.26);
         }
         [data-glass="enabled"] .player-card.card-correct {
-            border-color: rgba(102, 187, 106, 0.3);
-            background: rgba(102, 187, 106, 0.08);
+            border-color: rgba(102, 187, 106, 0.4);
+            background: rgba(102, 187, 106, 0.14);
         }
         [data-glass="enabled"] .player-card.card-wrong {
-            border-color: rgba(239, 83, 80, 0.2);
-            background: rgba(239, 83, 80, 0.05);
+            border-color: rgba(239, 83, 80, 0.3);
+            background: rgba(239, 83, 80, 0.1);
         }
         [data-glass="enabled"] .player-add-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border-color: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .player-add-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.25);
-        }
-        [data-glass="enabled"] .history-card,
-        [data-glass="enabled"] .rank-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(50px);
-            -webkit-backdrop-filter: blur(50px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            border-radius: 56px;
-        }
-        [data-glass="enabled"] .history-close,
-        [data-glass="enabled"] .rank-close {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
         }
         [data-glass="enabled"] .info-item .num {
-            background: rgba(139, 195, 74, 0.10);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: rgba(139, 195, 74, 0.16);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
         }
         [data-glass="enabled"] .info-item .score-num {
-            background: linear-gradient(135deg, rgba(255, 183, 77, 0.60), rgba(255, 138, 101, 0.60));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: linear-gradient(135deg, rgba(255, 183, 77, 0.7), rgba(255, 138, 101, 0.7));
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
         [data-glass="enabled"] .logo {
             color: #1a3a0a;
         }
         [data-glass="enabled"] .logo span {
-            background: linear-gradient(135deg, rgba(139, 195, 74, 0.60), rgba(85, 139, 47, 0.60));
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: linear-gradient(135deg, rgba(139, 195, 74, 0.7), rgba(85, 139, 47, 0.7));
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         [data-glass="enabled"] .multi-options-area {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.14);
         }
         [data-glass="enabled"] .multi-options-area .opt-labels span {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.14);
         }
 
         /* ===== 微动效增强 ===== */
@@ -1581,6 +1540,48 @@
 
         [data-glass="enabled"] .player-card .p-options button:active:not(:disabled) {
             animation: ripple 0.3s ease;
+        }
+
+        /* ===== 低配档位 / 系统减弱动效 =====
+           低配设备或系统开了「减弱动态效果」时，毛玻璃和装饰性动画都让步，
+           功能反馈（对错配色、状态文字、提示）一律保留。 */
+        [data-perf="low"][data-glass="enabled"] .app-container {
+            background: rgba(255, 255, 255, 0.30);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        [data-perf="low"] .option-card,
+        [data-perf="low"] .audio-btn,
+        [data-perf="low"] .action-btn,
+        [data-perf="low"] .btn-unit-select,
+        [data-perf="low"] .info-actions .history-btn {
+            transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+        }
+        [data-perf="low"] .option-card:hover:not(.disabled),
+        [data-perf="low"] .option-card.selected,
+        [data-perf="low"] .audio-btn.primary:hover:not(:disabled),
+        [data-perf="low"] .audio-btn.secondary:hover:not(:disabled),
+        [data-perf="low"] .action-btn.reset:hover,
+        [data-perf="low"] .btn-unit-select:hover,
+        [data-perf="low"] .info-actions .history-btn:hover {
+            transform: none;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .mode-panel.active,
+            .modal-overlay,
+            .history-modal,
+            .status-badge.playing,
+            .status-badge.correct,
+            .status-badge.wrong,
+            .status-badge.multi-correct,
+            .status-badge.multi-wrong,
+            .option-card.correct,
+            .option-card.wrong,
+            .num.bump,
+            .score-num.bump {
+                animation: none !important;
+            }
         }
         @keyframes ripple {
             0% {
@@ -1608,7 +1609,7 @@
                 <button class="btn-unit-select" id="unitSelectBtn">
                     📌 选择单元 <span class="badge" id="unitBadge">0</span>
                 </button>
-                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:3px 10px;font-size:1rem;cursor:pointer;transition:all 0.25s ease;font-family:inherit;backdrop-filter:blur(4px);" aria-label="切换高级渲染">💎</button>
+                <button id="glassToggleBtn" style="background:rgba(255,255,255,0.3);border:1px solid rgba(180,200,140,0.2);border-radius:30px;padding:3px 10px;font-size:1rem;cursor:pointer;transition:all 0.25s ease;font-family:inherit;" aria-label="切换高级渲染">💎</button>
             </div>
         </header>
 
@@ -2493,8 +2494,23 @@
             return shuffle(selected);
         }
 
+        // Windows(NTFS) 文件名大小写不敏感、Linux(GitHub Pages) 大小写敏感：
+        // may（情态动词「可以」）与 May（五月）读音相同、生成时共用了 May.mp3，
+        // 在 Windows 上跑得通，传到 GitHub Pages 就 404。这里显式指个别名。
+        const AUDIO_FILE_ALIAS = { 'may': 'May' };
+
         function getAudioUrl(word) {
-            return `./audio/${encodeURIComponent(word)}.mp3`;
+            const name = AUDIO_FILE_ALIAS[word] || word;
+            return `./audio/${encodeURIComponent(name)}.mp3`;
+        }
+
+        function audioFolderHint() {
+            const online = location.protocol !== 'file:';
+            return '⚠️ 连续几条录音都读不到\n' +
+                (online
+                    ? '网站上的 audio 文件夹可能没传全，\n请检查服务器上的 audio 目录。'
+                    : '请确认「听力练习场.html」和 audio 文件夹在同一目录，\n不要把网页单独拷走。') +
+                '\n修好后点「重新开始」即可。';
         }
 
         // ================================================================
@@ -2505,6 +2521,7 @@
             playTone(freq, dur, type = 'sine', vol = 0.2) {
                 try {
                     if (!this.ctx) this.ctx = new(window.AudioContext || window.webkitAudioContext)();
+                    if (this.ctx.state === 'suspended') this.ctx.resume();   // 切过标签页后不唤醒就没声
                     const osc = this.ctx.createOscillator();
                     const gain = this.ctx.createGain();
                     osc.type = type;
@@ -2531,185 +2548,232 @@
             }
         };
 
+        // 礼花画布：整屏 fixed 的 canvas。每帧重绘都会牵连底下的毛玻璃重算，
+        // 所以限粒子数、按颜色预生成填充色、原地回收粒子，且只在真有粒子时跑 rAF。
         const fwCanvas = document.getElementById('fireworkCanvas');
         const fwCtx = fwCanvas.getContext('2d');
+        const FW_COLORS = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#9b59b6', '#ff8a5c', '#a29bfe', '#8bc34a'];
+        // 每种颜色预生成 8 档透明度的填充色，省掉每帧拼字符串和切 globalAlpha
+        const FW_FILLS = FW_COLORS.map(function (hex) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            const arr = [];
+            for (let k = 1; k <= 8; k++) arr.push('rgba(' + r + ',' + g + ',' + b + ',' + (k / 8).toFixed(3) + ')');
+            return arr;
+        });
+        // 减弱动效就不放礼花了；低配设备把粒子上限砍一半
+        const FW_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const FW_LOWPOWER = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+        const FW_MAX = FW_REDUCED ? 0 : (FW_LOWPOWER ? 160 : 320);
         let fwParticles = [];
         let fwAnimId = null;
+        let fwResizeRaf = null;
 
-        function resizeFw() { fwCanvas.width = window.innerWidth;
-            fwCanvas.height = window.innerHeight; }
-        window.addEventListener('resize', resizeFw);
+        function resizeFw() {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            if (fwCanvas.width === w && fwCanvas.height === h) return;  // 没变就别动，改尺寸会清空画布
+            fwCanvas.width = w;
+            fwCanvas.height = h;
+        }
+        function scheduleFwResize() {
+            if (fwResizeRaf) return;
+            fwResizeRaf = requestAnimationFrame(function () { fwResizeRaf = null; resizeFw(); });
+        }
+        window.addEventListener('resize', scheduleFwResize, { passive: true });
+        window.addEventListener('orientationchange', scheduleFwResize, { passive: true });
         resizeFw();
 
-        class FwParticle {
-            constructor(x, y) {
-                this.x = x;
-                this.y = y;
-                const colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#9b59b6', '#ff8a5c', '#a29bfe', '#8bc34a'];
-                this.color = colors[Math.floor(Math.random() * colors.length)];
-                this.size = 3 + Math.random() * 4;
-                this.vx = (Math.random() - 0.5) * 8;
-                this.vy = (Math.random() - 0.5) * 8 - 2;
-                this.gravity = 0.15;
-                this.alpha = 1;
-                this.decay = 0.015 + Math.random() * 0.025;
-            }
-            update() {
-                this.vy += this.gravity;
-                this.x += this.vx;
-                this.y += this.vy;
-                this.alpha -= this.decay;
-                return this.alpha > 0;
-            }
-            draw() {
-                fwCtx.globalAlpha = this.alpha;
-                fwCtx.fillStyle = this.color;
-                fwCtx.beginPath();
-                fwCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                fwCtx.fill();
-                fwCtx.globalAlpha = 1;
-            }
-        }
-
         function firework(x, y) {
-            for (let i = 0; i < 60; i++) fwParticles.push(new FwParticle(x, y));
+            if (!FW_MAX) return;
+            const room = FW_MAX - fwParticles.length;
+            if (room <= 0) return;
+            const n = Math.min(56, room);
+            for (let i = 0; i < n; i++) {
+                fwParticles.push({
+                    x: x, y: y,
+                    ci: (Math.random() * FW_COLORS.length) | 0,
+                    r: 3 + Math.random() * 4,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8 - 2,
+                    a: 1,
+                    d: 0.015 + Math.random() * 0.025
+                });
+            }
             if (!fwAnimId) fwAnimId = requestAnimationFrame(animateFw);
         }
 
         function animateFw() {
+            fwAnimId = null;
             fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height);
-            let alive = false;
-            for (const p of fwParticles) {
-                if (p.update()) { alive = true;
-                    p.draw(); }
+
+            let n = 0;
+            for (let i = 0; i < fwParticles.length; i++) {
+                const p = fwParticles[i];
+                p.vy += 0.15;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.a -= p.d;
+                if (p.a > 0) fwParticles[n++] = p;    // 原地压缩，不产生垃圾对象
             }
-            fwParticles = fwParticles.filter(p => p.alpha > 0);
-            if (alive) fwAnimId = requestAnimationFrame(animateFw);
-            else { fwAnimId = null;
-                fwCtx.clearRect(0, 0, fwCanvas.width, fwCanvas.height); }
+            fwParticles.length = n;
+            if (!n) return;
+
+            for (let i = 0; i < n; i++) {
+                const p = fwParticles[i];
+                fwCtx.fillStyle = FW_FILLS[p.ci][Math.min(7, (p.a * 8) | 0)];
+                fwCtx.beginPath();
+                fwCtx.arc(p.x, p.y, p.r, 0, 6.2832);
+                fwCtx.fill();
+            }
+            fwAnimId = requestAnimationFrame(animateFw);
         }
 
         function showFirework(el) {
             if (!el) return;
             const r = el.getBoundingClientRect();
+            if (!r.width && !r.height) return;   // 隐藏的面板，别在左上角炸一朵
             firework(r.left + r.width / 2, r.top + r.height / 3);
+        }
+
+        function activeListeningArea() {
+            return document.querySelector('.mode-panel.active .listening-area') ||
+                document.querySelector('.listening-area');
         }
 
         // ================================================================
         //  4. 音频引擎
         // ================================================================
+        //  三条铁律（都是踩过的坑，别改回去）：
+        //  1) 全站只用一个 <audio>，反复换 src —— 不要每条 new Audio()。
+        //  2) 绝不写 audio.src = ''。置空会让媒体元素把「当前目录 / 当前网页」当成
+        //     媒体重新加载，再触发一次 error，而 onerror 里又置空 ——
+        //     error → 置空 → error 同步递归下去。实测 1.5 秒能打出 9 万次 error
+        //     事件，全在主线程，浏览器就是这么卡死的。
+        //  3) 不做「先探测文件在不在」的预检。原来用 oncanplaythrough + 2 秒超时
+        //     预检，网络稍慢就误报「缺少录音」。能不能播，让 play() 自己说。
         const AudioEngine = {
-            audio: null,
-            isPlaying: false,
-            word: '',
-            useTTS: false,
+            el: null,
+            playing: false,
+            missing: new Set(),     // 本次会话里确认读不到录音的词，之后不再重复请求
+            failStreak: 0,          // 连续失败次数，用来识别「整个 audio 文件夹都不在」
+            _seq: 0,
+            _pumping: false,
+            _warmList: [],
+            _warmed: new Set(),
 
-            checkAudioFile(word) {
-                return new Promise((resolve) => {
-                    const url = getAudioUrl(word);
-                    const audio = new Audio();
-                    audio.preload = 'none';
-                    const timeout = setTimeout(() => {
-                        audio.src = '';
-                        resolve(false);
-                    }, 2000);
-                    audio.oncanplaythrough = () => {
-                        clearTimeout(timeout);
-                        audio.src = '';
-                        resolve(true);
-                    };
-                    audio.onerror = () => {
-                        clearTimeout(timeout);
-                        audio.src = '';
-                        resolve(false);
-                    };
-                    audio.src = url;
-                    audio.load();
-                });
+            _el() {
+                if (!this.el) {
+                    const el = document.createElement('audio');
+                    el.preload = 'auto';
+                    el.setAttribute('playsinline', '');
+                    this.el = el;
+                }
+                return this.el;
             },
 
-            play(word, onStart, onEnd) {
-                return new Promise(async (resolve) => {
-                    this.stop();
-                    this.word = word;
+            // 播放一条录音，结束后回调 done(status)
+            //   'ended'   正常放完
+            //   'missing' 媒体明确报错（404 / 解不了码）
+            //   'failed'  起播超时或中途卡住
+            //   'blocked' 被浏览器自动播放策略拦下（录音本身没问题）
+            play(word, done) {
+                this.stop();
+                const seq = ++this._seq;
 
-                    const hasFile = await this.checkAudioFile(word);
-                    if (hasFile) {
-                        this.useTTS = false;
-                        this.audio = new Audio(getAudioUrl(word));
-                        this.audio.oncanplaythrough = () => {
-                            if (onStart) onStart();
-                        };
-                        this.audio.onended = () => {
-                            this.isPlaying = false;
-                            if (onEnd) onEnd();
-                            resolve();
-                        };
-                        this.audio.onerror = () => {
-                            this.isPlaying = false;
-                            this.playTTS(word, onStart, onEnd).then(resolve);
-                        };
-                        this.audio.play().catch(() => {
-                            this.isPlaying = false;
-                            this.playTTS(word, onStart, onEnd).then(resolve);
-                        });
-                        this.isPlaying = true;
-                    } else {
-                        this.playTTS(word, onStart, onEnd).then(resolve);
-                    }
-                });
+                // 已经确认读不到的，直接跳过，不再打一次网络请求
+                if (this.missing.has(word)) {
+                    this.failStreak++;
+                    setTimeout(() => { if (seq === this._seq && done) done('missing'); }, 0);
+                    return;
+                }
+
+                const el = this._el();
+                let settled = false;
+                let startTimer = null;
+                let runTimer = null;
+
+                const finish = (status) => {
+                    if (settled || seq !== this._seq) return;
+                    settled = true;
+                    clearTimeout(startTimer);
+                    clearTimeout(runTimer);
+                    el.onended = el.onerror = el.onplaying = null;
+                    this.playing = false;
+                    if (status === 'ended') this.failStreak = 0;
+                    else if (status === 'missing') { this.failStreak++; this.missing.add(word); }
+                    else if (status === 'failed') this.failStreak++;
+                    if (done) done(status);
+                };
+
+                el.onended = () => finish('ended');
+                // 只有「媒体明确报错」才当作缺录音。abort / stalled 是换 src、网络抖动
+                // 这类生命周期噪音，听进去就会把好端端的题当缺录音跳掉；
+                // 真卡住的情况一律交给下面 6 秒的起播超时兜底。
+                el.onerror = () => finish('missing');          // ← 只收尾，绝不动 src
+                el.onplaying = () => {                          // 真出声了，撤掉起播超时
+                    clearTimeout(startTimer);
+                    startTimer = null;
+                    const dur = isFinite(el.duration) && el.duration > 0 ? el.duration : 12;
+                    runTimer = setTimeout(() => finish('failed'), (dur + 8) * 1000);
+                };
+                startTimer = setTimeout(() => finish('failed'), 6000);
+
+                const src = getAudioUrl(word);
+                if (el.getAttribute('src') !== src) el.setAttribute('src', src);
+                else if (el.currentTime > 0) { try { el.currentTime = 0; } catch (_) {} }
+
+                this.playing = true;
+                let p = null;
+                try { p = el.play(); } catch (_) { finish('failed'); }
+                if (p && p.catch) {
+                    p.catch((err) => {
+                        finish(err && err.name === 'NotAllowedError' ? 'blocked' : 'missing');
+                    });
+                }
             },
 
-            playTTS(word, onStart, onEnd) {
-                // 本版本已移除网页语音合成（语音合成）。
-                // 每个单词都必须有录音文件：./audio/<单词>.mp3
-                // 缺录音时明确报错，不再用 TTS 顶替，避免学生听到机器腔或错音。
-                return new Promise((resolve) => {
-                    this.useTTS = true;          // 语义变为「本条没有录音」
-                    // 连续多条都缺，几乎肯定是「audio 文件夹没和网页放在一起」，
-                    // 而不是个别单词漏录 —— 直接说清楚，省得逐条排查。
-                    window.__missCount = (window.__missCount || 0) + 1;
-                    if (window.__missCount === 1) {
-                        window.__missUrl = './audio/' + encodeURIComponent(word) + '.mp3';
+            // 后台预取这一轮的录音，让后面的题一点就响。
+            // 正在播放时自动让路，不跟当前这条抢带宽；file:// 下 fetch 用不了，跳过。
+            warm(words) {
+                if (location.protocol === 'file:' || typeof fetch !== 'function') return;
+                const list = this._warmList;
+                for (const w of (words || [])) {
+                    if (w && !this.missing.has(w) && !this._warmed.has(w)) {
+                        this._warmed.add(w);
+                        if (list.length < 240) list.push(w);
                     }
-                    if (window.__missCount === 3) {
-                        var probe = new Image();
-                        probe.onerror = function () {};   // 只为触发一次探测
-                        fetch(window.__missUrl, { method: 'HEAD' })
-                            .then(function (r) {
-                                window.__showToast(
-                                    '⚠️ 找不到音频文件夹\n请确认网页和 audio 文件夹在同一目录\n' +
-                                    '（在「听力练习场」文件夹里，直接双击 听力练习场.html）', 6000);
-                            })
-                            .catch(function () {
-                                window.__showToast(
-                                    '⚠️ 找不到音频文件夹\n请确认网页和 audio 文件夹在同一目录\n' +
-                                    '（在「听力练习场」文件夹里，直接双击 听力练习场.html）', 6000);
-                            });
-                    } else if (window.__missCount < 3) {
-                        window.__showToast('⚠️ 缺少录音：' + word + '\n（需要 ./audio/' +
-                                           word + '.mp3）');
-                    }
-                    console.warn('[听力练习场] 缺少录音文件:', word,
-                                 '-> 期望 ./audio/' + word + '.mp3');
-                    if (onStart) onStart();
-                    if (onEnd) onEnd();
-                    resolve();
-                });
+                }
+                if (!this._pumping && list.length) {
+                    this._pumping = true;
+                    setTimeout(() => this._pumpWarm(), 1500);
+                }
+            },
+
+            _pumpWarm() {
+                if (this.playing) { setTimeout(() => this._pumpWarm(), 1200); return; }
+                const list = this._warmList;
+                if (!list.length) { this._pumping = false; return; }
+                const batch = list.splice(0, 2);
+                Promise.all(batch.map(w =>
+                    fetch(getAudioUrl(w), { cache: 'force-cache' }).catch(() => {})
+                )).then(() => setTimeout(() => this._pumpWarm(), 120));
             },
 
             stop() {
-                if (this.audio) {
-                    this.audio.pause();
-                    this.audio.currentTime = 0;
-                    this.audio = null;
+                this._seq++;                 // 让上一轮的回调全部失效
+                const el = this.el;
+                if (el) {
+                    el.onended = el.onerror = el.onplaying = null;
+                    try { el.pause(); } catch (_) {}
                 }
-                
-                this.isPlaying = false;
+                this.playing = false;
             },
 
-            isPlayingNow() {
-                return this.isPlaying;
+            reset() {                        // 换一轮练习：清失败计数，保留已预取记录
+                this.stop();
+                this.failStreak = 0;
             }
         };
 
@@ -2722,6 +2786,7 @@
             pickGrade: '4',
             pickBook: 'upper',
             glass: false,
+            audioBlocked: false,          // 连续读不到录音时暂停整轮，避免盲跳完
             selectedUnits: [],
             selectedWordsPerUnit: {},
             single: {
@@ -2814,7 +2879,6 @@
         const modeBtns = document.querySelectorAll('.mode-toggle button');
         const singlePanel = $('singlePanel');
         const multiPanel = $('multiPanel');
-        const mainContent = $('mainContent');
 
         // ================================================================
         //  7. 单人模式 (保持不变)
@@ -2860,6 +2924,9 @@
                     clearTimeout(STATE.single.autoNextTimer);
                     STATE.single.autoNextTimer = null;
                 }
+                STATE.audioBlocked = false;
+                AudioEngine.reset();
+                AudioEngine.warm(STATE.single.words.map(w => w.word));
                 this.updateUI();
                 this.renderQuestion();
                 this.updateUnitBadge();
@@ -2982,69 +3049,91 @@
                 }, delay);
             },
 
+            // 播放的唯一入口；录音读不到时的收尾见 audioFinished
             playAudio() {
-                if (STATE.single.audioLock) return;
+                this._play('🔊 播放中 ...');
+            },
+
+            replayAudio() {
+                if (STATE.single.answered) return;
+                this._play('🔊 再听一次 ...');
+            },
+
+            _play(label) {
+                if (STATE.single.audioLock || STATE.audioBlocked) return;
                 const words = STATE.single.words;
                 const idx = STATE.single.index;
                 if (idx >= words.length) return;
                 if (STATE.single.isPlaying) return;
-                const word = words[idx].word;
 
+                const word = words[idx].word;
                 STATE.single.audioLock = true;
                 STATE.single.isPlaying = true;
                 singlePlayBtn.disabled = true;
                 singleReplayBtn.disabled = true;
-                singleStatus.textContent = '🔊 播放中 ...';
+                singleStatus.textContent = label;
                 singleStatus.className = 'status-badge playing';
 
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.single.isPlaying = false;
-                        STATE.single.audioLock = false;
-                        singlePlayBtn.disabled = false;
-                        singleReplayBtn.disabled = false;
-                        if (!STATE.single.answered) {
-                            singleStatus.textContent = '🔊 播放完毕，请选择答案';
-                            singleStatus.className = 'status-badge done';
-                            STATE.single.played = true;
-                        }
-                    }
-                );
+                AudioEngine.play(word, (status) => this.audioFinished(status, word));
             },
 
-            replayAudio() {
-                if (STATE.single.audioLock) return;
+            audioFinished(status, word) {
+                STATE.single.isPlaying = false;
+                STATE.single.audioLock = false;
+                singlePlayBtn.disabled = false;
+                singleReplayBtn.disabled = false;
                 if (STATE.single.answered) return;
-                const words = STATE.single.words;
-                const idx = STATE.single.index;
-                if (idx >= words.length) return;
-                const word = words[idx].word;
 
-                STATE.single.audioLock = true;
-                STATE.single.isPlaying = true;
-                singlePlayBtn.disabled = true;
-                singleReplayBtn.disabled = true;
-                singleStatus.textContent = '🔊 再听一次 ...';
-                singleStatus.className = 'status-badge playing';
+                if (status === 'ended') {
+                    singleStatus.textContent = '🔊 播放完毕，请选择答案';
+                    singleStatus.className = 'status-badge done';
+                    STATE.single.played = true;
+                    return;
+                }
 
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.single.isPlaying = false;
-                        STATE.single.audioLock = false;
-                        singlePlayBtn.disabled = false;
-                        singleReplayBtn.disabled = false;
-                        if (!STATE.single.answered) {
-                            singleStatus.textContent = '🔊 播放完毕，请选择答案';
-                            singleStatus.className = 'status-badge done';
-                        }
-                    }
-                );
+                if (status === 'blocked') {
+                    // 浏览器自己的自动播放策略拦下的，跟录音文件无关
+                    singleReplayBtn.disabled = true;
+                    singleStatus.textContent = '🔇 浏览器拦下了自动播放，请再点一次「开始练习」';
+                    singleStatus.className = 'status-badge';
+                    return;
+                }
+
+                this.skipUnplayable(word);
             },
 
-            next() {
-                if (!STATE.single.answered) return;
+            // 录音读不到：讲清楚、记一笔、自动跳过，绝不让练习停在原地
+            skipUnplayable(word) {
+                singlePlayBtn.disabled = true;
+                singleReplayBtn.disabled = true;
+
+                // 连着三条都读不到，基本可以断定是「audio 文件夹没跟网页在一起」，
+                // 而不是个别词漏录 —— 停下来说清楚，别把整套题盲跳完。
+                if (AudioEngine.failStreak >= 3) {
+                    STATE.audioBlocked = true;
+                    singleStatus.textContent = '⚠️ 连续读不到录音，练习已暂停';
+                    singleStatus.className = 'status-badge wrong';
+                    window.__showToast(audioFolderHint(), 9000);
+                    return;
+                }
+
+                singleStatus.textContent = '⚠️ 这条录音读不到，已自动跳过';
+                singleStatus.className = 'status-badge wrong';
+                window.__showToast('⚠️ 缺少录音：' + word + '\n需要 ./audio/' + word +
+                    '.mp3\n已跳过这一题，练习继续', 4000);
+
+                const w = STATE.single.words[STATE.single.index] || { word: word, meaning: '' };
+                STATE.single.history.push({
+                    word: w.word, meaning: w.meaning, correct: false,
+                    skipped: true, timestamp: Date.now()
+                });
+
+                if (STATE.single.autoNextTimer) clearTimeout(STATE.single.autoNextTimer);
+                STATE.single.autoNextTimer = setTimeout(() => this.next(true), 1500);
+            },
+
+            next(force) {
+                if (!STATE.single.answered && !force) return;
                 STATE.single.index++;
                 if (STATE.single.index >= STATE.single.words.length) {
                     this.renderQuestion();
@@ -3053,13 +3142,13 @@
                     singlePlayBtn.disabled = true;
                     singleReplayBtn.disabled = true;
                     sfx.cheer();
-                    showFirework(document.querySelector('.listening-area'));
+                    showFirework(activeListeningArea());
                     return;
                 }
                 sfx.next();
                 this.renderQuestion();
                 setTimeout(() => {
-                    if (!STATE.single.answered && !STATE.single.isPlaying) {
+                    if (!STATE.single.answered && !STATE.single.isPlaying && !STATE.audioBlocked) {
                         this.playAudio();
                     }
                 }, 400);
@@ -3127,16 +3216,18 @@
                     el.addEventListener('click', () => {
                         const idx = parseInt(el.dataset.index);
                         const item = history[idx];
-                        AudioEngine.play(item.word,
-                            () => {
-                                singleStatus.textContent = `🔊 重听 "${item.word}" (复习)`;
-                                singleStatus.className = 'status-badge playing';
-                            },
-                            () => {
-                                singleStatus.textContent = `🔊 播放完毕 (复习)`;
+                        AudioEngine.play(item.word, (status) => {
+                            if (status === 'ended') {
+                                singleStatus.textContent = '🔊 播放完毕 (复习)';
                                 singleStatus.className = 'status-badge done';
+                            } else if (status === 'blocked') {
+                                singleStatus.textContent = '🔇 浏览器拦下了自动播放，请再点一次';
+                                singleStatus.className = 'status-badge';
+                            } else {
+                                singleStatus.textContent = '⚠️ 找不到 “' + item.word + '” 的录音';
+                                singleStatus.className = 'status-badge wrong';
                             }
-                        );
+                        });
                     });
                 });
 
@@ -3233,6 +3324,9 @@
                 STATE.multi.players.forEach(p => {
                     STATE.multi.playerStatus[p.id] = 'pending';
                 });
+                STATE.audioBlocked = false;
+                AudioEngine.reset();
+                AudioEngine.warm(STATE.multi.words.map(w => w.word));
                 this.renderPlayers();
                 this.renderQuestion();
                 this.updateUI();
@@ -3252,7 +3346,7 @@
                     multiProgress.textContent = `${Math.min(idx, words.length)}/${total}`;
                     if (idx >= total || idx >= words.length) {
                         sfx.cheer();
-                        showFirework(document.querySelector('.listening-area'));
+                        showFirework(activeListeningArea());
                     }
                     return;
                 }
@@ -3423,7 +3517,7 @@
                     if (cardEl) {
                         setTimeout(() => showFirework(cardEl), 200);
                     } else {
-                        showFirework(document.querySelector('.listening-area'));
+                        showFirework(activeListeningArea());
                     }
                     const wordObj = STATE.multi.words[STATE.multi.index];
                     STATE.multi.history.push({
@@ -3476,66 +3570,78 @@
             },
 
             playAudio() {
-                if (STATE.multi.audioLock) return;
+                this._play('🔊 播放中 ...');
+            },
+
+            replayAudio() {
+                if (STATE.multi.answered || STATE.multi.allWrong) return;
+                this._play('🔊 再听一次 ...');
+            },
+
+            _play(label) {
+                if (STATE.multi.audioLock || STATE.audioBlocked) return;
                 const words = STATE.multi.words;
                 const idx = STATE.multi.index;
                 const total = parseInt(multiTotalInput.value) || 10;
                 if (idx >= total || idx >= words.length) return;
                 if (STATE.multi.isPlaying) return;
-                const word = words[idx].word;
 
+                const word = words[idx].word;
                 STATE.multi.audioLock = true;
                 STATE.multi.isPlaying = true;
                 multiPlayBtn.disabled = true;
                 multiReplayBtn.disabled = true;
-                multiStatus.textContent = '🔊 播放中 ...';
+                multiStatus.textContent = label;
                 multiStatus.className = 'status-badge playing';
 
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.multi.isPlaying = false;
-                        STATE.multi.audioLock = false;
-                        multiPlayBtn.disabled = false;
-                        multiReplayBtn.disabled = false;
-                        if (!STATE.multi.answered && !STATE.multi.allWrong) {
-                            multiStatus.textContent = '🔊 播放完毕，开始抢答！点击玩家卡片上的 A/B/C';
-                            multiStatus.className = 'status-badge multi-wait';
-                            STATE.multi.played = true;
-                        }
-                    }
-                );
+                AudioEngine.play(word, (status) => this.audioFinished(status, word));
             },
 
-            replayAudio() {
-                if (STATE.multi.audioLock) return;
+            audioFinished(status, word) {
+                STATE.multi.isPlaying = false;
+                STATE.multi.audioLock = false;
+                multiPlayBtn.disabled = false;
+                multiReplayBtn.disabled = false;
                 if (STATE.multi.answered || STATE.multi.allWrong) return;
-                const words = STATE.multi.words;
-                const idx = STATE.multi.index;
-                const total = parseInt(multiTotalInput.value) || 10;
-                if (idx >= total || idx >= words.length) return;
-                const word = words[idx].word;
 
-                STATE.multi.audioLock = true;
-                STATE.multi.isPlaying = true;
+                if (status === 'ended') {
+                    multiStatus.textContent = '🔊 播放完毕，开始抢答！点击玩家卡片上的 A/B/C';
+                    multiStatus.className = 'status-badge multi-wait';
+                    STATE.multi.played = true;
+                    return;
+                }
+
+                if (status === 'blocked') {
+                    multiReplayBtn.disabled = true;
+                    multiStatus.textContent = '🔇 浏览器拦下了自动播放，请再点一次「开始练习」';
+                    multiStatus.className = 'status-badge';
+                    return;
+                }
+
+                this.skipUnplayable(word);
+            },
+
+            // 录音读不到：说清楚、跳过，绝不让抢答卡在这一题
+            skipUnplayable(word) {
                 multiPlayBtn.disabled = true;
                 multiReplayBtn.disabled = true;
-                multiStatus.textContent = '🔊 再听一次 ...';
-                multiStatus.className = 'status-badge playing';
 
-                AudioEngine.play(word,
-                    () => {},
-                    () => {
-                        STATE.multi.isPlaying = false;
-                        STATE.multi.audioLock = false;
-                        multiPlayBtn.disabled = false;
-                        multiReplayBtn.disabled = false;
-                        if (!STATE.multi.answered && !STATE.multi.allWrong) {
-                            multiStatus.textContent = '🔊 播放完毕，继续抢答！';
-                            multiStatus.className = 'status-badge multi-wait';
-                        }
-                    }
-                );
+                // 连着三条都读不到，基本可以断定是「audio 文件夹没跟网页在一起」
+                if (AudioEngine.failStreak >= 3) {
+                    STATE.audioBlocked = true;
+                    multiStatus.textContent = '⚠️ 连续读不到录音，练习已暂停';
+                    multiStatus.className = 'status-badge multi-wrong';
+                    window.__showToast(audioFolderHint(), 9000);
+                    return;
+                }
+
+                multiStatus.textContent = '⚠️ 这条录音读不到，已自动跳过';
+                multiStatus.className = 'status-badge multi-wrong';
+                window.__showToast('⚠️ 缺少录音：' + word + '\n需要 ./audio/' + word +
+                    '.mp3\n已跳过这一题，练习继续', 4000);
+
+                if (STATE.multi.autoNextTimer) clearTimeout(STATE.multi.autoNextTimer);
+                STATE.multi.autoNextTimer = setTimeout(() => this.next(), 1500);
             },
 
             next() {
@@ -3548,13 +3654,14 @@
                     multiPlayBtn.disabled = true;
                     multiReplayBtn.disabled = true;
                     sfx.cheer();
-                    showFirework(document.querySelector('.listening-area'));
+                    showFirework(activeListeningArea());
                     return;
                 }
                 sfx.next();
                 this.renderQuestion();
                 setTimeout(() => {
-                    if (!STATE.multi.answered && !STATE.multi.allWrong && !STATE.multi.isPlaying) {
+                    if (!STATE.multi.answered && !STATE.multi.allWrong &&
+                        !STATE.multi.isPlaying && !STATE.audioBlocked) {
                         this.playAudio();
                     }
                 }, 500);
@@ -3832,30 +3939,73 @@
         // ================================================================
         //  12. 高级渲染
         // ================================================================
-        function toggleGlass() {
-            STATE.glass = !STATE.glass;
-            if (STATE.glass) {
+        // localStorage 是同一个域名共用的（听力练习场和认读系统都挂在
+        // 726113394-cloud.github.io 下面），键名必须带工具前缀，否则互相覆盖：
+        // 在这里开了高级渲染，那边也跟着变。
+        // 另外有些环境（隐私模式、个别浏览器的 file://）读写会直接抛异常，
+        // 包一层，别让整个脚本跟着停摆。旧的 glassEnabled 读一次做迁移。
+        const LS_GLASS = 'listen.glassEnabled';
+        const LS_GLASS_WARNED = 'listen.glassPerfWarned';
+        function lsGet(key, legacyKey) {
+            try {
+                const v = localStorage.getItem(key);
+                if (v !== null) return v;
+                return legacyKey ? localStorage.getItem(legacyKey) : null;
+            } catch (_) { return null; }
+        }
+        function lsSet(key, value) {
+            try { localStorage.setItem(key, value); } catch (_) {}
+        }
+
+        function applyGlass(on) {
+            STATE.glass = !!on;
+            if (on) {
                 document.documentElement.setAttribute('data-glass', 'enabled');
                 glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
                 glassToggleBtn.style.borderColor = '#8bc34a';
                 glassToggleBtn.style.boxShadow = '0 0 12px rgba(139,195,74,0.2)';
+                glassToggleBtn.setAttribute('aria-pressed', 'true');
             } else {
                 document.documentElement.removeAttribute('data-glass');
                 glassToggleBtn.style.background = 'rgba(255,255,255,0.3)';
                 glassToggleBtn.style.borderColor = 'rgba(180,200,140,0.2)';
                 glassToggleBtn.style.boxShadow = 'none';
+                glassToggleBtn.setAttribute('aria-pressed', 'false');
             }
-            localStorage.setItem('glassEnabled', STATE.glass ? 'true' : 'false');
+            lsSet(LS_GLASS, on ? 'true' : 'false');
         }
 
-        const savedGlass = localStorage.getItem('glassEnabled');
-        if (savedGlass === 'true') {
-            STATE.glass = true;
-            document.documentElement.setAttribute('data-glass', 'enabled');
-            glassToggleBtn.style.background = 'rgba(139,195,74,0.2)';
-            glassToggleBtn.style.borderColor = '#8bc34a';
-            glassToggleBtn.style.boxShadow = '0 0 12px rgba(139,195,74,0.2)';
+        function toggleGlass() {
+            applyGlass(!STATE.glass);
+            if (STATE.glass) checkGlassFrameHealth();
         }
+
+        // 毛玻璃在低端设备上会明显掉帧。这里量一次实际帧间隔，卡的话提一句就够了，
+        // 决定权留给老师（只提醒一次，不反复骚扰）。
+        let glassHealthChecked = false;
+        function checkGlassFrameHealth() {
+            if (glassHealthChecked || lsGet(LS_GLASS_WARNED, 'glassPerfWarned') === 'true') return;
+            glassHealthChecked = true;
+            const gaps = [];
+            let last = performance.now();
+            let n = 0;
+            const tick = () => {
+                const now = performance.now();
+                gaps.push(now - last);
+                last = now;
+                if (++n < 45) { requestAnimationFrame(tick); return; }
+                gaps.sort((a, b) => a - b);
+                const median = gaps[Math.floor(gaps.length / 2)];
+                if (median > 32) {
+                    lsSet(LS_GLASS_WARNED, 'true');
+                    window.__showToast('💎 高级渲染在这台设备上有点吃力\n再点一次 💎 可以关掉，不影响练习', 6000);
+                }
+            };
+            requestAnimationFrame(tick);
+        }
+
+        const savedGlass = lsGet(LS_GLASS, 'glassEnabled');
+        if (savedGlass === 'true') applyGlass(true);
 
         // ================================================================
         //  13. 模式切换 (带平滑动画)
@@ -3865,20 +4015,12 @@
             const newPanel = mode === 'single' ? singlePanel : multiPanel;
             if (oldPanel === newPanel) return;
 
-            // 获取新面板高度并设置父容器
-            newPanel.style.display = 'block';
-            void newPanel.offsetHeight; // 强制重排
-            const height = newPanel.scrollHeight;
-            mainContent.style.height = height + 'px';
-
-            // 切换active类
-            oldPanel.classList.remove('active');
+            // 面板改成 display 切换 + 淡入动画：隐藏的那个不再参与合成，
+            // 也不再去量 scrollHeight 触发强制重排（毛玻璃下这一步特别贵）。
+            if (oldPanel) oldPanel.classList.remove('active');
             newPanel.classList.add('active');
-
-            // 更新按钮状态
             modeBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.mode === mode));
 
-            // 如果是多人模式，重新渲染以确保内容最新
             if (mode === 'multi') {
                 Multi.renderPlayers();
                 Multi.renderQuestion();
@@ -3926,23 +4068,34 @@
         });
 
         document.addEventListener('keydown', (e) => {
+            // 在输入框 / 下拉里按键不要抢
+            const t = e.target;
+            if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' ||
+                      t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+
+            const activeMode = document.querySelector('.mode-toggle button.active');
+            if (!activeMode) return;
+            const isSingle = activeMode.dataset.mode === 'single';
+            const st = isSingle ? STATE.single : STATE.multi;
+            if (st.answered || st.audioLock || st.isPlaying || STATE.audioBlocked) return;
+
+            // 空格：再听一次
             if (e.key === ' ' || e.code === 'Space') {
-                const activeMode = document.querySelector('.mode-toggle button.active');
-                if (!activeMode) return;
-                const mode = activeMode.dataset.mode;
-                if (mode === 'single') {
-                    if (!STATE.single.isPlaying && !STATE.single.answered && !STATE.single.audioLock) {
-                        e.preventDefault();
-                        Single.playAudio();
-                    }
-                } else if (mode === 'multi') {
-                    if (!STATE.multi.isPlaying && !STATE.multi.answered && !STATE.multi.allWrong && !STATE.multi
-                        .audioLock) {
-                        e.preventDefault();
-                        Multi.playAudio();
-                    }
-                }
+                e.preventDefault();
+                if (isSingle) Single.playAudio();
+                else Multi.playAudio();
+                return;
             }
+
+            // 单人模式：A/B/C 或 1/2/3 直接选答案
+            if (!isSingle) return;
+            const k = e.key.toLowerCase();
+            const idx = (k === 'a' || k === '1') ? 0 : (k === 'b' || k === '2') ? 1 :
+                (k === 'c' || k === '3') ? 2 : -1;
+            if (idx < 0) return;
+            if (!singleOptions.querySelector('.option-card')) return;
+            e.preventDefault();
+            Single.selectOption(idx);
         });
 
         unitModal.addEventListener('click', (e) => {
@@ -3958,21 +4111,19 @@
         updateUnits();
         Multi.init();
 
-        // 初始高度自适应
-        setTimeout(() => {
-            const activePanel = document.querySelector('.mode-panel.active');
-            if (activePanel) {
-                mainContent.style.height = activePanel.scrollHeight + 'px';
+        // ================================================================
+        //  16. 设备性能档位
+        // ================================================================
+        // 低配设备（核心少 / 内存小 / 系统要求减弱动效）自动换更轻的渲染方案，
+        // 免得毛玻璃和礼花把整台电脑拖住。
+        (function detectPerfTier() {
+            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const cores = navigator.hardwareConcurrency || 8;
+            const mem = navigator.deviceMemory || 8;
+            if (reduce || cores <= 4 || mem <= 4) {
+                document.documentElement.dataset.perf = 'low';
             }
-        }, 100);
-
-        // 窗口resize时重新计算高度
-        window.addEventListener('resize', () => {
-            const activePanel = document.querySelector('.mode-panel.active');
-            if (activePanel) {
-                mainContent.style.height = activePanel.scrollHeight + 'px';
-            }
-        });
+        })();
 
         console.log('🎧 听力练习场已启动！');
         console.log('👥 多人模式：玩家卡片在下方，抢答按钮为 A/B/C');
@@ -3986,10 +4137,12 @@
  padding:12px 18px;font-size:14px;line-height:1.5;white-space:pre-line;text-align:center;
  z-index:99999;box-shadow:0 8px 28px rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .2s}
 #__toast.on{opacity:1}
+@media (prefers-reduced-motion: reduce){#__toast{transition:none}}
 </style>
 <script>
 window.__showToast=function(msg,ms){var el=document.getElementById('__toast');
- if(!el){el=document.createElement('div');el.id='__toast';document.body.appendChild(el);}
+ if(!el){el=document.createElement('div');el.id='__toast';el.setAttribute('role','status');
+ el.setAttribute('aria-live','polite');document.body.appendChild(el);}
  el.textContent=msg;el.classList.add('on');clearTimeout(window.__toastTimer);
  window.__toastTimer=setTimeout(function(){el.classList.remove('on');},ms||2600);};
 </script>
