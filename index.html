@@ -1027,12 +1027,50 @@
             line-height: 1.8;
         }
         .unit-picked .picked-tag {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
             background: rgba(255, 255, 255, 0.75);
             border-radius: 20px;
-            padding: 1px 10px;
+            padding: 1px 3px 1px 10px;
             margin: 0 4px 3px 0;
             font-weight: 600;
+        }
+        /* 每个已选单元带一个 ✕：被默认塞进来的那个终于有地方关掉了 */
+        .unit-picked .tag-x {
+            border: none;
+            background: rgba(180, 200, 140, 0.4);
+            color: #3a6b2a;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            font-size: 0.6rem;
+            line-height: 1;
+            padding: 0;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .unit-picked .tag-x:hover { background: #e57373; color: #fff; }
+        .unit-picked .clear-all {
+            border: 1px solid rgba(139, 195, 74, 0.5);
+            background: rgba(255, 255, 255, 0.7);
+            color: #3a6b2a;
+            border-radius: 20px;
+            padding: 2px 10px;
+            font-size: 0.65rem;
+            font-weight: 700;
+            cursor: pointer;
+            font-family: inherit;
+            margin-left: 6px;
+        }
+        .unit-picked .clear-all:hover { background: #fff; border-color: #8bc34a; }
+        .unit-picked .picked-empty { color: #8a6d3a; }
+        [data-glass="enabled"] .unit-picked .picked-tag { background: rgba(255, 255, 255, 0.3); color: #12294a; }
+        [data-glass="enabled"] .unit-picked .tag-x { background: rgba(255, 255, 255, 0.4); color: #12294a; }
+        [data-glass="enabled"] .unit-picked .clear-all {
+            background: rgba(255, 255, 255, 0.26);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #12294a;
         }
         .word-list {
             display: grid;
@@ -2825,7 +2863,40 @@
             }
         };
 
+        // 上次选的单元记在本地。不加这个的话，每次打开都会被
+        // 「默认四上 Unit 1」顶回来 —— 老师反馈过这个坑。
+        const LS_UNITS = 'listen.units';
+
+        function saveSelection() {
+            lsSet(LS_UNITS, JSON.stringify({
+                units: STATE.selectedUnits,
+                words: STATE.selectedWordsPerUnit
+            }));
+        }
+
+        function loadSavedSelection() {
+            const raw = lsGet(LS_UNITS);
+            if (!raw) return false;
+            let data;
+            try { data = JSON.parse(raw); } catch (_) { return false; }
+            if (!data || !Array.isArray(data.units)) return false;
+            // 词表更新过之后，存下来的单元可能已经不存在了，过滤掉
+            const valid = data.units.filter(k => {
+                const { grade, book, unit } = parseUnitKey(k);
+                return getWords(grade, book, unit).length > 0;
+            });
+            STATE.selectedUnits = valid;
+            STATE.selectedWordsPerUnit = (data.words && typeof data.words === 'object') ? data.words : {};
+            if (valid.length > 0) {
+                const first = parseUnitKey(valid[0]);
+                STATE.pickGrade = first.grade;
+                STATE.pickBook = first.book;
+            }
+            return true;
+        }
+
         function initDefaultSelection() {
+            if (loadSavedSelection()) return;      // 上次选过就照上次的，不再硬塞默认单元
             const units = getUnits(STATE.pickGrade, STATE.pickBook);
             if (units.length > 0) {
                 STATE.selectedUnits = [unitKey(STATE.pickGrade, STATE.pickBook, units[0])];
@@ -2935,7 +3006,18 @@
             renderQuestion() {
                 const words = STATE.single.words;
                 const idx = STATE.single.index;
-                if (idx >= words.length || words.length === 0) {
+                if (words.length === 0) {
+                    singleOptions.innerHTML =
+                        `<div style="grid-column:1/-1; text-align:center; padding:22px; color:#8a6d3a; line-height:1.9;">`
+                        + `⚠️ 还没选练习单元<br>点右上角「📌 选择单元」勾上要练的（可跨年级、跨册多选）</div>`;
+                    singleStatus.textContent = '⚠️ 还没选练习单元';
+                    singleStatus.className = 'status-badge wrong';
+                    singlePlayBtn.disabled = true;
+                    singleReplayBtn.disabled = true;
+                    singleProgress.textContent = '0/0';
+                    return;
+                }
+                if (idx >= words.length) {
                     singleOptions.innerHTML =
                         `<div style="grid-column:1/-1; text-align:center; padding:20px; color:#5a7a4a;">🎉 全部完成！点击「重新开始」再来一轮</div>`;
                     singleStatus.textContent = '🎉 全部完成！';
@@ -3338,16 +3420,22 @@
                 const idx = STATE.multi.index;
                 const total = parseInt(multiTotalInput.value) || 10;
 
-                if (idx >= total || idx >= words.length || words.length === 0) {
+                if (words.length === 0) {
+                    multiStatus.textContent = '⚠️ 还没选练习单元，点右上角「📌 选择单元」';
+                    multiStatus.className = 'status-badge multi-wrong';
+                    multiPlayBtn.disabled = true;
+                    multiReplayBtn.disabled = true;
+                    multiProgress.textContent = `0/${total}`;
+                    return;
+                }
+                if (idx >= total || idx >= words.length) {
                     multiStatus.textContent = '🎉 全部完成！点击「重新开始」再来一轮';
                     multiStatus.className = 'status-badge done';
                     multiPlayBtn.disabled = true;
                     multiReplayBtn.disabled = true;
                     multiProgress.textContent = `${Math.min(idx, words.length)}/${total}`;
-                    if (idx >= total || idx >= words.length) {
-                        sfx.cheer();
-                        showFirework(activeListeningArea());
-                    }
+                    sfx.cheer();
+                    showFirework(activeListeningArea());
                     return;
                 }
 
@@ -3789,9 +3877,8 @@
                     } else {
                         STATE.selectedUnits = STATE.selectedUnits.filter(k => k !== key);
                     }
-                    const box = unitModalBody.querySelector('.unit-picked');
-                    if (box) box.innerHTML = pickedSummaryInner();
-                    unitBadge.textContent = STATE.selectedUnits.length;
+                    syncUnitUI();
+                    saveSelection();
                 });
             });
 
@@ -3806,10 +3893,44 @@
 
         function pickedSummaryInner() {
             const keys = STATE.selectedUnits;
-            const tags = keys.map(k => `<span class="picked-tag">${unitShortLabel(k)}</span>`).join('');
-            return `✅ 已选 <b>${keys.length}</b> 个单元（可跨年级、跨册多选）：<br>` +
-                (tags || '<span style="color:#8a9a7a">还没有选择单元，请至少勾选一个</span>');
+            if (keys.length === 0) {
+                return '<span class="picked-empty">还没有选择单元 —— 在下面勾选要练的单元（可跨年级、跨册多选）</span>';
+            }
+            const tags = keys.map(k =>
+                `<span class="picked-tag">${unitShortLabel(k)}` +
+                `<button class="tag-x" data-rm="${k}" title="把这个单元从练习里去掉">✕</button></span>`
+            ).join('');
+            return `✅ 已选 <b>${keys.length}</b> 个单元（可跨年级、跨册多选）` +
+                `<button class="clear-all" id="unitClearAll">全部取消</button><br>${tags}`;
         }
+
+        // 只更新「已选」区和当前页列表的勾选状态，不整块重渲染（免得弹窗跳到顶部）
+        function syncUnitUI() {
+            unitBadge.textContent = STATE.selectedUnits.length;
+            const box = unitModalBody.querySelector('.unit-picked');
+            if (box) box.innerHTML = pickedSummaryInner();
+            unitModalBody.querySelectorAll('.unit-checkbox').forEach(cb => {
+                cb.checked = STATE.selectedUnits.includes(cb.value);
+            });
+        }
+
+        // 已选标签上的 ✕ / 「全部取消」走委托，弹窗重渲染后依然有效
+        unitModalBody.addEventListener('click', (e) => {
+            const rm = e.target.closest('.tag-x');
+            if (rm) {
+                const key = rm.dataset.rm;
+                STATE.selectedUnits = STATE.selectedUnits.filter(k => k !== key);
+                delete STATE.selectedWordsPerUnit[key];
+                syncUnitUI();
+                saveSelection();
+                return;
+            }
+            if (e.target.closest('#unitClearAll')) {
+                STATE.selectedUnits = [];
+                syncUnitUI();
+                saveSelection();
+            }
+        });
 
         function openWordSelectModal(key) {
             const { grade, book, unit } = parseUnitKey(key);
@@ -3874,11 +3995,10 @@
         });
 
         unitModalConfirm.addEventListener('click', () => {
-            if (STATE.selectedUnits.length === 0) {
-                alert('请至少选择一个单元');
-                return;
-            }
+            // 允许一个都不选：老师要先把默认塞进来的那个单元清掉，再去勾自己要练的。
+            // 真没选时练习区会明确提示去哪里选，不会卡死。
             unitModal.classList.remove('show');
+            saveSelection();
             Single.loadWords();
             Multi.loadWords();
             Multi.renderPlayers();
@@ -3913,6 +4033,7 @@
                 if (cb.checked) selected.push(cb.value);
             });
             STATE.selectedWordsPerUnit[key] = selected;
+            saveSelection();
             wordSelectModal.classList.remove('show');
             unitModal.classList.add('show');
             renderUnitModal();
@@ -3922,12 +4043,8 @@
         //  11. 练习内容装配（已选单元 -> 词表）
         // ================================================================
         function updateUnits() {
-            if (STATE.selectedUnits.length === 0) {
-                const units = getUnits(STATE.pickGrade, STATE.pickBook);
-                if (units.length > 0) {
-                    STATE.selectedUnits = [unitKey(STATE.pickGrade, STATE.pickBook, units[0])];
-                }
-            }
+            // 这里原来有一段「如果没选就给个默认单元」，就是它把四上 Unit 1 又塞回来的。
+            // 默认只在首次打开时由 initDefaultSelection() 给一次，之后一律听用户的。
             renderUnitModal();
             Single.loadWords();
             Multi.loadWords();
