@@ -1580,30 +1580,8 @@
             animation: ripple 0.3s ease;
         }
 
-        /* ===== 低配档位 / 系统减弱动效 =====
-           低配设备或系统开了「减弱动态效果」时，毛玻璃和装饰性动画都让步，
-           功能反馈（对错配色、状态文字、提示）一律保留。 */
-        [data-perf="low"][data-glass="enabled"] .app-container {
-            background: rgba(255, 255, 255, 0.30);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-        }
-        [data-perf="low"] .option-card,
-        [data-perf="low"] .audio-btn,
-        [data-perf="low"] .action-btn,
-        [data-perf="low"] .btn-unit-select,
-        [data-perf="low"] .info-actions .history-btn {
-            transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
-        }
-        [data-perf="low"] .option-card:hover:not(.disabled),
-        [data-perf="low"] .option-card.selected,
-        [data-perf="low"] .audio-btn.primary:hover:not(:disabled),
-        [data-perf="low"] .audio-btn.secondary:hover:not(:disabled),
-        [data-perf="low"] .action-btn.reset:hover,
-        [data-perf="low"] .btn-unit-select:hover,
-        [data-perf="low"] .info-actions .history-btn:hover {
-            transform: none;
-        }
+        /* （这里原来是"低配档"那一整段：把毛玻璃从完整档剥成 blur(12px)、
+           并砍掉所有过渡。老师要求"开玻璃就是最高画质、不给降低"，所以整段删掉。） */
 
         @media (prefers-reduced-motion: reduce) {
             .mode-panel.active,
@@ -4346,20 +4324,9 @@
 
         // ================================================================
         //  16. 设备性能档位
-        // ================================================================
-        // 低配设备（核心少 / 内存小 / 系统要求减弱动效）自动换更轻的渲染方案，
-        // 免得毛玻璃和礼花把整台电脑拖住。
-        (function detectPerfTier() {
-            // ⚠️⚠️ 这里以前是 `reduce || cores <= 4 || mem <= 4`，两处都错：
-            //    · 「减少动效」是**用户的偏好**，不是机器差（老师的高配电脑就是这么被判低的）；
-            //    · ≤4 这档太松（4 核很常见，deviceMemory 还封顶 8）。
-            //    现在只看真小的硬件档；动效偏好交给 CSS，不参与判档。
-            const cores = navigator.hardwareConcurrency || 8;
-            const mem = navigator.deviceMemory || 8;
-            if (cores <= 2 || mem <= 2) {
-                document.documentElement.dataset.perf = 'low';
-            }
-        })();
+        // ★★ 老师定调：「开启玻璃效果直接把画质全部拉满不给降低」。
+        //    原来这里会按核心数/内存/减少动效给 <html> 挂 data-perf="low"，
+        //    而那条 CSS 会把毛玻璃剥成 12px 并砍掉所有过渡 —— 整段删掉，不再降档。
 
         console.log('🎧 听力练习场已启动！');
         console.log('👥 多人模式：玩家卡片在下方，抢答按钮为 A/B/C');
