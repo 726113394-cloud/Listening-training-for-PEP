@@ -2699,7 +2699,9 @@
         });
         // 减弱动效就不放礼花了；低配设备把粒子上限砍一半
         const FW_REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const FW_LOWPOWER = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) <= 4;
+        // ⚠️ 阈值别用 4：4 核机器很常见（Chrome 的 deviceMemory 还封顶 8），
+        //    按 ≤4 判会把正常机器一起算成低配。只留真小的 ≤2 档。
+        const FW_LOWPOWER = (navigator.hardwareConcurrency || 8) <= 2 || (navigator.deviceMemory || 8) <= 2;
         const FW_MAX = FW_REDUCED ? 0 : (FW_LOWPOWER ? 160 : 320);
         let fwParticles = [];
         let fwAnimId = null;
@@ -4348,10 +4350,13 @@
         // 低配设备（核心少 / 内存小 / 系统要求减弱动效）自动换更轻的渲染方案，
         // 免得毛玻璃和礼花把整台电脑拖住。
         (function detectPerfTier() {
-            const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            // ⚠️⚠️ 这里以前是 `reduce || cores <= 4 || mem <= 4`，两处都错：
+            //    · 「减少动效」是**用户的偏好**，不是机器差（老师的高配电脑就是这么被判低的）；
+            //    · ≤4 这档太松（4 核很常见，deviceMemory 还封顶 8）。
+            //    现在只看真小的硬件档；动效偏好交给 CSS，不参与判档。
             const cores = navigator.hardwareConcurrency || 8;
             const mem = navigator.deviceMemory || 8;
-            if (reduce || cores <= 4 || mem <= 4) {
+            if (cores <= 2 || mem <= 2) {
                 document.documentElement.dataset.perf = 'low';
             }
         })();
