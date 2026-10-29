@@ -2568,65 +2568,126 @@
         //  ⚠️ 「附 · 词组」是书上「附：」那一栏（全书词组），单独一个单元，别混进 Unit。
         // ================================================================
         const JIELI_BANK = {
+            "接力三年级": {
+                upper: {
+                    "Unit 1": [
+                        { word: "hello", meaning: "你好", bold: true }, { word: "hi", meaning: "你好", bold: true }, { word: "I", meaning: "我", bold: true },
+                        { word: "am", meaning: "是", bold: true }, { word: "yes", meaning: "是；是的", bold: true }, { word: "no", meaning: "不；不是", bold: true },
+                        { word: "good", meaning: "好的", bold: true }, { word: "morning", meaning: "早晨；上午", bold: true }, { word: "dad", meaning: "爸爸", bold: true },
+                        { word: "goodbye", meaning: "再见", bold: true }, { word: "mom", meaning: "妈妈", bold: true }, { word: "Miss", meaning: "小姐；女士", bold: true },
+                        { word: "bye", meaning: "再见", bold: true }
+                    ],
+                    "Unit 2": [
+                        { word: "a", meaning: "一；一个", bold: true }, { word: "teacher", meaning: "教师；老师", bold: true }, { word: "student", meaning: "学生", bold: true },
+                        { word: "stand", meaning: "站立", bold: true }, { word: "up", meaning: "向上", bold: true }, { word: "sit", meaning: "坐", bold: true },
+                        { word: "down", meaning: "向下", bold: true }, { word: "please", meaning: "请", bold: true }, { word: "and", meaning: "和", bold: true },
+                        { word: "go", meaning: "去；走", bold: true }, { word: "stop", meaning: "停止", bold: true }, { word: "are", meaning: "是", bold: true },
+                        { word: "you", meaning: "你；你们", bold: true }, { word: "girl", meaning: "女孩", bold: true }, { word: "boy", meaning: "男孩", bold: true }
+                    ],
+                    "Unit 3": [
+                        { word: "this", meaning: "这；这个", bold: true }, { word: "is", meaning: "是", bold: true }, { word: "box", meaning: "盒；箱", bold: true },
+                        { word: "ball", meaning: "球", bold: true }, { word: "bag", meaning: "包；袋", bold: true }, { word: "cat", meaning: "猫", bold: true },
+                        { word: "book", meaning: "书", bold: true }, { word: "an", meaning: "一；一个", bold: true }, { word: "apple", meaning: "苹果", bold: true },
+                        { word: "it", meaning: "它", bold: true }, { word: "ruler", meaning: "尺子", bold: true }, { word: "pencil", meaning: "铅笔", bold: true },
+                        { word: "pen", meaning: "钢笔", bold: true }, { word: "tree", meaning: "树", bold: true }
+                    ],
+                    "Unit 4": [
+                        { word: "what", meaning: "什么", bold: true }, { word: "car", meaning: "小汽车", bold: true }, { word: "taxi", meaning: "出租车", bold: true },
+                        { word: "train", meaning: "火车", bold: true }, { word: "bus", meaning: "公共汽车", bold: true }, { word: "dog", meaning: "狗", bold: true },
+                        { word: "door", meaning: "门", bold: true }, { word: "chair", meaning: "椅子", bold: true }, { word: "banana", meaning: "香蕉", bold: true },
+                        { word: "orange", meaning: "橙子；橙红色的", bold: true }, { word: "green", meaning: "绿色的", bold: true }, { word: "blue", meaning: "蓝色的", bold: true },
+                        { word: "black", meaning: "黑色的", bold: true }, { word: "white", meaning: "白色的", bold: true }, { word: "panda", meaning: "大熊猫", bold: true },
+                        { word: "show", meaning: "展示", bold: true }, { word: "me", meaning: "我", bold: true }, { word: "have", meaning: "有", bold: true },
+                        { word: "two", meaning: "二", bold: true }, { word: "three", meaning: "三", bold: true }, { word: "one", meaning: "一", bold: true },
+                        { word: "four", meaning: "四", bold: true }, { word: "five", meaning: "五", bold: true }, { word: "six", meaning: "六", bold: true }
+                    ],
+                    "Unit 5": [
+                        { word: "color", meaning: "颜色", bold: true }, { word: "yellow", meaning: "黄色的", bold: true }, { word: "red", meaning: "红色的", bold: true },
+                        { word: "she", meaning: "她", bold: true }, { word: "he", meaning: "他", bold: true }, { word: "who", meaning: "谁", bold: true },
+                        { word: "Mr.", meaning: "先生", bold: true }, { word: "Ms.", meaning: "女士", bold: true }, { word: "worker", meaning: "工人", bold: true }
+                    ],
+                    "Unit 6": [
+                        { word: "that", meaning: "那；那个", bold: true }, { word: "come", meaning: "来", bold: true }, { word: "here", meaning: "在这里", bold: true },
+                        { word: "not", meaning: "不", bold: true }, { word: "how", meaning: "怎样；如何", bold: true }, { word: "old", meaning: "岁；年纪", bold: true },
+                        { word: "nine", meaning: "九", bold: true }, { word: "ten", meaning: "十", bold: true }, { word: "seven", meaning: "七", bold: true },
+                        { word: "eight", meaning: "八", bold: true }, { word: "happy", meaning: "快乐的", bold: true }, { word: "birthday", meaning: "生日", bold: true },
+                        { word: "to", meaning: "给；向", bold: true }, { word: "thank", meaning: "谢谢", bold: true }, { word: "card", meaning: "卡片", bold: true }
+                    ],
+                    "Unit 7": [
+                        { word: "new", meaning: "新的", bold: true }, { word: "year", meaning: "年", bold: true }, { word: "for", meaning: "给；对", bold: true },
+                        { word: "dear", meaning: "亲爱的", bold: true }, { word: "yours", meaning: "你的；你们的", bold: false }, { word: "some", meaning: "一些", bold: true },
+                        { word: "water", meaning: "水", bold: true }, { word: "hungry", meaning: "饥饿的", bold: true }, { word: "bread", meaning: "面包", bold: true },
+                        { word: "OK", meaning: "好；行", bold: true }, { word: "do", meaning: "（助动词）", bold: true }, { word: "like", meaning: "喜欢", bold: true },
+                        { word: "juice", meaning: "果汁", bold: true }, { word: "fish", meaning: "鱼肉", bold: true }
+                    ],
+                    "Unit 8": [
+                        { word: "driver", meaning: "司机", bold: true }, { word: "farmer", meaning: "农民", bold: true }, { word: "doctor", meaning: "医生", bold: true },
+                        { word: "nurse", meaning: "护士", bold: true }
+                    ],
+                    "词组": [
+                        { word: "stand up", meaning: "起立", bold: true }, { word: "sit down", meaning: "坐下", bold: true }, { word: "come here", meaning: "过来", bold: true }
+                    ],
+                },
+            },
             "接力四年级": {
                 upper: {
                     "Unit 1": [
-                        { word: "these", meaning: "这些", bold: true },{ word: "wash", meaning: "洗", bold: true },{ word: "brush", meaning: "（用刷子）刷净", bold: false },
-                        { word: "wave", meaning: "挥动；挥舞", bold: false },{ word: "body", meaning: "身体", bold: true },{ word: "shake", meaning: "摇动；抖动", bold: false },
-                        { word: "feet", meaning: "脚（foot 的复数形式）", bold: false },{ word: "with", meaning: "用", bold: true },{ word: "eat", meaning: "吃", bold: true },
-                        { word: "listen", meaning: "听", bold: true },{ word: "write", meaning: "写", bold: true },{ word: "they", meaning: "他们；她们；它们", bold: true },
-                        { word: "clock", meaning: "时钟", bold: true },{ word: "blackboard", meaning: "黑板", bold: true },{ word: "out", meaning: "（从……里）出来", bold: true },
+                        { word: "these", meaning: "这些", bold: true }, { word: "wash", meaning: "洗", bold: true }, { word: "brush", meaning: "（用刷子）刷净", bold: false },
+                        { word: "wave", meaning: "挥动；挥舞", bold: false }, { word: "body", meaning: "身体", bold: true }, { word: "shake", meaning: "摇动；抖动", bold: false },
+                        { word: "feet", meaning: "脚（foot 的复数形式）", bold: false }, { word: "with", meaning: "用", bold: true }, { word: "eat", meaning: "吃", bold: true },
+                        { word: "listen", meaning: "听", bold: true }, { word: "write", meaning: "写", bold: true }, { word: "they", meaning: "他们；她们；它们", bold: true },
+                        { word: "clock", meaning: "时钟", bold: true }, { word: "blackboard", meaning: "黑板", bold: true }, { word: "out", meaning: "（从……里）出来", bold: true },
                         { word: "say", meaning: "说", bold: true }
                     ],
                     "Unit 2": [
-                        { word: "behind", meaning: "在……后面", bold: true },{ word: "schoolbag", meaning: "书包", bold: true },{ word: "cup", meaning: "杯子", bold: true },
-                        { word: "move", meaning: "移动", bold: true },{ word: "excuse", meaning: "原谅", bold: false },{ word: "park", meaning: "公园", bold: true },
-                        { word: "along", meaning: "沿着", bold: false },{ word: "street", meaning: "街道", bold: true },{ word: "turn", meaning: "转向", bold: true },
-                        { word: "school", meaning: "学校", bold: true },{ word: "zoo", meaning: "动物园", bold: true },{ word: "hospital", meaning: "医院", bold: true },
+                        { word: "behind", meaning: "在……后面", bold: true }, { word: "schoolbag", meaning: "书包", bold: true }, { word: "cup", meaning: "杯子", bold: true },
+                        { word: "move", meaning: "移动", bold: true }, { word: "excuse", meaning: "原谅", bold: false }, { word: "park", meaning: "公园", bold: true },
+                        { word: "along", meaning: "沿着", bold: false }, { word: "street", meaning: "街道", bold: true }, { word: "turn", meaning: "转向", bold: true },
+                        { word: "school", meaning: "学校", bold: true }, { word: "zoo", meaning: "动物园", bold: true }, { word: "hospital", meaning: "医院", bold: true },
                         { word: "round", meaning: "转过来；调转方向", bold: false }
                     ],
                     "Unit 3": [
-                        { word: "sky", meaning: "天空", bold: false },{ word: "plane", meaning: "飞机", bold: true }
+                        { word: "sky", meaning: "天空", bold: false }, { word: "plane", meaning: "飞机", bold: true }
                     ],
                     "Unit 4": [
-                        { word: "weather", meaning: "天气", bold: true },{ word: "windy", meaning: "多风的", bold: true },{ word: "sunny", meaning: "晴朗的", bold: true },
-                        { word: "cool", meaning: "凉爽的", bold: true },{ word: "cloudy", meaning: "多云的", bold: true },{ word: "rainy", meaning: "下雨的", bold: false },
-                        { word: "warm", meaning: "暖和的", bold: true },{ word: "wear", meaning: "穿", bold: true },{ word: "shirt", meaning: "衬衫", bold: true },
-                        { word: "spring", meaning: "春天，春季", bold: true },{ word: "summer", meaning: "夏天，夏季", bold: true },{ word: "autumn", meaning: "秋天，秋季", bold: true },
-                        { word: "winter", meaning: "冬天，冬季", bold: true },{ word: "which", meaning: "哪一个", bold: true },{ word: "season", meaning: "季节", bold: true },
+                        { word: "weather", meaning: "天气", bold: true }, { word: "windy", meaning: "多风的", bold: true }, { word: "sunny", meaning: "晴朗的", bold: true },
+                        { word: "cool", meaning: "凉爽的", bold: true }, { word: "cloudy", meaning: "多云的", bold: true }, { word: "rainy", meaning: "下雨的", bold: false },
+                        { word: "warm", meaning: "暖和的", bold: true }, { word: "wear", meaning: "穿", bold: true }, { word: "shirt", meaning: "衬衫", bold: true },
+                        { word: "spring", meaning: "春天，春季", bold: true }, { word: "summer", meaning: "夏天，夏季", bold: true }, { word: "autumn", meaning: "秋天，秋季", bold: true },
+                        { word: "winter", meaning: "冬天，冬季", bold: true }, { word: "which", meaning: "哪一个", bold: true }, { word: "season", meaning: "季节", bold: true },
                         { word: "best", meaning: "最", bold: true }
                     ],
                     "Unit 5": [
-                        { word: "family", meaning: "家，家庭", bold: true },{ word: "father", meaning: "父亲", bold: true },{ word: "Mrs.", meaning: "太太，夫人", bold: true },
-                        { word: "sister", meaning: "姐姐，妹妹", bold: true },{ word: "brother", meaning: "哥哥，弟弟", bold: true },{ word: "his", meaning: "他的", bold: true },
-                        { word: "cleaner", meaning: "清洁工", bold: false },{ word: "dancer", meaning: "舞蹈家", bold: false },{ word: "singer", meaning: "歌唱家，歌手", bold: false }
+                        { word: "family", meaning: "家，家庭", bold: true }, { word: "father", meaning: "父亲", bold: true }, { word: "Mrs.", meaning: "太太，夫人", bold: true },
+                        { word: "sister", meaning: "姐姐，妹妹", bold: true }, { word: "brother", meaning: "哥哥，弟弟", bold: true }, { word: "his", meaning: "他的", bold: true },
+                        { word: "cleaner", meaning: "清洁工", bold: false }, { word: "dancer", meaning: "舞蹈家", bold: false }, { word: "singer", meaning: "歌唱家，歌手", bold: false }
                     ],
                     "Unit 6": [
-                        { word: "light", meaning: "浅色的", bold: true },{ word: "clean", meaning: "干净的", bold: true },{ word: "boat", meaning: "小船", bold: true },
-                        { word: "grass", meaning: "草", bold: true },{ word: "skirt", meaning: "短裙", bold: true },{ word: "milk", meaning: "牛奶", bold: true },
-                        { word: "beef", meaning: "牛肉", bold: false },{ word: "chicken", meaning: "鸡肉", bold: true },{ word: "thirsty", meaning: "渴的", bold: false }
+                        { word: "light", meaning: "浅色的", bold: true }, { word: "clean", meaning: "干净的", bold: true }, { word: "boat", meaning: "小船", bold: true },
+                        { word: "grass", meaning: "草", bold: true }, { word: "skirt", meaning: "短裙", bold: true }, { word: "milk", meaning: "牛奶", bold: true },
+                        { word: "beef", meaning: "牛肉", bold: false }, { word: "chicken", meaning: "鸡肉", bold: true }, { word: "thirsty", meaning: "渴的", bold: false }
                     ],
                     "Unit 7": [
-                        { word: "eleven", meaning: "十一", bold: true },{ word: "twelve", meaning: "十二", bold: true },{ word: "thirteen", meaning: "十三", bold: true },
-                        { word: "fourteen", meaning: "十四", bold: true },{ word: "fifteen", meaning: "十五", bold: true },{ word: "sixteen", meaning: "十六", bold: true },
-                        { word: "seventeen", meaning: "十七", bold: true },{ word: "eighteen", meaning: "十八", bold: true },{ word: "nineteen", meaning: "十九", bold: true },
-                        { word: "twenty", meaning: "二十", bold: true },{ word: "balloon", meaning: "气球", bold: false },{ word: "win", meaning: "赢，获胜", bold: true },
-                        { word: "many", meaning: "许多", bold: true },{ word: "our", meaning: "我们的", bold: true },{ word: "thirty", meaning: "三十", bold: true },
-                        { word: "study", meaning: "学习", bold: true },{ word: "fork", meaning: "叉子", bold: false },{ word: "spoon", meaning: "勺，匙，调羹", bold: false },
-                        { word: "pear", meaning: "梨", bold: false },{ word: "grape", meaning: "葡萄", bold: true },{ word: "tomato", meaning: "西红柿", bold: true }
+                        { word: "eleven", meaning: "十一", bold: true }, { word: "twelve", meaning: "十二", bold: true }, { word: "thirteen", meaning: "十三", bold: true },
+                        { word: "fourteen", meaning: "十四", bold: true }, { word: "fifteen", meaning: "十五", bold: true }, { word: "sixteen", meaning: "十六", bold: true },
+                        { word: "seventeen", meaning: "十七", bold: true }, { word: "eighteen", meaning: "十八", bold: true }, { word: "nineteen", meaning: "十九", bold: true },
+                        { word: "twenty", meaning: "二十", bold: true }, { word: "balloon", meaning: "气球", bold: false }, { word: "win", meaning: "赢，获胜", bold: true },
+                        { word: "many", meaning: "许多", bold: true }, { word: "our", meaning: "我们的", bold: true }, { word: "thirty", meaning: "三十", bold: true },
+                        { word: "study", meaning: "学习", bold: true }, { word: "fork", meaning: "叉子", bold: false }, { word: "spoon", meaning: "勺，匙，调羹", bold: false },
+                        { word: "pear", meaning: "梨", bold: false }, { word: "grape", meaning: "葡萄", bold: true }, { word: "tomato", meaning: "西红柿", bold: true }
                     ],
                     "Unit 8": [
-                        { word: "animal", meaning: "动物", bold: true },{ word: "those", meaning: "那些", bold: true },{ word: "duck", meaning: "鸭子", bold: true },
+                        { word: "animal", meaning: "动物", bold: true }, { word: "those", meaning: "那些", bold: true }, { word: "duck", meaning: "鸭子", bold: true },
                         { word: "tiger", meaning: "老虎", bold: true }
                     ],
-                    "附 · 词组": [
-                        { word: "nature park", meaning: "自然公园", bold: false },{ word: "go out", meaning: "出去", bold: false },{ word: "come in", meaning: "进来", bold: false },
-                        { word: "put up", meaning: "举起来", bold: false },{ word: "turn right", meaning: "向右转", bold: false },{ word: "turn left", meaning: "向左转", bold: false },
+                    "词组": [
+                        { word: "nature park", meaning: "自然公园", bold: false }, { word: "go out", meaning: "出去", bold: false }, { word: "come in", meaning: "进来", bold: false },
+                        { word: "put up", meaning: "举起来", bold: false }, { word: "turn right", meaning: "向右转", bold: false }, { word: "turn left", meaning: "向左转", bold: false },
                         { word: "make new friends", meaning: "结交新朋友", bold: false }
                     ],
                 },
             },
-        };
+};
 
         const PUBLISHERS = [{ id: 'pep', name: '人教版' }, { id: 'jieli', name: '接力版' }];
         const LS_PUBLISHER = 'listen.publisher';       // ⚠️ 键名带工具前缀
